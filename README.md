@@ -15,10 +15,10 @@
 ## 📊 GitHub Stats:
 <br><br>
 <p  align="center">
-&nbsp;<img src="https://github-readme-stats.vercel.app/api?username=theinsanecat&theme=neon&hide_border=false&include_all_commits=true&count_private=false"  width="45.5%"/>&nbsp;
-  &nbsp;<img src="https://nirzak-streak-stats.vercel.app/?user=theinsanecat&theme=neon&hide_border=false" width="50%"/>&nbsp;
+&nbsp;<img src="https://github-readme-stats.vercel.app/api?username=theinsanecat&theme=neon&hide_border=false&include_all_commits=true&count_private=false"  width="45.5%"/>&nbsp;&nbsp;
+&nbsp;&nbsp;<img src="https://nirzak-streak-stats.vercel.app/?user=theinsanecat&theme=neon&hide_border=false" width="50%"/>&nbsp;
 </p>
-<p  align="center">
+<p align="center">
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=theinsanecat&theme=neon&hide_border=false&include_all_commits=true&count_private=false&layout=compact" width="35%"/>
 </p>
 <br><br>
