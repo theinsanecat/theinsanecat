@@ -26,6 +26,11 @@
 <br><br>
 ## 🌐 Socials:
 [![Facebook](https://img.shields.io/badge/Facebook-%231877F2.svg?logo=Facebook&logoColor=white)](https://facebook.com/theinsaencat) [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/theinsanecat) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/soumya-dwivedi) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/theinsanebillu) [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://youtube.com/@theinsanebillu) [![email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:soumya.dwivedi05@gmail.com) 
+<!-- <a href="https://linkedin.com/in/soumya-dwivedi" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="soumya-dwivedi" height="30" width="40" /></a>
+<a href="https://fb.com/theinsanecat" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="theinsanecat" height="30" width="40" /></a>
+<a href="https://instagram.com/theinsanecat" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="theinsanecat" height="30" width="40" /></a>
+<a href="https://www.leetcode.com/theinsanecat" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/leet-code.svg" alt="theinsanecat" height="30" width="40" /></a> -->
+
 
 <br><br><br>
 <p align="center">
