@@ -1,0 +1,48 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Glowing Thrust Beam under Saucer -->
+  <path d="M70 145 L60 190 A45 45 0 0 0 140 190 L130 145 Z" fill="url(#ufo-thrust)" opacity="0.45" />
+
+  <!-- UFO Saucer Base (Solid Dark Metallic & Cyan Trim) -->
+  <ellipse cx="100" cy="135" rx="75" ry="22" fill="#0f172a" stroke="#06b6d4" strokeWidth="4.5" />
+  
+  <!-- Light nodes on the rim -->
+  <circle cx="45" cy="135" r="4" fill="#ec4899" />
+  <circle cx="72" cy="143" r="4" fill="#e879f9" />
+  <circle cx="100" cy="146" r="5" fill="#fda4af" />
+  <circle cx="128" cy="143" r="4" fill="#e879f9" />
+  <circle cx="155" cy="135" r="4" fill="#ec4899" />
+
+  <!-- Glass Dome (Semi-transparent with pink glowing stroke) -->
+  <path d="M50 120 C50 60, 150 60, 150 120" fill="#ec4899" fillOpacity="0.08" stroke="#ec4899" strokeWidth="4" strokeLinecap="round" />
+
+  <!-- Cat Pilot Inside (Solid White body outline to stand out) -->
+  <!-- Body -->
+  <path d="M80 125 C70 100, 75 85, 100 85 C125 85, 130 100, 120 125" fill="#FFF" stroke="#000" strokeWidth="3" />
+  <!-- Head -->
+  <ellipse cx="100" cy="78" rx="26" ry="20" fill="#FFF" stroke="#000" strokeWidth="3" />
+  <!-- Left Ear -->
+  <path d="M80 66 L72 45 L90 60" fill="#FFF" stroke="#000" strokeWidth="3" strokeLinejoin="round" />
+  <!-- Right Ear -->
+  <path d="M120 66 L128 45 L110 60" fill="#FFF" stroke="#000" strokeWidth="3" strokeLinejoin="round" />
+  <!-- Eyes -->
+  <circle cx="91" cy="76" r="3" fill="#000" />
+  <circle cx="109" cy="76" r="3" fill="#000" />
+  <!-- Nose/Mouth -->
+  <path d="M98 82 Q100 84 102 82" stroke="#000" strokeWidth="2" strokeLinecap="round" />
+  <!-- Little Steering Wheel or Controls -->
+  <circle cx="100" cy="110" r="14" stroke="#06b6d4" strokeWidth="3" />
+  <path d="M100 110 L100 124 M100 110 L88 103 M100 110 L112 103" stroke="#06b6d4" strokeWidth="2.5" />
+  
+  <!-- Antenna on dome -->
+  <path d="M100 60 L100 45" stroke="#ec4899" strokeWidth="3" />
+  <circle cx="100" cy="40" r="4.5" fill="#ec4899" />
+
+  <defs>
+    <!-- Thrust Gradient -->
+    <linearGradient id="ufo-thrust" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stopColor="#e879f9" stopOpacity="0.8" />
+      <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.45" />
+      <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+    </linearGradient>
+  </defs>
+</svg>

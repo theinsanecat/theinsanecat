@@ -1,0 +1,49 @@
+<svg viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Tail - White base with black patch and tip -->
+  <path d="M140 180 C 160 180, 180 140, 160 120 C 150 110, 140 130, 145 150" stroke="#FFF" strokeWidth="6" strokeLinecap="round"/>
+  <path d="M145 150 C 150 140, 160 125, 160 120" stroke="#000" strokeWidth="6" strokeLinecap="round"/>
+  <path d="M160 120 C 155 110, 145 115, 145 125" fill="#000" />
+
+  <!-- Body Base -->
+  <path d="M60 110 C 45 130, 45 200, 70 215 L 130 215 C 155 200, 155 130, 140 110 Z" fill="#FFF" stroke="#000" strokeWidth="4"/>
+
+  <!-- Black saddle patch on back -->
+  <path d="M50 140 C 40 160, 45 185, 60 185 C 55 160, 52 150, 50 140 Z" fill="#000" />
+  <!-- Back Leg Spot (Black) -->
+  <path d="M125 150 C 145 145, 155 170, 140 185 C 125 195, 115 170, 125 150 Z" fill="#000" />
+
+  <!-- 4 Straight Standing Legs -->
+  <path d="M68 180 L 68 235 C 64 242, 79 242, 76 235 L 78 180" fill="#FFF" stroke="#000" strokeWidth="3.5" strokeLinecap="round"/>
+  <path d="M122 180 L 122 235 C 118 242, 133 242, 130 235 L 128 180" fill="#FFF" stroke="#000" strokeWidth="3.5" strokeLinecap="round"/>
+  <path d="M82 185 L 82 235 C 78 242, 93 242, 90 235 L 90 185" fill="#FFF" stroke="#000" strokeWidth="4" strokeLinecap="round"/>
+  <path d="M108 185 L 108 235 C 104 242, 119 242, 116 235 L 114 185" fill="#FFF" stroke="#000" strokeWidth="4" strokeLinecap="round"/>
+
+  <!-- Head Base -->
+  <ellipse cx="100" cy="80" rx="52" ry="42" fill="#FFF" stroke="#000" strokeWidth="4"/>
+  
+  <!-- Black Eye Patch (viewer's right, left eye) -->
+  <ellipse cx="120" cy="76" rx="15" ry="12" fill="#000" />
+
+  <!-- Left Ear (viewer's left, right ear - Pink inside) -->
+  <path d="M60 50 L 45 15 L 80 38" fill="#FFF" stroke="#000" strokeWidth="4" strokeLinejoin="round"/>
+  <path d="M55 45 L 48 20 L 70 36 Z" fill="#FCDBD9" />
+
+  <!-- Right Ear (viewer's right, left ear - Black inside) -->
+  <path d="M140 50 L 155 15 L 120 38" fill="#FFF" stroke="#000" strokeWidth="4" strokeLinejoin="round"/>
+  <path d="M135 45 L 150 22 L 125 36 Z" fill="#000" />
+
+  <!-- Face Details -->
+  <path d="M78 72 Q 88 64 92 72" fill="none" stroke="#000" strokeWidth="3.5" strokeLinecap="round"/>
+  <path d="M108 72 Q 112 64 120 72" fill="none" stroke="#FFF" strokeWidth="3.5" strokeLinecap="round"/>
+  
+  <!-- Blush -->
+  <ellipse cx="68" cy="85" rx="8" ry="4" fill="#FCDBD9" />
+  <ellipse cx="128" cy="85" rx="8" ry="4" fill="#FCDBD9" opacity="0.6"/>
+
+  <path d="M94 88 Q 97 91 100 88" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round"/>
+  <polygon points="95,84 101,84 98,88" fill="#000" />
+
+  <!-- Whiskers -->
+  <path d="M40 75 L 15 70 M 40 85 L 10 85 M 45 95 L 20 105" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+  <path d="M160 75 L 185 70 M 160 85 L 190 85 M 155 95 L 180 105" stroke="#000" strokeWidth="2" strokeLinecap="round"/>
+</svg>

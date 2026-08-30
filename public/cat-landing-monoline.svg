@@ -1,0 +1,41 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Tail - White base with black patch and black tip, flicking upward -->
+  <path d="M60 130 C 40 110, 25 70, 38 50 C 45 40, 55 55, 50 70 C 45 85, 52 105, 58 115" stroke="#FFF" strokeWidth="5.5" strokeLinecap="round"/>
+  <path d="M48 90 C 43 80, 50 65, 48 55" stroke="#000" strokeWidth="5.5" strokeLinecap="round"/>
+  <path d="M38 50 C 33 40, 48 35, 45 55" fill="#000" />
+
+  <!-- Body Base - Compressed Torso -->
+  <path d="M60 110 C 40 130, 40 170, 70 175 L 130 175 C 160 170, 160 130, 140 110 Z" fill="#FFF" stroke="#000" strokeWidth="4"/>
+
+  <!-- Black back saddle patch -->
+  <path d="M75 110 C 90 95, 120 100, 125 115 C 110 125, 90 120, 75 110 Z" fill="#000" />
+  <!-- Black flank patch on thigh -->
+  <path d="M125 125 C 140 120, 150 140, 140 150 C 130 160, 120 140, 125 125 Z" fill="#000" />
+
+  <!-- Front Compressed Paws -->
+  <path d="M74 140 L 74 175 C 70 182, 85 182, 82 175" fill="#FFF" stroke="#000" strokeWidth="3.5" strokeLinecap="round"/>
+  <path d="M116 140 L 116 175 C 112 182, 127 182, 124 175" fill="#FFF" stroke="#000" strokeWidth="3.5" strokeLinecap="round"/>
+
+  <!-- Head Base - Dipping low -->
+  <ellipse cx="96" cy="100" rx="42" ry="34" fill="#FFF" stroke="#000" strokeWidth="4"/>
+  
+  <!-- Black patch over left eye -->
+  <ellipse cx="110" cy="96" rx="14" ry="11" fill="#000" />
+
+  <!-- Left Ear (Black inside, white outside) -->
+  <path d="M64 78 L 52 50 L 78 68" fill="#FFF" stroke="#000" strokeWidth="3.5" strokeLinejoin="round"/>
+  <path d="M60 73 L 55 55 L 72 65 Z" fill="#000" />
+
+  <!-- Right Ear (Pink inside) -->
+  <path d="M124 78 L 136 50 L 110 68" fill="#FFF" stroke="#000" strokeWidth="3.5" strokeLinejoin="round"/>
+  <path d="M120 73 L 131 55 L 114 65 Z" fill="#FCDBD9" />
+
+  <!-- Face Details -->
+  <path d="M78 92 Q 84 85 88 92" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round"/>
+  <path d="M96 92 Q 102 85 106 92" fill="none" stroke="#FFF" strokeWidth="3" strokeLinecap="round"/>
+  
+  <ellipse cx="72" cy="100" rx="8" ry="4" fill="#FCDBD9" />
+  <ellipse cx="112" cy="100" rx="8" ry="4" fill="#FCDBD9" opacity="0.6"/>
+  <path d="M90 104 Q 93 107 96 104" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round"/>
+  <polygon points="92,101 95,101 93,104" fill="#000" />
+</svg>
