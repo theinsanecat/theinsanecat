@@ -141,20 +141,24 @@ function App() {
     return 'home';
   });
 
-  // Sync state with URL Hash for address bar updates (clean URL for home page)
+  // Sync activeSection with browser history (pushState) for native Back/Forward browser navigation
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (activeSection === 'home') {
-        const cleanUrl = window.location.pathname + window.location.search;
-        window.history.replaceState(null, '', cleanUrl);
-      } else {
-        window.history.replaceState(null, '', `#${activeSection}`);
+      const currentHash = window.location.hash.replace('#', '');
+      const targetSection = activeSection === 'home' ? '' : activeSection;
+
+      if (currentHash !== targetSection) {
+        const targetUrl = activeSection === 'home'
+          ? window.location.pathname + window.location.search
+          : `#${activeSection}`;
+        window.history.pushState({ section: activeSection }, '', targetUrl);
       }
     }
   }, [activeSection]);
 
+  // Handle native browser Back and Forward button clicks
   useEffect(() => {
-    const handleHashChange = () => {
+    const handlePopState = () => {
       const hash = window.location.hash.replace('#', '');
       if (['about', 'projects', 'contact', 'experience'].includes(hash)) {
         setActiveSection(hash);
@@ -162,8 +166,13 @@ function App() {
         setActiveSection('home');
       }
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
   }, []);
 
   const isAboutPage = activeSection === 'about';
