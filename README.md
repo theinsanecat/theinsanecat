@@ -1,14 +1,14 @@
-# Hi there, I'm Soumya Dwivedi 👋
+# Soumya Dwivedi
 
-### 🚀 [View My Live Interactive Portfolio Website](https://theinsanecat.github.io/theinsanecat/)
+### [View Live Portfolio Website](https://theinsanecat.github.io/theinsanecat/)
 
-Welcome to my personal GitHub profile repository! My full interactive 3D/2D web application portfolio is deployed live at:
+Welcome to my personal GitHub profile repository. My interactive portfolio is deployed live at:
 
-👉 **[https://theinsanecat.github.io/theinsanecat/](https://theinsanecat.github.io/theinsanecat/)**
+**[https://theinsanecat.github.io/theinsanecat/](https://theinsanecat.github.io/theinsanecat/)**
 
 ---
 
-## 🛠️ Featured Projects & Research
+## Featured Projects & Research
 
 - **Real-Time Automatic License Plate Recognition System for Indian Vehicles** *(BITS Pilani Dissertation)*
   - YOLOv8 Nano detection model (98% accuracy) & custom OCR pipeline (95.2% character accuracy) optimized for Indian road complexities & RTSP video streams.
@@ -21,7 +21,7 @@ Welcome to my personal GitHub profile repository! My full interactive 3D/2D web 
 
 ---
 
-## 📬 Connect with Me
+## Connect with Me
 
 - **Live Website**: [theinsanecat.github.io/theinsanecat](https://theinsanecat.github.io/theinsanecat/)
 - **GitHub**: [github.com/theinsanecat](https://github.com/theinsanecat)

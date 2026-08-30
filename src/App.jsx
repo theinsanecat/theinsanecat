@@ -131,7 +131,34 @@ function App() {
   }, []);
 
   // State to track active section ('home', 'about', 'projects', 'experience', or 'contact')
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const hash = window.location.hash.replace('#', '');
+      if (['home', 'about', 'projects', 'contact', 'experience'].includes(hash)) {
+        return hash;
+      }
+    }
+    return 'home';
+  });
+
+  // Sync state with URL Hash for address bar updates and direct deep-linking
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', `#${activeSection}`);
+    }
+  }, [activeSection]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (['home', 'about', 'projects', 'contact', 'experience'].includes(hash)) {
+        setActiveSection(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const isAboutPage = activeSection === 'about';
   const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'experience' || activeSection === 'projects';
 
