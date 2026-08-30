@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTransform, motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from './hooks/useMouseParallax';
 import { SkyLayer } from './components/environment/SkyLayer';
