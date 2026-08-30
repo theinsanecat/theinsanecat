@@ -18,7 +18,7 @@ const cardsData = [
     category: "ENTERPRISE FRONTEND",
     backTitle: "01/05",
     date: "Jan 2025 - Present",
-    image: "/images/infosys-building.jpg",
+    image: `${import.meta.env.BASE_URL}images/infosys-building.jpg`,
     description: "Jan 2025 - Present",
     longDescription:
       "I moved to Bangalore. For someone who had spent most of her life close to home, it was one of the most courageous and nerve-wracking decisions I had ever made, yes, EVER MADE. Not every brave decision feels brave while you're living it. Sometimes it just feels scary, but I am glad I did it, because I learned so much about myself and the people who love me. Somewhere along this journey, I also stopped thinking that good engineering meant making everything perfect, there's much more to it. Today, I care just as much about the people, the problem, and what happens beyond the code. At Infosys, I work on high-stakes banking applications, take ownership of messy production problems, work across teams, and build systems that can grow without becoming harder to live with. I’m still the girl who loves solving problems but I’ve also learned that the best solutions come from curiosity, consistency, empathy, and the courage to keep moving.",
@@ -41,7 +41,7 @@ const cardsData = [
     category: "FRONTEND DEVELOPER",
     backTitle: "02/05",
     date: "Oct 2020 - Dec 2024",
-    image: "/images/jio-building.jpg",
+    image: `${import.meta.env.BASE_URL}images/jio-building.jpg`,
     description: "Oct 2020 - Dec 2024",
     longDescription:
       "Jio was where I grew into the developer I am today. It was my first company, and over four years I went from writing code to leading projects, building products from scratch, creating reusable systems, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
@@ -64,7 +64,7 @@ const cardsData = [
     category: "POSTGRADUATE STUDIES",
     backTitle: "03/05",
     date: "2022 - 2024",
-    image: "/images/bits-pilani-building.jpg",
+    image: `${import.meta.env.BASE_URL}images/bits-pilani-building.jpg`,
     description: "2022 - 2024",
     longDescription:
       "Apparently, having a full-time career wasn't enough to satisfy my curiosity. While working, I went back to being a student and pursued my Master's in Data Science & Engineering at BITS Pilani. I dove into machine learning, deep learning, statistics, AI and the mathematics behind intelligent systems — not because I needed another line on my résumé, but because I genuinely wanted to understand more. It was demanding, occasionally exhausting, and completely worth it. Curiosity, I've learned, doesn't really care how busy you are.",
@@ -87,7 +87,7 @@ const cardsData = [
     category: "UNDERGRADUATE STUDIES",
     backTitle: "04/05",
     date: "2016 - 2020",
-    image: "/images/mumbai-university-building.jpg",
+    image: `${import.meta.env.BASE_URL}images/mumbai-university-building.jpg`,
     description: "2016 - 2020",
     longDescription:
       "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I am so thankful for it. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning aboutcircuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make a path my own and I did. I started diving deep to understand myself, organised workshops along with my professors for my juniors, Headed my very first event in a tech-fest where I was Event Head, I was an active member of the Social Wing, the Summer Internship Student Coordinator and a proud member of the college dance crew. In short, I never let anything hold me back from pursuing my interests and doing what I loved.",
@@ -108,7 +108,7 @@ const cardsData = [
     category: "ACADEMICS & HONORS",
     backTitle: "05/05",
     date: "2014 - 2016",
-    image: "/images/dav-school-building.jpg",
+    image: `${import.meta.env.BASE_URL}images/dav-school-building.jpg`,
     description: "2014 - 2016",
     longDescription:
       "I was the studious kid. The one who usually came first or second, loved Mathematics and Science, had a soft spot for English Literature and Computer Science, and somehow managed to have a good rapport with her teachers. But studying was never the only thing I wanted to do. I played Handball, Throwball and Kho-Kho, ran Marathons, was a Choir Member, danced, debated, sketched, painted, wrote small plays/stories, competed in SpellBee and Olympiads, and even brought home medals in all of the above. Looking back, I think school revealed something that has stayed with me ever since: I have always desired to create, explore and pour myself into things, whether that thing was a mathematical problem, a dance floor, or eventually, a piece of code.",

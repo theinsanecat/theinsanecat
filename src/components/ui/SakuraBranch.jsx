@@ -92,8 +92,8 @@ export const SakuraBranch = ({ theme }) => {
         }}
       >
         <img
-          src="/sakura-branch.svg"
-          alt="Right Sakura Branch Vector"
+          src={`${import.meta.env.BASE_URL}sakura-branch.svg`}
+          alt="Right Sakura Branch"
           className={`w-full h-auto opacity-100 transition-all duration-500 ${isLight
               ? 'filter brightness-[1.1] contrast-[1.05] saturate-[1.25] drop-shadow(0 0 20px rgba(244,114,182,0.4))'
               : 'filter brightness-[0.88] contrast-[1.5] saturate-[1.15] drop-shadow(0 0 25px rgba(244,63,94,0.5)) drop-shadow(0 0 10px rgba(15,23,42,0.8))'
