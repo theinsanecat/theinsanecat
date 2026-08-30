@@ -141,22 +141,21 @@ function App() {
     return 'home';
   });
 
-  // Sync activeSection with browser history (pushState) for native Back/Forward browser navigation
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const currentHash = window.location.hash.replace('#', '');
-      const targetSection = activeSection === 'home' ? '' : activeSection;
-
-      if (currentHash !== targetSection) {
-        const targetUrl = activeSection === 'home'
+  // Manual section navigation handler (pushes state to browser history stack)
+  const handleSectionChange = useCallback((newSection) => {
+    setActiveSection((prevSection) => {
+      if (prevSection === newSection) return prevSection;
+      if (typeof window !== 'undefined') {
+        const targetUrl = newSection === 'home'
           ? window.location.pathname + window.location.search
-          : `#${activeSection}`;
-        window.history.pushState({ section: activeSection }, '', targetUrl);
+          : `#${newSection}`;
+        window.history.pushState({ section: newSection }, '', targetUrl);
       }
-    }
-  }, [activeSection]);
+      return newSection;
+    });
+  }, []);
 
-  // Handle native browser Back and Forward button clicks
+  // Sync state with native browser Back & Forward button traversal
   useEffect(() => {
     const handlePopState = () => {
       const hash = window.location.hash.replace('#', '');
@@ -273,7 +272,7 @@ function App() {
       {/* 0. Header Navigation Overlay with Theme Switch */}
       <Navbar 
         activeSection={activeSection} 
-        setActiveSection={setActiveSection} 
+        setActiveSection={handleSectionChange} 
         theme={theme} 
         setTheme={setTheme} 
       />
@@ -390,7 +389,7 @@ function App() {
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full flex items-center justify-center pointer-events-auto"
               >
-                <HeroContent setActiveSection={setActiveSection} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
+                <HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
               </motion.div>
             ) : activeSection === 'about' ? (
               <motion.div
@@ -426,7 +425,7 @@ function App() {
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
               >
-                <ContactContent setActiveSection={setActiveSection} theme={theme} onAvatarTrigger={handleAvatarTrigger} />
+                <ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} />
               </motion.div>
             ) : activeSection === 'experience' ? (
               <motion.div
@@ -438,7 +437,7 @@ function App() {
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full flex items-center justify-center pointer-events-auto"
               >
-                <ExperienceContent setActiveSection={setActiveSection} />
+                <ExperienceContent setActiveSection={handleSectionChange} />
               </motion.div>
             ) : null}
           </AnimatePresence>
