@@ -141,18 +141,25 @@ function App() {
     return 'home';
   });
 
-  // Sync state with URL Hash for address bar updates and direct deep-linking
+  // Sync state with URL Hash for address bar updates (clean URL for home page)
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.history.replaceState(null, '', `#${activeSection}`);
+      if (activeSection === 'home') {
+        const cleanUrl = window.location.pathname + window.location.search;
+        window.history.replaceState(null, '', cleanUrl);
+      } else {
+        window.history.replaceState(null, '', `#${activeSection}`);
+      }
     }
   }, [activeSection]);
 
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'about', 'projects', 'contact', 'experience'].includes(hash)) {
+      if (['about', 'projects', 'contact', 'experience'].includes(hash)) {
         setActiveSection(hash);
+      } else {
+        setActiveSection('home');
       }
     };
     window.addEventListener('hashchange', handleHashChange);
