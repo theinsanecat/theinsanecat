@@ -1,16 +1,30 @@
-# React + Vite
+# Hi there, I'm Soumya Dwivedi 👋
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 🚀 [View My Live Interactive Portfolio Website](https://theinsanecat.github.io/theinsanecat/)
 
-Currently, two official plugins are available:
+Welcome to my personal GitHub profile repository! My full interactive 3D/2D web application portfolio is deployed live at:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+👉 **[https://theinsanecat.github.io/theinsanecat/](https://theinsanecat.github.io/theinsanecat/)**
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Featured Projects & Research
 
-## Expanding the ESLint configuration
+- **Real-Time Automatic License Plate Recognition System for Indian Vehicles** *(BITS Pilani Dissertation)*
+  - YOLOv8 Nano detection model (98% accuracy) & custom OCR pipeline (95.2% character accuracy) optimized for Indian road complexities & RTSP video streams.
+- **Automation of Irrigation & Security of Farm by using IoT and Machine Learning** *(B.E. Capstone Project)*
+  - Smart agricultural telemetry & automated irrigation scheduling powered by embedded sensors & ML algorithms.
+- **Smart Mirror & Daily Assistant** *(RAIT Campus Recognition)*
+  - Raspberry Pi 2-way mirror displaying OpenWeatherMap forecasts, schedules, self-esteem compliments, and PIR motion energy saving.
+- **Square-Up Game Grid** *(Interactive Canvas Application)*
+  - Real-time geometric line & triangle capture game engine featuring Delaunay Triangulation and dynamic scoring.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📬 Connect with Me
+
+- **Live Website**: [theinsanecat.github.io/theinsanecat](https://theinsanecat.github.io/theinsanecat/)
+- **GitHub**: [github.com/theinsanecat](https://github.com/theinsanecat)
+- **LinkedIn**: [linkedin.com/in/soumya-dwivedi](https://linkedin.com/in/soumya-dwivedi)
+- **Email**: [soumya.dwivedi05@gmail.com](mailto:soumya.dwivedi05@gmail.com)
+
