@@ -28,9 +28,9 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.88, y: 15 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative max-w-lg sm:max-w-xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 shadow-2xl ${isLight
-              ? 'bg-white/95 border-pink-300 text-slate-900 shadow-pink-500/20'
-              : 'bg-[#0f0921]/95 border-purple-500/50 text-purple-100 shadow-purple-500/30'
+            className={`relative max-w-lg sm:max-w-xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 ${isLight
+              ? 'bg-white/95 border-pink-300 text-slate-900'
+              : 'bg-[#0f0921]/95 border-purple-500/50 text-purple-100'
               }`}
           >
             {/* Background Glow Orbs */}

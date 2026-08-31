@@ -717,7 +717,7 @@ export const AboutContent = ({ theme }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 640 : false
   );
-  const isLocked = useRef(false);
+  const [isCardAnimating, setIsCardAnimating] = useState(false);
 
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
   const total = cardsData.length;
@@ -758,13 +758,13 @@ export const AboutContent = ({ theme }) => {
   }, [selectedCardId, activeIndex]);
 
   const navigate = (dir) => {
-    if (isLocked.current || selectedCardId !== null) return;
+    if (isCardAnimating || selectedCardId !== null) return;
     setActiveIndex(i => (i + dir + total) % total);
   };
 
   // Touch Swipe Gesture for mobile / tablet deck navigation
   const handlePanEnd = (e, info) => {
-    if (selectedCardId !== null || isLocked.current) return;
+    if (selectedCardId !== null || isCardAnimating) return;
     const threshold = 20;
     if (Math.abs(info.offset.x) > threshold && Math.abs(info.offset.x) > Math.abs(info.offset.y)) {
       if (info.offset.x < 0) {
@@ -776,17 +776,17 @@ export const AboutContent = ({ theme }) => {
   };
 
   const handleCardClick = (card, index) => {
-    if (isLocked.current) return;
+    if (isCardAnimating) return;
     if (selectedCardId === null) {
       if (index !== activeIndex) {
         setActiveIndex(index);
         return;
       }
-      isLocked.current = true;
+      setIsCardAnimating(true);
       setSelectedCardId(card.id);
       setTimeout(() => {
-        isLocked.current = false;
-      }, 700);
+        setIsCardAnimating(false);
+      }, 550);
     } else {
       if (card.id === selectedCardId) {
         collapse();
@@ -795,12 +795,12 @@ export const AboutContent = ({ theme }) => {
   };
 
   const collapse = () => {
-    if (isLocked.current) return;
-    isLocked.current = true;
+    if (isCardAnimating) return;
+    setIsCardAnimating(true);
     setSelectedCardId(null);
     setTimeout(() => {
-      isLocked.current = false;
-    }, 700);
+      setIsCardAnimating(false);
+    }, 550);
   };
 
   return (
@@ -944,7 +944,7 @@ export const AboutContent = ({ theme }) => {
                   marginLeft: '-150px',
                   willChange: 'transform, opacity',
                   filter: arc.offset !== 0 && isLight ? 'brightness(0.92) saturate(0.9)' : 'none',
-                  cursor: isLocked.current ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
+                  cursor: isCardAnimating ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
                   pointerEvents: (!isAnySelected || isSelected) ? 'auto' : 'none',
                 }}
               >
@@ -952,7 +952,7 @@ export const AboutContent = ({ theme }) => {
                   card={card}
                   isSelected={isSelected}
                   isHovered={isHovered && !isAnySelected}
-                  isCenterUnturned={isCenterUnturned && !isLocked.current}
+                  isCenterUnturned={isCenterUnturned && !isCardAnimating}
                   theme={theme}
                   isMobile={isMobile}
                 />
