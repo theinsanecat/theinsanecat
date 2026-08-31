@@ -333,21 +333,44 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
             <polygon points="0,-23 18,-9 0,0 -18,-9" fill={card.gemGlare} opacity="0.8" />
           </g>
         </g>
-        {/* Top Vector Crest Card Number Index - Light Mode */}
-        <g transform="translate(160, 68)">
-          <polygon points="0,-16 32,-8 32,8 0,16 -32,8 -32,-8" fill="#fbcfe8" stroke="#7c3aed" strokeWidth="2" />
-          <polygon points="0,-12 26,-6 26,6 0,12 -26,6 -26,-6" fill="#ffffff" opacity="0.9" />
+        {/* Top Header Text (No container box) - Light Mode */}
+        <g transform="translate(160, 56)">
+          <text x="0" y="-6" textAnchor="middle" fill="#6b21a8" opacity="0.65" fontSize="7.5" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="1.8">
+            UNIT DESIGNATION: 0{card.id}
+          </text>
+          <text x="0" y="8" textAnchor="middle" fill="#7c3aed" opacity="0.55" fontSize="8" fontWeight="700" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="2">
+            SET: [05]
+          </text>
+        </g>
+
+        {/* Lower Cyber Hologram Number & Sub-count / 05 - Light Mode */}
+        <g transform="translate(160, 368)">
           <text
             x="0"
-            y="3.5"
+            y="0"
             textAnchor="middle"
-            fill="#581c87"
-            fontSize="10"
+            fill="#ff2a8d"
+            fontSize="54"
             fontWeight="900"
-            fontFamily="monospace"
-            letterSpacing="1.2"
+            fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace"
+            letterSpacing="1"
+            filter="drop-shadow(0 0 8px #ff1493) drop-shadow(0 0 18px #ff2a8d)"
           >
-            {card.backTitle}
+            {card.id}
+          </text>
+          <path d="M -22,-36 L -22,-8 M 22,-36 L 22,-8 M -35,-20 L 35,-20" stroke="#ff2a8d" strokeWidth="1" strokeOpacity="0.4" strokeDasharray="2 2" />
+          <text x="0" y="24" textAnchor="middle" fill="#7c3aed" fontSize="12" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="2">
+            / 05
+          </text>
+        </g>
+
+        {/* Bottom Status Footer Line - Light Mode */}
+        <g transform="translate(160, 442)">
+          <text x="-124" y="0" fill="#6b21a8" opacity="0.65" fontSize="7" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="0.8">
+            STATUS: ACTIVE [0{card.id}/05]
+          </text>
+          <text x="124" y="0" textAnchor="end" fill="#6b21a8" opacity="0.65" fontSize="7" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="0.8">
+            PORTFOLIO SERIES: VER. 1.1
           </text>
         </g>
       </svg>
@@ -369,21 +392,44 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
           </g>
         </g>
 
-        {/* Top Vector Crest Card Number Index - Dark Mode */}
-        <g transform="translate(160, 68)">
-          <polygon points="0,-16 32,-8 32,8 0,16 -32,8 -32,-8" fill="#1b1235" stroke="#7952c2" strokeWidth="2" />
-          <polygon points="0,-12 26,-6 26,6 0,12 -26,6 -26,-6" fill="#251744" opacity="0.9" />
+        {/* Top Header Text (No container box) - Dark Mode */}
+        <g transform="translate(160, 56)">
+          <text x="0" y="-6" textAnchor="middle" fill="#e9d5ff" opacity="0.65" fontSize="7.5" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="1.8">
+            UNIT DESIGNATION: 0{card.id}
+          </text>
+          <text x="0" y="8" textAnchor="middle" fill="#c084fc" opacity="0.55" fontSize="8" fontWeight="700" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="2">
+            SET: [05]
+          </text>
+        </g>
+
+        {/* Lower Cyber Hologram Number & Sub-count / 05 - Dark Mode */}
+        <g transform="translate(160, 368)">
           <text
             x="0"
-            y="3.5"
+            y="0"
             textAnchor="middle"
-            fill="#f3e8f5"
-            fontSize="10"
+            fill="#ff2a8d"
+            fontSize="54"
             fontWeight="900"
-            fontFamily="monospace"
-            letterSpacing="1.2"
+            fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace"
+            letterSpacing="1"
+            filter="drop-shadow(0 0 8px #ff1493) drop-shadow(0 0 18px #ff2a8d)"
           >
-            {card.backTitle}
+            {card.id}
+          </text>
+          <path d="M -22,-36 L -22,-8 M 22,-36 L 22,-8 M -35,-20 L 35,-20" stroke="#ff2a8d" strokeWidth="1" strokeOpacity="0.4" strokeDasharray="2 2" />
+          <text x="0" y="24" textAnchor="middle" fill="#c084fc" fontSize="12" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="2">
+            / 05
+          </text>
+        </g>
+
+        {/* Bottom Status Footer Line - Dark Mode */}
+        <g transform="translate(160, 442)">
+          <text x="-124" y="0" fill="#a855f7" fontSize="7" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="0.8">
+            STATUS: ACTIVE [0{card.id}/05]
+          </text>
+          <text x="124" y="0" textAnchor="end" fill="#a855f7" fontSize="7" fontWeight="800" fontFamily="Questrial, ui-monospace, SFMono-Regular, monospace" letterSpacing="0.8">
+            PORTFOLIO SERIES: VER. 1.1
           </text>
         </g>
       </svg>
@@ -427,7 +473,7 @@ const CardFront = ({ card, isSelected, theme, isMobile }) => {
             <img
               src={card.image}
               alt={card.heading}
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-cover rounded-lg saturate-[1.20] contrast-[1.10] brightness-[1.04]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-purple-950/40 via-transparent to-transparent pointer-events-none" />
           </div>
@@ -814,7 +860,7 @@ export const AboutContent = ({ theme }) => {
 
       {/* Section Header */}
       <div
-        className="text-center transition-all duration-700 z-20 flex flex-col items-center pointer-events-none mt-20 sm:mt-24 md:mt-28 mb-2"
+        className="text-center transition-all duration-700 z-20 flex flex-col items-center pointer-events-none mt-16 sm:mt-20 md:mt-24 mb-2"
         style={{
           opacity: selectedCardId ? 0 : 1,
           transform: selectedCardId ? 'translateY(-12px)' : 'none',
@@ -870,11 +916,11 @@ export const AboutContent = ({ theme }) => {
           if (isAnySelected) {
             if (isSelected) {
               if (isMobile) {
-                // Mobile screens: card centered higher at top, details text BELOW card with clean 32px vertical gap
+                // Mobile screens: card centered higher at top, details text BELOW card with clean 20px vertical gap
                 targetX = 0;
-                targetY = isSmallScreen ? -185 : -195;
+                targetY = isSmallScreen ? -140 : -150;
                 rotateZ = 0;
-                scale = isSmallScreen ? 0.30 : 0.34;
+                scale = isSmallScreen ? 0.36 : 0.40;
                 opacity = 1;
                 zIndex = 50;
               } else {
@@ -959,7 +1005,7 @@ export const AboutContent = ({ theme }) => {
                 }`}
               style={{
                 left: '50%',
-                top: isMobile ? (isSmallScreen ? '185px' : '210px') : '50%',
+                top: isMobile ? (isSmallScreen ? 'calc(50% - 95px)' : 'calc(50% - 110px)') : '50%',
                 marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
                 width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
                 height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
@@ -1085,32 +1131,33 @@ export const AboutContent = ({ theme }) => {
           </svg>
         </button>
 
-      </motion.div>
-      </div>
+        {/* ── Single-Line Title Heading for Focused Card (Attached below card deck with comfortable gap) ── */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 text-center z-20 transition-all duration-700 pointer-events-none whitespace-nowrap"
+          style={{
+            top: 'calc(50% + 244px)',
+            opacity: selectedCardId ? 0 : 1,
+            transform: selectedCardId ? 'translateY(8px)' : 'none',
+          }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.h3
+              key={cardsData[activeIndex].id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className={`text-base sm:text-lg md:text-xl font-black tracking-tight transition-colors duration-700 ${isLight
+                ? 'text-[#1e1832] drop-shadow-[0_0_12px_rgba(236,72,153,0.3)]'
+                : 'text-white drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]'
+                }`}
+            >
+              {cardsData[activeIndex].heading}
+            </motion.h3>
+          </AnimatePresence>
+        </div>
 
-      {/* ── Single-Line Title Heading for Focused Card (Tightly attached right below card deck with CONSTANT mt-3 sm:mt-4 spacing) ── */}
-      <div
-        className="text-center z-20 mt-3 sm:mt-4 px-4 transition-all duration-700 pointer-events-none shrink-0"
-        style={{
-          opacity: selectedCardId ? 0 : 1,
-          transform: selectedCardId ? 'translateY(8px)' : 'none',
-        }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.h3
-            key={cardsData[activeIndex].id}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
-            className={`text-base sm:text-lg md:text-xl font-black tracking-tight transition-colors duration-700 ${isLight
-              ? 'text-[#1e1832] drop-shadow-[0_0_12px_rgba(236,72,153,0.3)]'
-              : 'text-white drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]'
-              }`}
-          >
-            {cardsData[activeIndex].heading}
-          </motion.h3>
-        </AnimatePresence>
+      </motion.div>
       </div>
 
       {/* ── Pretty Overlay Modal for Math Reflection ── */}
