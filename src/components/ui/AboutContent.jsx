@@ -662,15 +662,11 @@ export const AboutContent = ({ theme }) => {
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
   const [isTablet, setIsTablet] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth >= 768 && window.innerWidth <= 1180 : false
+    typeof window !== 'undefined' ? (window.innerWidth >= 768 && window.innerWidth <= 1180) : false
   );
   const [isSmallScreen, setIsSmallScreen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 640 : false
   );
-  const [isCompactHeight, setIsCompactHeight] = useState(() =>
-    typeof window !== 'undefined' ? window.innerHeight <= 700 : false
-  );
-
   const isLocked = useRef(false);
 
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
@@ -749,9 +745,7 @@ export const AboutContent = ({ theme }) => {
   };
 
   return (
-    <div className={`relative w-screen min-h-screen flex flex-col justify-between items-center select-none pointer-events-auto pb-4 sm:pb-6 ${
-      selectedCardId && isMobile ? 'overflow-y-auto' : 'overflow-hidden max-h-screen'
-    }`}>
+    <div className="relative w-screen h-screen max-h-screen flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-4 sm:pb-6">
 
       {/* Aurora Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -794,213 +788,213 @@ export const AboutContent = ({ theme }) => {
         <motion.div
           onPanEnd={handlePanEnd}
           className={`relative w-full flex flex-col items-center justify-center transition-all duration-700 ${selectedCardId
-            ? (isMobile ? 'h-[650px] sm:h-[690px]' : (isTablet ? 'h-[440px]' : 'h-[480px]'))
+            ? (isMobile ? 'h-[500px] xs:h-[540px] sm:h-[690px]' : (isTablet ? 'h-[440px]' : 'h-[480px]'))
             : 'h-[360px] sm:h-[420px] md:h-[460px]'
             }`}
         >
-          {/* Circular Plate Disc */}
-          <div
-            className={`absolute left-1/2 -translate-x-1/2 rounded-full border pointer-events-none transition-all duration-700 ${isLight
-              ? 'border-purple-300/40 bg-gradient-to-t from-purple-200/20 to-transparent'
-              : 'border-purple-500/25 bg-gradient-to-t from-purple-950/30 to-transparent'
-              }`}
-            style={{ width: '1100px', height: '1100px', bottom: '-830px', opacity: selectedCardId ? 0 : 1 }}
-          />
+        {/* Circular Plate Disc */}
+        <div
+          className={`absolute left-1/2 -translate-x-1/2 rounded-full border pointer-events-none transition-all duration-700 ${isLight
+            ? 'border-purple-300/40 bg-gradient-to-t from-purple-200/20 to-transparent'
+            : 'border-purple-500/25 bg-gradient-to-t from-purple-950/30 to-transparent'
+            }`}
+          style={{ width: '1100px', height: '1100px', bottom: '-830px', opacity: selectedCardId ? 0 : 1 }}
+        />
 
-          {/* Cards mapping - stays entirely mounted to morph dynamically */}
-          {cardsData.map((card, index) => {
-            const isSelected = selectedCardId === card.id;
-            const isAnySelected = selectedCardId !== null;
-            const isHovered = index === activeIndex;
-            const isCenterUnturned = index === activeIndex && !isAnySelected;
+        {/* Cards mapping - stays entirely mounted to morph dynamically */}
+        {cardsData.map((card, index) => {
+          const isSelected = selectedCardId === card.id;
+          const isAnySelected = selectedCardId !== null;
+          const isHovered = index === activeIndex;
+          const isCenterUnturned = index === activeIndex && !isAnySelected;
 
-            const arc = getArc(index, activeIndex, total, isLight);
+          const arc = getArc(index, activeIndex, total, isLight);
 
-            // Proportional card scaling based on screen size
-            let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 : arc.scale));
+          // Proportional card scaling based on screen size
+          let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 : arc.scale));
 
-            // Position targets
-            let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 : 1)));
-            let targetY = arc.y;
-            let rotateZ = arc.rotateZ;
-            let scale = baseScale;
-            let opacity = arc.opacity;
-            let zIndex = arc.zIndex;
+          // Position targets
+          let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 : 1)));
+          let targetY = arc.y;
+          let rotateZ = arc.rotateZ;
+          let scale = baseScale;
+          let opacity = arc.opacity;
+          let zIndex = arc.zIndex;
 
-            if (isAnySelected) {
-              if (isSelected) {
-                if (isMobile) {
-                  // Mobile screens: card centered at top, details text BELOW card with clean gap
-                  targetX = 0;
-                  targetY = isCompactHeight ? -200 : (isSmallScreen ? -180 : -190);
-                  rotateZ = 0;
-                  scale = isCompactHeight ? 0.38 : (isSmallScreen ? 0.42 : 0.46);
-                  opacity = 1;
-                  zIndex = 50;
-                } else {
-                  // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
-                  targetX = isTablet ? -135 : -200;
-                  targetY = 0;
-                  rotateZ = 0;
-                  scale = isTablet ? 0.80 : 0.92;
-                  opacity = 1;
-                  zIndex = 50;
-                }
+          if (isAnySelected) {
+            if (isSelected) {
+              if (isMobile) {
+                // Mobile screens: card centered at top, details text BELOW card cleanly
+                targetX = 0;
+                targetY = isSmallScreen ? -145 : -160;
+                rotateZ = 0;
+                scale = isSmallScreen ? 0.38 : 0.42;
+                opacity = 1;
+                zIndex = 50;
               } else {
-                // Other cards fly/fade out smoothly
-                targetX = arc.x;
-                targetY = arc.y + 180;
-                rotateZ = arc.rotateZ * 1.5;
-                scale = 0.35;
-                opacity = 0;
-                zIndex = 0;
+                // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
+                targetX = isTablet ? -135 : -200;
+                targetY = 0;
+                rotateZ = 0;
+                scale = isTablet ? 0.80 : 0.92;
+                opacity = 1;
+                zIndex = 50;
               }
+            } else {
+              // Other cards fly/fade out smoothly
+              targetX = arc.x;
+              targetY = arc.y + 180;
+              rotateZ = arc.rotateZ * 1.5;
+              scale = 0.35;
+              opacity = 0;
+              zIndex = 0;
             }
+          }
 
-            return (
-              <motion.div
-                key={card.id}
-                initial={{
-                  x: 0,
-                  y: 0,
-                  rotateZ: 0,
-                  scale: 0.5,
-                  opacity: 0,
-                }}
-                animate={{
-                  x: targetX,
-                  y: targetY,
-                  rotateZ: rotateZ,
-                  scale: scale,
-                  opacity: opacity,
-                  zIndex: zIndex,
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 110,
-                  damping: 16,
-                  mass: 0.8,
-                }}
-                onClick={() => handleCardClick(card, index)}
-                className="absolute w-[300px] h-[450px]"
-                style={{
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-225px',
-                  marginLeft: '-150px',
-                  filter: arc.offset !== 0 && isLight ? 'brightness(0.92) saturate(0.9)' : 'none',
-                  cursor: isLocked.current ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
-                  pointerEvents: (!isAnySelected || isSelected) ? 'auto' : 'none',
-                }}
-              >
-                <CardVisual
-                  card={card}
-                  isSelected={isSelected}
-                  isHovered={isHovered && !isAnySelected}
-                  isCenterUnturned={isCenterUnturned}
-                  theme={theme}
-                />
-              </motion.div>
-            );
-          })}
+          return (
+            <motion.div
+              key={card.id}
+              initial={{
+                x: 0,
+                y: 0,
+                rotateZ: 0,
+                scale: 0.5,
+                opacity: 0,
+              }}
+              animate={{
+                x: targetX,
+                y: targetY,
+                rotateZ: rotateZ,
+                scale: scale,
+                opacity: opacity,
+                zIndex: zIndex,
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 110,
+                damping: 16,
+                mass: 0.8,
+              }}
+              onClick={() => handleCardClick(card, index)}
+              className="absolute w-[300px] h-[450px]"
+              style={{
+                top: '50%',
+                left: '50%',
+                marginTop: '-225px',
+                marginLeft: '-150px',
+                filter: arc.offset !== 0 && isLight ? 'brightness(0.92) saturate(0.9)' : 'none',
+                cursor: isLocked.current ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
+                pointerEvents: (!isAnySelected || isSelected) ? 'auto' : 'none',
+              }}
+            >
+              <CardVisual
+                card={card}
+                isSelected={isSelected}
+                isHovered={isHovered && !isAnySelected}
+                isCenterUnturned={isCenterUnturned}
+                theme={theme}
+              />
+            </motion.div>
+          );
+        })}
 
-          {/* Details Description Panel (Below card on mobile with clean 50px vertical gap, side-by-side on tablet/desktop matching EXACT card height) */}
-          <AnimatePresence>
-            {selectedCard && (
-              <motion.div
-                key={`details-${selectedCard.id}`}
-                initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: isMobile ? '15px' : '-50%' }}
-                animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: isMobile ? '0px' : '-50%' }}
-                exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: isMobile ? '10px' : '-50%' }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-                className={`absolute flex flex-col text-left px-3 sm:px-4 z-30 pointer-events-auto items-start ${isMobile ? 'justify-start' : 'justify-between py-1'
-                  }`}
-                style={{
-                  left: '50%',
-                  top: isMobile ? (isCompactHeight ? '195px' : (isSmallScreen ? '240px' : '285px')) : '50%',
-                  marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
-                  width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
-                  height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
-                  maxHeight: isMobile ? (isCompactHeight ? 'calc(100vh - 210px)' : '360px') : 'none',
-                }}
-              >
-                {/* Header Info */}
-                <div className="w-full shrink-0 flex flex-col items-start mb-1">
-                  <span className={`text-[9.5px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
-                    }`}>
-                    {selectedCard.category} FOCUS
-                  </span>
-                  <h2 className={`text-lg sm:text-2xl md:text-3xl font-black tracking-tight leading-none my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
-                    }`}>
-                    {selectedCard.heading}
-                  </h2>
-                  <h3 className={`text-[11px] sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
-                    }`}>
-                    {selectedCard.title}
-                  </h3>
+        {/* Details Description Panel (Below card on mobile, side-by-side on tablet/desktop) */}
+        <AnimatePresence>
+          {selectedCard && (
+            <motion.div
+              key={`details-${selectedCard.id}`}
+              initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: isMobile ? '15px' : '-50%' }}
+              animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: isMobile ? '0px' : '-50%' }}
+              exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: isMobile ? '10px' : '-50%' }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className={`absolute flex flex-col text-left px-3 sm:px-4 z-30 pointer-events-auto items-start ${isMobile ? 'justify-start' : 'justify-between py-1'
+                }`}
+              style={{
+                left: '50%',
+                top: isMobile ? (isSmallScreen ? '175px' : '200px') : '50%',
+                marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
+                width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
+                height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
+                maxHeight: isMobile ? '350px' : 'none',
+              }}
+            >
+              {/* Header Info */}
+              <div className="w-full shrink-0 flex flex-col items-start mb-0.5 sm:mb-1">
+                <span className={`text-[8.5px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
+                  }`}>
+                  {selectedCard.category} FOCUS
+                </span>
+                <h2 className={`text-base sm:text-2xl md:text-3xl font-black tracking-tight leading-tight my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
+                  }`}>
+                  {selectedCard.heading}
+                </h2>
+                <h3 className={`text-[10px] sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
+                  }`}>
+                  {selectedCard.title}
+                </h3>
+              </div>
+
+              {/* Long Description Body */}
+              <div className={`w-full my-1 leading-snug text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[120px] sm:max-h-[160px] overflow-y-auto pr-1' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
+                } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
+                <p>{selectedCard.longDescription}</p>
+              </div>
+
+              {/* Bottom Section: Skills & Close Button */}
+              <div className="w-full shrink-0 flex flex-col items-start pt-0.5 sm:pt-1">
+                <h4 className={`text-[8.5px] sm:text-xs font-bold uppercase tracking-wider mb-0.5 sm:mb-1 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
+                  }`}>
+                  Key Stacks & Disciplines
+                </h4>
+                <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-1.5 sm:mb-3">
+                  {selectedCard.skills.map((skill, idx) => (
+                    skill === "Core Mathematics" ? (
+                      <CoreMathematicsPill
+                        key={`${skill}-${idx}`}
+                        isLight={isLight}
+                        onOpen={() => setIsMathModalOpen(true)}
+                      />
+                    ) : (
+                      <span key={`${skill}-${idx}`} className={`px-2 py-0.5 rounded-full text-[8.5px] sm:text-[11px] font-semibold transition-all duration-700 ${isLight
+                        ? 'bg-white/80 border border-purple-200 text-purple-900 shadow-sm'
+                        : 'bg-white/5 border border-purple-500/20 text-purple-200'
+                        }`}>
+                        {skill}
+                      </span>
+                    )
+                  ))}
                 </div>
-
-                {/* Long Description Body - Scrollable if text exceeds card height */}
-                <div className={`w-full my-1 leading-relaxed text-[11px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? (isCompactHeight ? 'max-h-[90px] overflow-y-auto pr-1 custom-scrollbar' : 'max-h-[140px] overflow-y-auto pr-1 custom-scrollbar') : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
-                  } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
-                  <p>{selectedCard.longDescription}</p>
-                </div>
-
-                {/* Bottom Section: Skills & Close Button */}
-                <div className="w-full shrink-0 flex flex-col items-start pt-1">
-                  <h4 className={`text-[9.5px] sm:text-xs font-bold uppercase tracking-wider mb-1 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
-                    }`}>
-                    Key Stacks & Disciplines
-                  </h4>
-                  <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-2.5 sm:mb-3">
-                    {selectedCard.skills.map((skill, idx) => (
-                      skill === "Core Mathematics" ? (
-                        <CoreMathematicsPill
-                          key={`${skill}-${idx}`}
-                          isLight={isLight}
-                          onOpen={() => setIsMathModalOpen(true)}
-                        />
-                      ) : (
-                        <span key={`${skill}-${idx}`} className={`px-2 sm:px-2.5 py-0.5 rounded-full text-[9.5px] sm:text-[11px] font-semibold transition-all duration-700 ${isLight
-                          ? 'bg-white/80 border border-purple-200 text-purple-900 shadow-sm'
-                          : 'bg-white/5 border border-purple-500/20 text-purple-200'
-                          }`}>
-                          {skill}
-                        </span>
-                      )
-                    ))}
-                  </div>
-                  {isLight ? (
+                {isLight ? (
+                  <button
+                    onClick={() => setSelectedCardId(null)}
+                    className="self-start px-3.5 sm:px-5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-1.5 sm:gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                    </svg>
+                    Close Expanded Card
+                  </button>
+                ) : (
+                  <BorderGlow
+                    borderRadius={9999}
+                    glowColor="270 85 70"
+                    colors={['#ab55f7', '#ec4899', '#3b82f6']}
+                    edgeSensitivity={40}
+                    glowRadius={20}
+                    glowIntensity={1.2}
+                    backgroundColor="#1b1235"
+                    className="self-start active:scale-95 transition-all duration-700 cursor-pointer w-max"
+                  >
                     <button
                       onClick={() => setSelectedCardId(null)}
-                      className="self-start px-4 sm:px-5 py-1.5 text-[11px] sm:text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-2"
+                      className="px-3.5 sm:px-5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1.5 sm:gap-2"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                       </svg>
                       Close Expanded Card
                     </button>
-                  ) : (
-                    <BorderGlow
-                      borderRadius={9999}
-                      glowColor="270 85 70"
-                      colors={['#ab55f7', '#ec4899', '#3b82f6']}
-                      edgeSensitivity={40}
-                      glowRadius={25}
-                      glowIntensity={1.2}
-                      backgroundColor="#1b1235"
-                      className="self-start active:scale-95 transition-all duration-700 cursor-pointer w-max"
-                    >
-                      <button
-                        onClick={() => setSelectedCardId(null)}
-                        className="px-4 sm:px-5 py-1.5 text-[11px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-2"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                        </svg>
-                        Close Expanded Card
-                      </button>
-                    </BorderGlow>
+                  </BorderGlow>
                   )}
                 </div>
               </motion.div>

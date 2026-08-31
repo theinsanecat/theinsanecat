@@ -76,24 +76,24 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
         </defs>
       </svg>
 
-      {/* Back Button - Fixed Top Left (Below Main Header) */}
+      {/* Back Button - Aligned cleanly at top-left level with navbar */}
       <motion.div
-        initial={{ opacity: 0, x: -30 }}
+        initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-16 sm:top-20 left-4 sm:left-6 md:left-16 z-40 transform-gpu"
+        className="fixed top-3.5 sm:top-4 left-3 sm:left-6 md:left-12 z-50 transform-gpu"
       >
         <div className="relative">
           {/* Light Mode Back Button */}
           <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <button
               onClick={() => setActiveSection('home')}
-              className="px-4 sm:px-5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-[#1e1832] bg-white/80 hover:bg-white border border-purple-200 shadow-md shadow-purple-900/10 rounded-full active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none flex items-center gap-2"
+              className="px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-[#1e1832] bg-white/90 hover:bg-white border border-purple-200/90 shadow-sm rounded-full active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none flex items-center gap-1.5"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-3.5 sm:h-3.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
-              Back to Home
+              <span>Back to Home</span>
             </button>
           </div>
 
@@ -104,19 +104,19 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
               glowColor="270 85 70"
               colors={['#ab55f7', '#ec4899', '#3b82f6']}
               edgeSensitivity={40}
-              glowRadius={25}
+              glowRadius={20}
               glowIntensity={1.2}
               backgroundColor="#1b1235"
               className="active:scale-95 transition-all duration-300 cursor-pointer w-max"
             >
               <button
                 onClick={() => setActiveSection('home')}
-                className="px-4 sm:px-5 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-2"
+                className="px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1.5"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-3.5 sm:h-3.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
-                Back to Home
+                <span>Back to Home</span>
               </button>
             </BorderGlow>
           </div>
@@ -242,12 +242,12 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
 
       </motion.div>
 
-      {/* Social Links Row — Positioned Cleanly Below Emblem */}
+      {/* Social Links Row — Scaled for mobile screens (iPhone SE) */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 w-full px-2 mt-6 sm:mt-8 z-30 transform-gpu"
+        className="flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full px-2 mt-4 sm:mt-8 z-30 transform-gpu"
       >
         {socialLinks.map((link) => (
           <div key={link.name} className="relative transform-gpu">
@@ -257,7 +257,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold tracking-wide text-[#1e1832] bg-white/85 hover:bg-white border border-purple-200/90 shadow-md shadow-purple-900/5 rounded-full hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none flex items-center justify-center gap-2 group whitespace-nowrap"
+                className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-[#1e1832] bg-white/85 hover:bg-white border border-purple-200/90 shadow-sm rounded-full hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
               >
                 <span className="text-purple-600 group-hover:text-pink-600 transition-colors duration-300">
                   {link.icon}
@@ -268,14 +268,14 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
               </a>
             </div>
 
-            {/* Dark Mode Social Button with Animated Border Glow (Matching Say Hello button) */}
+            {/* Dark Mode Social Button with Animated Border Glow */}
             <div className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <BorderGlow
                 borderRadius={9999}
                 glowColor="270 85 70"
                 colors={['#ab55f7', '#ec4899', '#3b82f6']}
                 edgeSensitivity={40}
-                glowRadius={25}
+                glowRadius={20}
                 glowIntensity={1.2}
                 backgroundColor="#1b1235"
                 className="active:scale-95 hover:scale-105 transition-all duration-300 cursor-pointer h-full"
@@ -284,7 +284,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold tracking-wide text-white focus:outline-none flex items-center justify-center gap-2 group whitespace-nowrap"
+                  className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-white focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
                 >
                   <span className={`transition-colors duration-300 ${link.color}`}>
                     {link.icon}
