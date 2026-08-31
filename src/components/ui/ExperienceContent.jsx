@@ -63,19 +63,10 @@ export const UFOCatSpaceship = ({ isHovered, isActive, className = '', style = {
       }}
     >
       <div className="relative w-full h-full" style={{ overflow: "visible" }}>
-        <motion.svg
+        <svg
           viewBox="0 0 200 200"
-          className="absolute inset-0 w-full h-full pointer-events-none"
+          className="absolute inset-0 w-full h-full pointer-events-none animate-ufo-float"
           style={{ overflow: "visible" }}
-          animate={{
-            y: [-1.8, 1.8, -1.8],
-            rotate: [-1.5, 1.5, -1.5]
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 3.0,
-            ease: "easeInOut"
-          }}
         >
           {/* ================= LAYER 1: GAS THRUST ================= */}
           <motion.g 
@@ -84,29 +75,18 @@ export const UFOCatSpaceship = ({ isHovered, isActive, className = '', style = {
             animate={{ opacity: activeOrHovered ? 1.0 : 0 }}
             transition={{ duration: 0.25 }}
           >
-            <motion.path 
+            <path 
               d="M 80,135 Q 55,175 100,205 Q 145,175 120,135 Z" 
               fill="url(#gas-gradient)" 
               filter="url(#gas-glow)"
-              animate={{
-                scaleY: [1.0, 1.25, 0.9, 1.15, 1.0],
-                scaleX: [1.0, 0.9, 1.1, 0.95, 1.0],
-                opacity: [0.75, 1.0, 0.65, 0.9, 0.75]
-              }}
-              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-              style={{ transformOrigin: "100px 135px" }}
+              className="animate-gas-thrust"
             />
-            <motion.path 
+            <path 
               d="M 90,135 Q 75,160 100,185 Q 125,160 110,135 Z" 
               fill="#ffffff" 
               opacity="0.65"
               filter="url(#gas-glow)"
-              animate={{
-                scaleY: [1.0, 1.2, 0.9, 1.1, 1.0],
-                opacity: [0.6, 0.8, 0.5, 0.7, 0.6]
-              }}
-              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-              style={{ transformOrigin: "100px 135px" }}
+              className="animate-gas-thrust"
             />
           </motion.g>
 
@@ -183,7 +163,7 @@ export const UFOCatSpaceship = ({ isHovered, isActive, className = '', style = {
             strokeWidth="2.8" 
             fill="none" 
           />
-        </motion.svg>
+        </svg>
       </div>
     </motion.div>
   );
@@ -404,12 +384,8 @@ const SlabTop = ({ isHovered, isActive, children }) => {
   const activeOrHovered = isActive || isHovered;
 
   return (
-    <motion.div
-      animate={{
-        y: [0, -8, 0]
-      }}
-      transition={floatTransition}
-      className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer"
+    <div
+      className="absolute inset-0 z-20 flex items-center justify-center cursor-pointer animate-pedestal-float"
       style={{ overflow: "visible" }}
     >
       <div className="relative w-[245px] h-[109px] flex items-center justify-center" style={{ overflow: "visible" }}>
@@ -516,7 +492,7 @@ const SlabTop = ({ isHovered, isActive, children }) => {
           {children}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

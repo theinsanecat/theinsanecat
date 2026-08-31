@@ -21,44 +21,26 @@ export const MobileLotusWaterBody = ({ theme }) => {
         viewBox="0 0 600 180"
         preserveAspectRatio="xMidYMax slice"
       >
-        {/* ================= 1. WATER BACKGROUND WAVES ================= */}
+        {/* ================= 1. WATER BACKGROUND WAVES — GPU CSS ANIMATED ================= */}
         <g id="water-background-waves-mob">
           {/* Layer 1: Back Wave */}
-          <motion.path
-            animate={{
-              d: [
-                "M -400,25 Q 150,10 300,25 T 1000,25 L 1000,600 L -400,600 Z",
-                "M -400,15 Q 150,35 300,15 T 1000,20 L 1000,600 L -400,600 Z",
-                "M -400,25 Q 150,10 300,25 T 1000,25 L 1000,600 L -400,600 Z",
-              ]
-            }}
-            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          <path
+            className="animate-wave-1"
+            d="M -400,25 Q 150,10 300,25 T 1000,25 L 1000,600 L -400,600 Z"
             fill="url(#backWaterGrad)"
           />
 
           {/* Layer 2: Mid Wave */}
-          <motion.path
-            animate={{
-              d: [
-                "M -400,55 Q 150,75 300,50 T 1000,60 L 1000,600 L -400,600 Z",
-                "M -400,45 Q 150,35 300,65 T 1000,50 L 1000,600 L -400,600 Z",
-                "M -400,55 Q 150,75 300,50 T 1000,60 L 1000,600 L -400,600 Z",
-              ]
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          <path
+            className="animate-wave-2"
+            d="M -400,55 Q 150,75 300,50 T 1000,60 L 1000,600 L -400,600 Z"
             fill="url(#midWaterGrad)"
           />
 
           {/* Layer 3: Foreground Wave */}
-          <motion.path
-            animate={{
-              d: [
-                "M -400,85 Q 150,65 300,90 T 1000,80 L 1000,600 L -400,600 Z",
-                "M -400,95 Q 150,105 300,75 T 1000,90 L 1000,600 L -400,600 Z",
-                "M -400,85 Q 150,65 300,90 T 1000,80 L 1000,600 L -400,600 Z",
-              ]
-            }}
-            transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
+          <path
+            className="animate-wave-3"
+            d="M -400,85 Q 150,65 300,90 T 1000,80 L 1000,600 L -400,600 Z"
             fill="url(#frontWaterGrad)"
           />
         </g>

@@ -13,24 +13,12 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
       {/* Premium Interactive Profile Avatar */}
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ 
-          opacity: 1, 
-          scale: 1,
-          y: [0, -6, 0]
-        }}
-        transition={{ 
-          opacity: { delay: 0.1, duration: 0.6 },
-          scale: { delay: 0.1, duration: 0.6 },
-          y: {
-            repeat: Infinity,
-            duration: 5,
-            ease: "easeInOut"
-          }
-        }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ opacity: { delay: 0.1, duration: 0.6 }, scale: { delay: 0.1, duration: 0.6 } }}
         onClick={() => {
           if (onAvatarTrigger) onAvatarTrigger();
         }}
-        className="relative mb-6 pointer-events-auto group cursor-pointer"
+        className="relative mb-6 pointer-events-auto group cursor-pointer animate-hero-float"
       >
         {/* Glow Halo behind the avatar */}
         <div className={`absolute -inset-2 rounded-full blur-md opacity-80 transition-all duration-700 animate-pulse ${

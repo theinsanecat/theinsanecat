@@ -40,40 +40,26 @@ const MonochromeButterfly = ({
     >
       <div className="relative w-full h-full flex items-center justify-center">
         {/* Left Wing */}
-        <motion.div
-          animate={{ rotateY: [0, 66, 0] }}
-          transition={{
-            duration: effectiveFlapDuration,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: flapDelay,
-          }}
-          className="absolute right-[50%] w-[50%] h-[92%] origin-right"
-          style={{ transformStyle: 'preserve-3d' }}
+        <div
+          className="absolute right-[50%] w-[50%] h-[92%] origin-right animate-flap-left"
+          style={{ transformStyle: 'preserve-3d', animationDuration: `${effectiveFlapDuration}s` }}
         >
           <svg viewBox="0 0 30 44" className="w-full h-full overflow-visible">
             <path d="M 30,22 C 14,0 0,6 2,24 C 4,34 20,38 30,22 Z" fill={mainColor} />
             <path d="M 30,22 C 18,28 4,38 12,44 C 22,48 26,34 30,22 Z" fill={mainColor} />
           </svg>
-        </motion.div>
+        </div>
 
         {/* Right Wing */}
-        <motion.div
-          animate={{ rotateY: [0, -66, 0] }}
-          transition={{
-            duration: effectiveFlapDuration,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: flapDelay,
-          }}
-          className="absolute left-[50%] w-[50%] h-[92%] origin-left"
-          style={{ transformStyle: 'preserve-3d' }}
+        <div
+          className="absolute left-[50%] w-[50%] h-[92%] origin-left animate-flap-right"
+          style={{ transformStyle: 'preserve-3d', animationDuration: `${effectiveFlapDuration}s` }}
         >
           <svg viewBox="0 0 30 44" className="w-full h-full overflow-visible">
             <path d="M 0,22 C 16,0 30,6 28,24 C 26,34 10,38 0,22 Z" fill={mainColor} />
             <path d="M 0,22 C 12,28 26,38 18,44 C 8,48 4,34 0,22 Z" fill={mainColor} />
           </svg>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

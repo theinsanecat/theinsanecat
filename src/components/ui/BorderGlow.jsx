@@ -124,7 +124,7 @@ const BorderGlow = ({
     let angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
     if (angle < 0) angle += 360;
 
-    targetAngleRef.current = angle;
+    card.style.setProperty('--cursor-angle', `${angle.toFixed(2)}deg`);
 
     // Proximity calculation
     let kx = Infinity;
@@ -141,20 +141,11 @@ const BorderGlow = ({
     }
     isHoveredRef.current = true;
     updateAngleAndEdge(e);
-    // Initialize current angle immediately to target to prevent entry jump
-    currentAngleRef.current = targetAngleRef.current;
-    if (cardRef.current) {
-      cardRef.current.style.setProperty('--cursor-angle', `${targetAngleRef.current.toFixed(2)}deg`);
-    }
-    startRafLoop();
-  }, [updateAngleAndEdge, startRafLoop]);
+  }, [updateAngleAndEdge]);
 
   const handlePointerMove = useCallback((e) => {
     updateAngleAndEdge(e);
-    if (!rafIdRef.current) {
-      startRafLoop();
-    }
-  }, [updateAngleAndEdge, startRafLoop]);
+  }, [updateAngleAndEdge]);
 
   const handlePointerLeave = useCallback(() => {
     isHoveredRef.current = false;

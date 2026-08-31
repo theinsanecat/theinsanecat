@@ -84,24 +84,8 @@ export const SakuraBranch = ({ theme }) => {
 
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none z-10 overflow-hidden select-none">
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{
-          rotate: [-2, -5.5, -2],
-          y: [0, 6, 0],
-          x: [0, -4, 0]
-        }}
-        transition={{
-          // On mobile: slow the sway to reduce GPU repaint frequency
-          duration: isMobile ? 16 : 8.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.5
-        }}
-        className="absolute top-0 right-0 w-[240px] md:w-[390px] origin-top-right opacity-100"
-        style={{
-          transform: 'rotate(-5deg) translate(8%, -8%)',
-        }}
+      <div
+        className="absolute top-0 right-0 w-[240px] md:w-[390px] origin-top-right opacity-100 animate-branch-sway"
       >
         <img
           src={`${import.meta.env.BASE_URL}sakura-branch.svg`}
@@ -111,7 +95,7 @@ export const SakuraBranch = ({ theme }) => {
               : 'filter brightness-[0.88] contrast-[1.5] saturate-[1.15] drop-shadow(0 0 25px rgba(244,63,94,0.5)) drop-shadow(0 0 10px rgba(15,23,42,0.8))'
             }`}
         />
-      </motion.div>
+      </div>
 
       {/* Ambient Falling Sakura Petals */}
       {petals.map((p) => (

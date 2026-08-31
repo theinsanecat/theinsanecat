@@ -596,37 +596,29 @@ const MiniSvgHeart = ({ className }) => (
 // ─── Special Glowing Floating Pill for Core Mathematics (Vector SVG Hearts, No Emojis) ───────
 const CoreMathematicsPill = ({ onOpen, isLight }) => {
   return (
-    <motion.button
+    <button
       type="button"
       onClick={(e) => {
         e.stopPropagation();
         onOpen();
       }}
-      animate={{ y: [0, -3.5, 0] }}
-      transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
-      className={`relative px-1.5 xs:px-2 sm:px-2.5 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold tracking-wide border border-pink-500 text-pink-500 bg-pink-500/10 shadow-[0_0_10px_rgba(236,72,153,0.7)] hover:shadow-[0_0_16px_rgba(236,72,153,0.9)] hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 overflow-visible select-none transition-all duration-300 ${isLight ? 'bg-pink-100/90 text-pink-700 border-pink-400' : 'bg-pink-950/40 text-pink-300 border-pink-500'
+      className={`relative px-1.5 xs:px-2 sm:px-2.5 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold tracking-wide border border-pink-500 text-pink-500 bg-pink-500/10 shadow-[0_0_10px_rgba(236,72,153,0.7)] hover:shadow-[0_0_16px_rgba(236,72,153,0.9)] hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 overflow-visible select-none transition-all duration-300 animate-pill-float ${isLight ? 'bg-pink-100/90 text-pink-700 border-pink-400' : 'bg-pink-950/40 text-pink-300 border-pink-500'
         }`}
     >
       <span>Core Mathematics</span>
 
       {/* Floating emitting mini vector SVG glowing hearts */}
-      <motion.div
-        initial={{ opacity: 0, y: 0, scale: 0.4 }}
-        animate={{ opacity: [0, 1, 0], y: [-2, -16], scale: [0.4, 1, 0.6] }}
-        transition={{ repeat: Infinity, duration: 2.0, ease: "easeOut" }}
-        className="absolute -top-2.5 left-1.5 text-pink-400 pointer-events-none drop-shadow-[0_0_6px_rgba(236,72,153,0.9)]"
+      <div
+        className="absolute -top-2.5 left-1.5 text-pink-400 pointer-events-none drop-shadow-[0_0_6px_rgba(236,72,153,0.9)] animate-heart-float-1"
       >
         <MiniSvgHeart className="w-2.5 h-2.5 fill-pink-500" />
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 0, scale: 0.4 }}
-        animate={{ opacity: [0, 1, 0], y: [-2, -20], scale: [0.4, 1, 0.6] }}
-        transition={{ repeat: Infinity, duration: 2.4, delay: 0.8, ease: "easeOut" }}
-        className="absolute -top-2.5 right-1.5 text-pink-400 pointer-events-none drop-shadow-[0_0_6px_rgba(236,72,153,0.9)]"
+      </div>
+      <div
+        className="absolute -top-2.5 right-1.5 text-pink-400 pointer-events-none drop-shadow-[0_0_6px_rgba(236,72,153,0.9)] animate-heart-float-2"
       >
         <MiniSvgHeart className="w-2 h-2 fill-pink-400" />
-      </motion.div>
-    </motion.button>
+      </div>
+    </button>
   );
 };
 

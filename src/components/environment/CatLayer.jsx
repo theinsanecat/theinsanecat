@@ -30,7 +30,7 @@ export const CatLayer = ({ isAboutPage }) => {
   };
 
   return (
-    <motion.div
+    <div
       ref={catRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -38,31 +38,12 @@ export const CatLayer = ({ isAboutPage }) => {
         position: 'absolute',
         bottom: '18%', // Nestles perfectly on the foreground grass floor
         left: 0,
-        // When hovered, lock the horizontal position to localX in pixels.
-        // Otherwise, allow Framer Motion's loop keyframes to pace the cat.
         x: isHovered && hoverPosition !== null ? hoverPosition : undefined,
         zIndex: 25,
       }}
-      animate={isHovered || isAboutPage ? {} : {
-        x: ["25vw", "75vw", "75vw", "25vw", "25vw"],
-        scaleX: [0.75, 0.75, -0.75, -0.75, 0.75] // Scale to 0.75x for realistic proportion
-      }}
-      transition={isHovered || isAboutPage ? {} : {
-        x: {
-          duration: 24,
-          repeat: Infinity,
-          ease: "easeInOut",
-          times: [0, 0.45, 0.5, 0.95, 1]
-        },
-        scaleX: {
-          duration: 24,
-          repeat: Infinity,
-          ease: "steps(1)",
-          times: [0, 0.45, 0.5, 0.95, 1]
-        }
-      }}
-      className={`w-14 h-14 select-none ${isAboutPage ? 'pointer-events-none' : 'cursor-pointer pointer-events-auto'
-        }`}
+      className={`w-14 h-14 select-none ${isHovered || isAboutPage ? '' : 'animate-cat-walk'} ${
+        isAboutPage ? 'pointer-events-none' : 'cursor-pointer pointer-events-auto'
+      }`}
     >
       <svg viewBox="0 0 100 100" className="w-full h-full text-[#0a0416] drop-shadow-[0_4px_6px_rgba(0,0,0,0.85)]">
         <defs>
@@ -139,6 +120,6 @@ export const CatLayer = ({ isAboutPage }) => {
           </>
         )}
       </svg>
-    </motion.div>
+    </div>
   );
 };

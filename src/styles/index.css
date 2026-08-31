@@ -221,3 +221,186 @@
 svg path, svg rect, svg polygon, svg circle, svg ellipse, svg line, svg stop {
   transition: fill 0.7s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), stop-color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* GPU-Accelerated Marquee Animations (0 JS Overhead) */
+@keyframes logoMarqueeLeft {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes logoMarqueeRight {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+.animate-logoloop-left {
+  animation: logoMarqueeLeft 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-logoloop-right {
+  animation: logoMarqueeRight 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-logoloop-left:hover, .animate-logoloop-right:hover {
+  animation-play-state: paused;
+}
+
+/* GPU-Accelerated Water Wave Translations (0 JS Overhead) */
+@keyframes waveSlide1 {
+  0% { transform: translate3d(-30px, 0, 0); }
+  50% { transform: translate3d(30px, -4px, 0); }
+  100% { transform: translate3d(-30px, 0, 0); }
+}
+
+@keyframes waveSlide2 {
+  0% { transform: translate3d(25px, 0, 0); }
+  50% { transform: translate3d(-25px, 3px, 0); }
+  100% { transform: translate3d(25px, 0, 0); }
+}
+
+@keyframes waveSlide3 {
+  0% { transform: translate3d(-20px, 0, 0); }
+  50% { transform: translate3d(20px, -3px, 0); }
+  100% { transform: translate3d(-20px, 0, 0); }
+}
+
+.animate-wave-1 {
+  animation: waveSlide1 14s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-wave-2 {
+  animation: waveSlide2 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-wave-3 {
+  animation: waveSlide3 7.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* GPU-Accelerated Butterfly Wing Flapping (0 JS Overhead) */
+@keyframes flapLeft {
+  0%, 100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(64deg); }
+}
+
+@keyframes flapRight {
+  0%, 100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(-64deg); }
+}
+
+.animate-flap-left {
+  animation: flapLeft 0.28s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-flap-right {
+  animation: flapRight 0.28s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* GPU-Accelerated Sakura Branch Swaying (0 JS Overhead) */
+@keyframes branchSway {
+  0%, 100% { transform: rotate(-5deg) translate(8%, -8%); }
+  50% { transform: rotate(-7.5deg) translate(6%, -6%); }
+}
+
+.animate-branch-sway {
+  animation: branchSway 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* GPU-Accelerated Cat Walking Animation (0 JS Overhead) */
+@keyframes catWalk {
+  0%, 100% { transform: translate3d(25vw, 0, 0) scaleX(0.75); }
+  45% { transform: translate3d(75vw, 0, 0) scaleX(0.75); }
+  50% { transform: translate3d(75vw, 0, 0) scaleX(-0.75); }
+  95% { transform: translate3d(25vw, 0, 0) scaleX(-0.75); }
+}
+
+.animate-cat-walk {
+  animation: catWalk 24s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* GPU-Accelerated Hero Avatar Float (0 JS Overhead) */
+@keyframes heroFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+
+.animate-hero-float {
+  animation: heroFloat 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* GPU-Accelerated Core Mathematics Pill & Floating Hearts (0 JS Overhead) */
+@keyframes pillFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -3.5px, 0); }
+}
+
+@keyframes heartFloat1 {
+  0% { opacity: 0; transform: translate3d(0, -2px, 0) scale(0.4); }
+  50% { opacity: 1; transform: translate3d(0, -9px, 0) scale(1); }
+  100% { opacity: 0; transform: translate3d(0, -16px, 0) scale(0.6); }
+}
+
+@keyframes heartFloat2 {
+  0% { opacity: 0; transform: translate3d(0, -2px, 0) scale(0.4); }
+  50% { opacity: 1; transform: translate3d(0, -11px, 0) scale(1); }
+  100% { opacity: 0; transform: translate3d(0, -20px, 0) scale(0.6); }
+}
+
+.animate-pill-float {
+  animation: pillFloat 2.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-heart-float-1 {
+  animation: heartFloat1 2.0s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-heart-float-2 {
+  animation: heartFloat2 2.4s ease-out infinite 0.8s;
+  will-change: transform, opacity;
+}
+
+/* GPU-Accelerated UFO Float & Gas Thrust (0 JS Overhead) */
+@keyframes ufoFloat {
+  0%, 100% { transform: translate3d(0, -1.8px, 0) rotate(-1.5deg); }
+  50% { transform: translate3d(0, 1.8px, 0) rotate(1.5deg); }
+}
+
+@keyframes gasThrust {
+  0%, 100% { transform: scale(1.0, 1.0); opacity: 0.75; }
+  25% { transform: scale(0.9, 1.25); opacity: 1.0; }
+  50% { transform: scale(1.1, 0.9); opacity: 0.65; }
+  75% { transform: scale(0.95, 1.15); opacity: 0.9; }
+}
+
+.animate-ufo-float {
+  animation: ufoFloat 3.0s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-gas-thrust {
+  animation: gasThrust 1.8s ease-in-out infinite;
+  will-change: transform, opacity;
+  transform-origin: 100px 135px;
+}
+
+/* GPU-Accelerated Pedestal Float (0 JS Overhead) */
+@keyframes pedestalFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+.animate-pedestal-float {
+  animation: pedestalFloat 4s ease-in-out infinite;
+  will-change: transform;
+}
