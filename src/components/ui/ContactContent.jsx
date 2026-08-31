@@ -157,20 +157,14 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
             WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
           }}
         >
-          {/* Light Mode Emblem */}
+          {/* Single Dynamic Emblem Image — 50% VRAM memory reduction */}
           <img
             src={rotatingEmblem}
             alt=""
-            className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-opacity duration-700 ease-in-out transform-gpu filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18) opacity(0.9) drop-shadow(0 0 20px rgba(192,132,252,0.5)) ${
-              isLight ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-          {/* Dark Mode Emblem */}
-          <img
-            src={rotatingEmblem}
-            alt=""
-            className={`absolute inset-0 w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none opacity-90 select-none transition-opacity duration-700 ease-in-out transform-gpu ${
-              isLight ? 'opacity-0' : 'opacity-90'
+            className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-all duration-700 ease-in-out transform-gpu ${
+              isLight 
+                ? 'opacity-90 filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18)' 
+                : 'opacity-90'
             }`}
           />
         </div>

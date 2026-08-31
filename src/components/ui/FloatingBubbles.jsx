@@ -8,15 +8,22 @@ const Bubble = ({ size, type, style }) => {
       width={size} 
       height={size} 
       viewBox="0 0 100 100" 
-      style={{
-        ...style,
-        filter: isSolid
-          ? "drop-shadow(0 0 16px rgba(219, 39, 119, 0.75)) drop-shadow(0 0 6px rgba(168, 85, 247, 0.5))"
-          : "drop-shadow(0 0 10px rgba(236, 72, 153, 0.35)) drop-shadow(0 0 4px rgba(168, 85, 247, 0.2))"
-      }}
+      className="transform-gpu overflow-visible"
+      style={style}
     >
       <defs>
-        <radialGradient id={`bubble-bg-${size}`} cx="35%" cy="35%" r="65%">
+        <filter id={`bubble-glow-${size}-${type}`} x="-40%" y="-40%" width="180%" height="180%">
+          {isSolid ? (
+            <>
+              <feDropShadow dx="0" dy="0" stdDeviation="4.5" floodColor="#db2777" floodOpacity="0.8" />
+              <feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#a855f7" floodOpacity="0.5" />
+            </>
+          ) : (
+            <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor="#ec4899" floodOpacity="0.45" />
+          )}
+        </filter>
+
+        <radialGradient id={`bubble-bg-${size}-${type}`} cx="35%" cy="35%" r="65%">
           {isSolid ? (
             <>
               <stop offset="0%" stopColor="#ffffff" />
@@ -33,7 +40,8 @@ const Bubble = ({ size, type, style }) => {
             </>
           )}
         </radialGradient>
-        <linearGradient id={`bubble-border-${size}`} x1="0%" y1="0%" x2="100%" y2="100%">
+
+        <linearGradient id={`bubble-border-${size}-${type}`} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="rgba(255, 255, 255, 0.4)" />
           <stop offset="30%" stopColor="rgba(236, 72, 153, 0.5)" />
           <stop offset="70%" stopColor="rgba(168, 85, 247, 0.5)" />
@@ -41,19 +49,20 @@ const Bubble = ({ size, type, style }) => {
         </linearGradient>
       </defs>
       
-      {/* Outer border glow ring */}
+      {/* Outer border & body with soft embedded SVG glow filter */}
       <circle 
         cx="50" 
         cy="50" 
-        r="47" 
-        stroke={isSolid ? "none" : `url(#bubble-border-${size})`} 
+        r="44" 
+        stroke={isSolid ? "none" : `url(#bubble-border-${size}-${type})`} 
         strokeWidth="1.2" 
-        fill={`url(#bubble-bg-${size})`} 
+        fill={`url(#bubble-bg-${size}-${type})`} 
+        filter={`url(#bubble-glow-${size}-${type})`}
       />
       
       {!isSolid && (
         <>
-          {/* Specular main reflection dot (near center-right, as in original image) */}
+          {/* Specular main reflection dot */}
           <circle 
             cx="62" 
             cy="50" 
@@ -67,10 +76,9 @@ const Bubble = ({ size, type, style }) => {
             r="4" 
             fill="#ffffff" 
             opacity="0.25"
-            filter="blur(1px)"
           />
 
-          {/* Secondary soft reflection (bottom-left) to simulate refraction bounce */}
+          {/* Secondary soft reflection */}
           <path 
             d="M 25,65 A 30,30 0 0,0 35,75" 
             stroke="rgba(255, 255, 255, 0.25)" 
@@ -101,10 +109,11 @@ export const FloatingBubbles = () => {
       {bubbles.map((b) => (
         <div
           key={b.id}
-          className={`absolute ${b.animName}`}
+          className={`absolute transform-gpu ${b.animName}`}
           style={{
             left: b.x,
             top: b.y,
+            willChange: 'transform',
           }}
         >
           <Bubble size={b.size} type={b.type} />
