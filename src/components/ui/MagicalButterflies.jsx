@@ -81,13 +81,13 @@ export const MagicalButterflies = ({ theme }) => {
       {/* ================= BUTTERFLY 1: Purple Butterfly (Upper Left) — always shown ================= */}
       <motion.div
         animate={{
-          left: ['0%', '16%', '2%', '22%', '8%', '0%'],
-          top: ['12%', '32%', '52%', '28%', '42%', '12%'],
+          x: ['0vw', '16vw', '2vw', '22vw', '8vw', '0vw'],
+          y: ['12vh', '32vh', '52vh', '28vh', '42vh', '12vh'],
           rotate: [12, -15, 20, -10, 15, 12],
         }}
         transition={{ duration: isMobile ? 26 : 18, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute w-7 h-7 z-25"
-        style={{ left: '0%', top: '12%' }}
+        className="absolute w-7 h-7 z-25 transform-gpu"
+        style={{ left: 0, top: 0, willChange: 'transform' }}
       >
         <MonochromeButterfly colorTheme="purple" size={28} flapDuration={0.27} flapDelay={0.04} theme={theme} isMobile={isMobile} />
       </motion.div>
@@ -95,13 +95,13 @@ export const MagicalButterflies = ({ theme }) => {
       {/* ================= BUTTERFLY 2: Pink Butterfly (Mid Left) — always shown ================= */}
       <motion.div
         animate={{
-          left: ['18%', '1%', '25%', '5%', '20%', '18%'],
-          top: ['20%', '40%', '64%', '78%', '36%', '20%'],
+          x: ['18vw', '1vw', '25vw', '5vw', '20vw', '18vw'],
+          y: ['20vh', '40vh', '64vh', '78vh', '36vh', '20vh'],
           rotate: [-18, 12, -22, 15, -8, -18],
         }}
         transition={{ duration: isMobile ? 24 : 17, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-        className="absolute w-7 h-7 z-25"
-        style={{ left: '18%', top: '20%' }}
+        className="absolute w-7 h-7 z-25 transform-gpu"
+        style={{ left: 0, top: 0, willChange: 'transform' }}
       >
         <MonochromeButterfly colorTheme="pink" size={28} flapDuration={0.22} flapDelay={0.08} theme={theme} isMobile={isMobile} />
       </motion.div>
@@ -111,26 +111,26 @@ export const MagicalButterflies = ({ theme }) => {
         <>
           <motion.div
             animate={{
-              left: ['-0.5%', '12%', '1%', '20%', '6%', '-0.5%'],
-              top: ['42%', '65%', '82%', '54%', '34%', '42%'],
+              x: ['-0.5vw', '12vw', '1vw', '20vw', '6vw', '-0.5vw'],
+              y: ['42vh', '65vh', '82vh', '54vh', '34vh', '42vh'],
               rotate: [-10, 18, -12, 16, -22, -10],
             }}
             transition={{ duration: 19, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute w-6 h-6 z-25"
-            style={{ left: '-0.5%', top: '42%' }}
+            className="absolute w-6 h-6 z-25 transform-gpu"
+            style={{ left: 0, top: 0, willChange: 'transform' }}
           >
             <MonochromeButterfly colorTheme="purple" size={26} flapDuration={0.33} flapDelay={0.16} theme={theme} isMobile={false} />
           </motion.div>
 
           <motion.div
             animate={{
-              left: ['75%', '92%', '78%', '95%', '84%', '75%'],
-              top: ['15%', '32%', '54%', '26%', '42%', '15%'],
+              x: ['75vw', '92vw', '78vw', '95vw', '84vw', '75vw'],
+              y: ['15vh', '32vh', '54vh', '26vh', '42vh', '15vh'],
               rotate: [10, -14, 18, -12, 14, 10],
             }}
             transition={{ duration: 18.5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-            className="absolute w-7 h-7 z-25"
-            style={{ left: '75%', top: '15%' }}
+            className="absolute w-7 h-7 z-25 transform-gpu"
+            style={{ left: 0, top: 0, willChange: 'transform' }}
           >
             <MonochromeButterfly colorTheme="pink" size={28} flapDuration={0.25} flapDelay={0.12} theme={theme} isMobile={false} />
           </motion.div>
