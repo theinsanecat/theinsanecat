@@ -19,19 +19,35 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="fixed top-0 left-0 w-full z-50 px-2 sm:px-6 md:px-16 py-3 sm:py-5 flex items-center justify-between pointer-events-auto"
     >
-      {/* Logo: Glowing typography with responsive scaling */}
-      <button 
-        onClick={() => setActiveSection('home')} 
-        className="group flex items-center gap-1 sm:gap-2 cursor-pointer focus:outline-none shrink-0 z-10"
-      >
-        <span className={`text-[10px] xs:text-[11px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-300 whitespace-nowrap ${
-          isLight 
-            ? 'text-[#1e1832] group-hover:text-pink-600' 
-            : 'text-white group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
-        }`}>
-          git commit -m &quot;I tried&quot;
-        </span>
-      </button>
+      {/* Top Left: Logo / Back to Home Button when on Contact Page */}
+      {activeSection === 'contact' ? (
+        <button
+          onClick={() => setActiveSection('home')}
+          className={`group flex items-center gap-1.5 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border text-[10px] sm:text-xs font-bold transition-all duration-300 cursor-pointer focus:outline-none shrink-0 z-10 active:scale-95 ${
+            isLight
+              ? 'bg-white/85 border-purple-200 text-[#1e1832] hover:bg-white shadow-sm'
+              : 'bg-[#1b1235]/90 border-purple-500/40 text-white hover:bg-purple-900/60 shadow-md'
+          }`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-3.5 sm:h-3.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          <span>Back to Home</span>
+        </button>
+      ) : (
+        <button 
+          onClick={() => setActiveSection('home')} 
+          className="group flex items-center gap-1 sm:gap-2 cursor-pointer focus:outline-none shrink-0 z-10"
+        >
+          <span className={`text-[10px] xs:text-[11px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-300 whitespace-nowrap ${
+            isLight 
+              ? 'text-[#1e1832] group-hover:text-pink-600' 
+              : 'text-white group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
+          }`}>
+            git commit -m &quot;I tried&quot;
+          </span>
+        </button>
+      )}
 
       {/* Nav Links: Glassmorphism pill wrapper - Visible & centered on ALL screen sizes */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-10">

@@ -782,9 +782,8 @@ export const AboutContent = ({ theme }) => {
           }`}>Rotate the deck and click a card to explore my journey.</p>
       </div>
 
-      {/* ── Main Interactive Section (Deck + Title linked together for CONSTANT spacing across all devices) ── */}
+      {/* ── Main Interactive Section ── */}
       <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center flex-1 px-4 sm:px-8">
-        {/* ── Unified Layout Container with Touch Swipe Gesture ── */}
         <motion.div
           onPanEnd={handlePanEnd}
           className={`relative w-full flex flex-col items-center justify-center transition-all duration-700 ${selectedCardId
@@ -995,74 +994,74 @@ export const AboutContent = ({ theme }) => {
                       Close Expanded Card
                     </button>
                   </BorderGlow>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-          {/* Left Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
-          <button
-            onClick={() => navigate(-1)}
-            aria-label="Previous card"
-            className={`absolute left-2 sm:left-4 md:left-6 lg:left-8 xl:-left-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
-              ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
-              : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
-              }`}
-            style={{
-              opacity: selectedCardId ? 0 : 1,
-              pointerEvents: selectedCardId ? 'none' : 'auto'
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:-translate-x-0.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-          </button>
-
-          {/* Right Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
-          <button
-            onClick={() => navigate(1)}
-            aria-label="Next card"
-            className={`absolute right-2 sm:right-4 md:right-6 lg:right-8 xl:-right-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
-              ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
-              : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
-              }`}
-            style={{
-              opacity: selectedCardId ? 0 : 1,
-              pointerEvents: selectedCardId ? 'none' : 'auto'
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:translate-x-0.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-
-        </motion.div>
-
-        {/* ── Single-Line Title Heading for Focused Card (Tightly attached right below card deck with CONSTANT mt-3 sm:mt-4 spacing) ── */}
-        <div
-          className="text-center z-20 mt-3 sm:mt-4 px-4 transition-all duration-700 pointer-events-none shrink-0"
+        {/* Left Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
+        <button
+          onClick={() => navigate(-1)}
+          aria-label="Previous card"
+          className={`absolute left-2 sm:left-4 md:left-6 lg:left-8 xl:-left-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
+            ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
+            : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
+            }`}
           style={{
             opacity: selectedCardId ? 0 : 1,
-            transform: selectedCardId ? 'translateY(8px)' : 'none',
+            pointerEvents: selectedCardId ? 'none' : 'auto'
           }}
         >
-          <AnimatePresence mode="wait">
-            <motion.h3
-              key={cardsData[activeIndex].id}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-              className={`text-base sm:text-lg md:text-xl font-black tracking-tight transition-colors duration-700 ${isLight
-                ? 'text-[#1e1832] drop-shadow-[0_0_12px_rgba(236,72,153,0.3)]'
-                : 'text-white drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]'
-                }`}
-            >
-              {cardsData[activeIndex].heading}
-            </motion.h3>
-          </AnimatePresence>
-        </div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:-translate-x-0.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+
+        {/* Right Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
+        <button
+          onClick={() => navigate(1)}
+          aria-label="Next card"
+          className={`absolute right-2 sm:right-4 md:right-6 lg:right-8 xl:-right-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
+            ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
+            : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
+            }`}
+          style={{
+            opacity: selectedCardId ? 0 : 1,
+            pointerEvents: selectedCardId ? 'none' : 'auto'
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:translate-x-0.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+
+      </motion.div>
+      </div>
+
+      {/* ── Single-Line Title Heading for Focused Card (Tightly attached right below card deck with CONSTANT mt-3 sm:mt-4 spacing) ── */}
+      <div
+        className="text-center z-20 mt-3 sm:mt-4 px-4 transition-all duration-700 pointer-events-none shrink-0"
+        style={{
+          opacity: selectedCardId ? 0 : 1,
+          transform: selectedCardId ? 'translateY(8px)' : 'none',
+        }}
+      >
+        <AnimatePresence mode="wait">
+          <motion.h3
+            key={cardsData[activeIndex].id}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className={`text-base sm:text-lg md:text-xl font-black tracking-tight transition-colors duration-700 ${isLight
+              ? 'text-[#1e1832] drop-shadow-[0_0_12px_rgba(236,72,153,0.3)]'
+              : 'text-white drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]'
+              }`}
+          >
+            {cardsData[activeIndex].heading}
+          </motion.h3>
+        </AnimatePresence>
       </div>
 
       {/* ── Pretty Overlay Modal for Math Reflection ── */}
@@ -1071,7 +1070,6 @@ export const AboutContent = ({ theme }) => {
         onClose={() => setIsMathModalOpen(false)}
         theme={theme}
       />
-
     </div>
   );
 };
