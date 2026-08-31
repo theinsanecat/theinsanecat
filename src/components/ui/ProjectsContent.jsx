@@ -29,8 +29,8 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
             exit={{ opacity: 0, scale: 0.88, y: 15 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className={`relative max-w-lg sm:max-w-xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 shadow-2xl ${isLight
-                ? 'bg-white/95 border-pink-300 text-slate-900 shadow-pink-500/20'
-                : 'bg-[#0f0921]/95 border-purple-500/50 text-purple-100 shadow-purple-500/30'
+              ? 'bg-white/95 border-pink-300 text-slate-900 shadow-pink-500/20'
+              : 'bg-[#0f0921]/95 border-purple-500/50 text-purple-100 shadow-purple-500/30'
               }`}
           >
             {/* Background Glow Orbs */}
@@ -41,8 +41,8 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
             <button
               onClick={onClose}
               className={`absolute top-4 right-4 p-1.5 rounded-full border transition-all duration-300 cursor-pointer focus:outline-none z-20 ${isLight
-                  ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
-                  : 'bg-purple-950/80 hover:bg-purple-900 border-purple-500/30 text-purple-200'
+                ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
+                : 'bg-purple-950/80 hover:bg-purple-900 border-purple-500/30 text-purple-200'
                 }`}
               aria-label="Close details"
             >
@@ -68,9 +68,8 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
               <p className="leading-relaxed">{project.description}</p>
 
               {project.fullDetails?.recognition && (
-                <p className={`text-[10px] sm:text-[11px] font-bold leading-tight transition-colors duration-300 ${
-                  isLight ? 'text-amber-600' : 'text-yellow-400'
-                }`}>
+                <p className={`text-[10px] sm:text-[11px] font-bold leading-tight transition-colors duration-300 ${isLight ? 'text-amber-600' : 'text-yellow-400'
+                  }`}>
                   {project.fullDetails.recognition}
                 </p>
               )}
@@ -126,8 +125,8 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold border transition-all duration-300 active:scale-95 cursor-pointer ${isLight
-                        ? 'bg-slate-900 text-white border-slate-800 hover:bg-slate-800 shadow-sm'
-                        : 'bg-purple-950/80 text-cyan-300 border-cyan-500/40 hover:bg-purple-900 shadow-[0_0_12px_rgba(34,211,238,0.25)]'
+                      ? 'bg-slate-900 text-white border-slate-800 hover:bg-slate-800 shadow-sm'
+                      : 'bg-purple-950/80 text-cyan-300 border-cyan-500/40 hover:bg-purple-900 shadow-[0_0_12px_rgba(34,211,238,0.25)]'
                       }`}
                   >
                     <svg className="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24">
@@ -153,8 +152,8 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
               <button
                 onClick={onClose}
                 className={`px-4 py-1.5 text-xs font-bold rounded-full border transition-all duration-300 cursor-pointer focus:outline-none active:scale-95 ${isLight
-                    ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
-                    : 'bg-purple-950/60 hover:bg-purple-900 border-purple-500/30 text-purple-200'
+                  ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
+                  : 'bg-purple-950/60 hover:bg-purple-900 border-purple-500/30 text-purple-200'
                   }`}
               >
                 Close Details
@@ -173,11 +172,10 @@ const ProjectCardPreview = ({ projectId, isLight }) => {
   if (projectId === 1) {
     // 1. Automation of Farm Irrigation & Security (BE Capstone RAIT)
     return (
-      <div className={`w-full h-full relative p-3 flex flex-col items-center justify-between overflow-hidden transition-colors duration-500 ${
-        isLight
-          ? 'bg-gradient-to-br from-emerald-100 via-teal-50 to-emerald-200 text-emerald-950 border border-emerald-300'
-          : 'bg-gradient-to-br from-emerald-950/80 via-teal-950/60 to-slate-950/80 text-emerald-200 border-none'
-      }`}>
+      <div className={`w-full h-full relative p-3 flex flex-col items-center justify-between overflow-hidden transition-colors duration-500 ${isLight
+        ? 'bg-gradient-to-br from-emerald-100 via-teal-50 to-emerald-200 text-emerald-950 border border-emerald-300'
+        : 'bg-gradient-to-br from-emerald-950/80 via-teal-950/60 to-slate-950/80 text-emerald-200 border-none'
+        }`}>
         <div className={`w-full flex items-center justify-between border-b pb-1 ${isLight ? 'border-emerald-300' : 'border-emerald-500/30'}`}>
           <div className="flex items-center gap-1">
             <div className={`w-1.5 h-1.5 rounded-full animate-ping ${isLight ? 'bg-emerald-600' : 'bg-emerald-400'}`} />
@@ -221,19 +219,17 @@ const ProjectCardPreview = ({ projectId, isLight }) => {
   if (projectId === 2) {
     // 2. Smart Mirror & Daily Assistant (60-Hr IoT Workshop RAIT)
     return (
-      <div className={`w-full h-full relative p-2.5 flex flex-col justify-between overflow-hidden transition-colors duration-500 ${
-        isLight
-          ? 'bg-gradient-to-br from-sky-100 via-blue-50 to-sky-200 text-sky-950 border border-sky-300'
-          : 'bg-gradient-to-br from-sky-950/80 via-slate-900/70 to-blue-950/80 text-sky-200 border-none'
-      }`}>
+      <div className={`w-full h-full relative p-2.5 flex flex-col justify-between overflow-hidden transition-colors duration-500 ${isLight
+        ? 'bg-gradient-to-br from-sky-100 via-blue-50 to-sky-200 text-sky-950 border border-sky-300'
+        : 'bg-gradient-to-br from-sky-950/80 via-slate-900/70 to-blue-950/80 text-sky-200 border-none'
+        }`}>
         <div className={`flex items-center justify-between border-b pb-1 ${isLight ? 'border-sky-300' : 'border-sky-500/30'}`}>
           <span className={`text-[7.5px] font-mono font-bold tracking-wider uppercase ${isLight ? 'text-sky-900' : 'text-cyan-300'}`}>08:45 AM • MON</span>
           <span className={`text-[7.5px] font-mono font-bold ${isLight ? 'text-sky-800' : 'text-sky-300'}`}>28°C Sunny</span>
         </div>
 
-        <div className={`my-auto text-center px-2 py-1.5 rounded-lg border backdrop-blur-sm ${
-          isLight ? 'bg-white/90 border-sky-300 shadow-sm' : 'bg-sky-500/15 border-sky-400/40'
-        }`}>
+        <div className={`my-auto text-center px-2 py-1.5 rounded-lg border backdrop-blur-sm ${isLight ? 'bg-white/90 border-sky-300 shadow-sm' : 'bg-sky-500/15 border-sky-400/40'
+          }`}>
           <p className={`text-[9px] font-bold tracking-tight leading-tight ${isLight ? 'text-sky-950' : 'text-cyan-100'}`}>
             "You Look Radiant Today ✨"
           </p>
@@ -250,34 +246,29 @@ const ProjectCardPreview = ({ projectId, isLight }) => {
   if (projectId === 3) {
     // 3. Square-Up Game Logo & Real-time Grid
     return (
-      <div className={`w-full h-full relative p-2.5 flex flex-col items-center justify-between overflow-hidden transition-colors duration-500 ${
-        isLight
-          ? 'bg-gradient-to-br from-pink-100 via-purple-50 to-pink-200 text-purple-950 border border-pink-300'
-          : 'bg-gradient-to-br from-pink-950/80 via-purple-950/70 to-slate-950/80 text-purple-200 border-none'
-      }`}>
-        <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border ${
-          isLight ? 'bg-white/90 border-pink-300 shadow-sm' : 'bg-pink-500/20 border-pink-400/40'
+      <div className={`w-full h-full relative p-2.5 flex flex-col items-center justify-between overflow-hidden transition-colors duration-500 ${isLight
+        ? 'bg-gradient-to-br from-pink-100 via-purple-50 to-pink-200 text-purple-950 border border-pink-300'
+        : 'bg-gradient-to-br from-pink-950/80 via-purple-950/70 to-slate-950/80 text-purple-200 border-none'
         }`}>
+        <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border ${isLight ? 'bg-white/90 border-pink-300 shadow-sm' : 'bg-pink-500/20 border-pink-400/40'
+          }`}>
           <div className="w-2 h-2 rounded bg-pink-500 shadow-[0_0_6px_rgba(236,72,153,0.8)]" />
           <span className={`text-[8px] font-mono font-black tracking-widest uppercase ${isLight ? 'text-pink-950' : 'text-pink-200'}`}>SQUARE-UP</span>
           <div className="w-2 h-2 rounded-full bg-purple-500" />
         </div>
 
-        <div className={`relative w-32 h-14 border rounded-lg p-1.5 flex items-center justify-around ${
-          isLight ? 'bg-white/90 border-pink-300 shadow-sm' : 'bg-purple-950/40 border-purple-500/40'
-        }`}>
-          <div className={`absolute inset-[8px] border rounded ${
-            isLight ? 'border-pink-400 bg-pink-100/60' : 'border-cyan-400/70 bg-cyan-500/15'
-          }`} />
+        <div className={`relative w-32 h-14 border rounded-lg p-1.5 flex items-center justify-around ${isLight ? 'bg-white/90 border-pink-300 shadow-sm' : 'bg-purple-950/40 border-purple-500/40'
+          }`}>
+          <div className={`absolute inset-[8px] border rounded ${isLight ? 'border-pink-400 bg-pink-100/60' : 'border-cyan-400/70 bg-cyan-500/15'
+            }`} />
 
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.9)] z-10" />
           <div className="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.9)] z-10" />
           <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.9)] z-10" />
         </div>
 
-        <div className={`w-full flex items-center justify-between text-[7.5px] font-mono border-t pt-1 ${
-          isLight ? 'border-pink-300 text-purple-950' : 'border-purple-500/20 text-purple-300/90'
-        }`}>
+        <div className={`w-full flex items-center justify-between text-[7.5px] font-mono border-t pt-1 ${isLight ? 'border-pink-300 text-purple-950' : 'border-purple-500/20 text-purple-300/90'
+          }`}>
           <span>DELAUNAY TRIANGULATION</span>
           <span className={`font-bold ${isLight ? 'text-pink-800' : 'text-pink-400'}`}>2-PLAYER REALTIME</span>
         </div>
@@ -288,25 +279,21 @@ const ProjectCardPreview = ({ projectId, isLight }) => {
   if (projectId === 4) {
     // 4. Indian ALPR & RTSP Vision Pipeline (BITS Pilani Dissertation)
     return (
-      <div className={`w-full h-full relative p-2.5 flex flex-col justify-between overflow-hidden transition-colors duration-500 ${
-        isLight
-          ? 'bg-gradient-to-br from-amber-100 via-yellow-50 to-amber-200 text-amber-950 border border-amber-300'
-          : 'bg-gradient-to-br from-amber-950/80 via-slate-950/90 to-orange-950/80 text-amber-200 border-none'
-      }`}>
-        <div className={`flex items-center justify-between text-[7.5px] font-mono border-b pb-1 ${
-          isLight ? 'border-amber-300 text-amber-950' : 'border-amber-500/30 text-amber-300'
+      <div className={`w-full h-full relative p-2.5 flex flex-col justify-between overflow-hidden transition-colors duration-500 ${isLight
+        ? 'bg-gradient-to-br from-amber-100 via-yellow-50 to-amber-200 text-amber-950 border border-amber-300'
+        : 'bg-gradient-to-br from-amber-950/80 via-slate-950/90 to-orange-950/80 text-amber-200 border-none'
         }`}>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-b pb-1 ${isLight ? 'border-amber-300 text-amber-950' : 'border-amber-500/30 text-amber-300'
+          }`}>
           <span className={`font-bold uppercase tracking-wider ${isLight ? 'text-amber-900' : 'text-amber-400'}`}>RTSP STREAM CAM #01</span>
           <span className={`font-bold ${isLight ? 'text-emerald-800' : 'text-emerald-400'}`}>93.3% ACCURACY</span>
         </div>
 
-        <div className={`my-auto p-1.5 rounded border relative flex items-center justify-between ${
-          isLight ? 'bg-white/90 border-amber-400 shadow-sm' : 'bg-emerald-500/15 border-emerald-400/80'
-        }`}>
+        <div className={`my-auto p-1.5 rounded border relative flex items-center justify-between ${isLight ? 'bg-white/90 border-amber-400 shadow-sm' : 'bg-emerald-500/15 border-emerald-400/80'
+          }`}>
           <div className="flex items-center gap-1">
-            <span className={`text-[7.5px] font-mono font-black px-1.5 py-0.5 rounded border ${
-              isLight ? 'bg-amber-100 text-amber-950 border-amber-400' : 'bg-black/70 text-amber-300 border-amber-400/40'
-            }`}>
+            <span className={`text-[7.5px] font-mono font-black px-1.5 py-0.5 rounded border ${isLight ? 'bg-amber-100 text-amber-950 border-amber-400' : 'bg-black/70 text-amber-300 border-amber-400/40'
+              }`}>
               MH 12 AB 1234
             </span>
             <span className={`text-[7px] font-mono font-bold ${isLight ? 'text-emerald-900' : 'text-emerald-300'}`}>[YOLOv8: 98%]</span>
@@ -314,9 +301,8 @@ const ProjectCardPreview = ({ projectId, isLight }) => {
           <span className={`text-[7px] font-mono font-bold ${isLight ? 'text-sky-900' : 'text-cyan-300'}`}>[OCR: 95.2%]</span>
         </div>
 
-        <div className={`flex items-center justify-between text-[7.5px] font-mono border-t pt-1 ${
-          isLight ? 'border-amber-300 text-amber-950' : 'border-amber-500/20 text-amber-200/90'
-        }`}>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-t pt-1 ${isLight ? 'border-amber-300 text-amber-950' : 'border-amber-500/20 text-amber-200/90'
+          }`}>
           <span>BITS PILANI DISSERTATION</span>
           <span className={`font-bold ${isLight ? 'text-amber-900' : 'text-amber-400'}`}>INDIAN PLATES</span>
         </div>
@@ -603,18 +589,18 @@ export const ProjectsContent = ({ theme }) => {
       <FloatingBubbles />
 
       {/* Title Header */}
-      <div className="text-center mb-1 sm:mb-2 max-w-2xl z-10 mt-10 sm:mt-14 md:mt-16 shrink-0">
+      <div className="text-center mb-1 sm:mb-2 max-w-2xl z-10 mt-16 xs:mt-18 sm:mt-20 md:mt-24 lg:mt-16 shrink-0">
         <span className={`text-[10px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-500 ease-in-out ${isLight ? 'text-pink-600' : 'text-pink-400'
           }`}>
-          Stellar Showcase
+          Ideas In Motion
         </span>
         <h2 className={`text-2xl sm:text-3xl md:text-4xl font-black mt-0.5 mb-0.5 sm:mb-1 tracking-tight leading-none transition-colors duration-500 ease-in-out ${isLight ? 'text-[#1e1832]' : 'text-white'
           }`}>
-          Stellar Creations
+          Projects & Experiments
         </h2>
         <p className={`text-[10px] sm:text-xs leading-relaxed font-questrial px-2 max-w-md mx-auto transition-colors duration-500 ease-in-out ${isLight ? 'text-slate-700 font-medium' : 'text-purple-200/60'
           }`}>
-          Explore Soumya's orbital creations, featuring advanced WebGL mechanics, design aesthetics, and distributed architectures!
+          A few ideas brought to life
         </p>
       </div>
 

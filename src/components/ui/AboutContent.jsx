@@ -44,7 +44,7 @@ const cardsData = [
     image: `${import.meta.env.BASE_URL}images/jio-building.jpg`,
     description: "Oct 2020 - Dec 2024",
     longDescription:
-      "Jio was where I grew into the developer I am today. It was my first company, and over four years I went from writing code to leading projects, building products from scratch, creating reusable systems, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
+      "Jio was where I grew into the developer I am today. It wasn't just my first job; it was my college placement, my first company, and the place where my professional journey truly began. That makes this chapter especially dear to my heart. Over four years I went from writing code to leading projects, building products from scratch, creating reusable systems, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
     skills: [
       "Team Lead",
       "Web Development",
@@ -67,14 +67,14 @@ const cardsData = [
     image: `${import.meta.env.BASE_URL}images/bits-pilani-building.jpg`,
     description: "2022 - 2024",
     longDescription:
-      "Apparently, having a full-time career wasn't enough to satisfy my curiosity. While working, I went back to being a student and pursued my Master's in Data Science & Engineering at BITS Pilani. I dove into machine learning, deep learning, statistics, AI and the mathematics behind intelligent systems — not because I needed another line on my résumé, but because I genuinely wanted to understand more. It was demanding, occasionally exhausting, and completely worth it. Curiosity, I've learned, doesn't really care how busy you are.",
+      "Apparently, having a full-time career wasn't enough to satisfy my curiosity. While working, I went back to being a student and pursued my Master's in Data Science & Engineering at BITS Pilani. I dove into machine learning, deep learning, statistics, AI and the mathematics behind intelligent systems not because I needed another line on my résumé, but because I genuinely wanted to understand more. I've always enjoyed learning for the simple joy of understanding something I didn't understand before. Balancing a full-time career, academics, and everything in between demanded discipline, consistency, and the ability to keep showing up. It was one of the most demanding chapters of my life but also the one I'm incredibly proud of. Curiosity, I've learned, doesn't really care how busy you are.",
     skills: [
       "M.Tech Data Science",
       "7.5 CGPA",
       "Data Engineering",
       "Machine Learning",
       "Algorithmic Design",
-      "Python Analytics",
+      "Python",
       "Core Mathematics"
     ],
     ...GEM,
@@ -83,14 +83,14 @@ const cardsData = [
   {
     id: 4,
     heading: "University of Mumbai (RAIT)",
-    title: "B.E. Electronics & Telecommunication",
+    title: "B.E. Electronics & Telecomm.",
     category: "UNDERGRADUATE STUDIES",
     backTitle: "04/05",
     date: "2016 - 2020",
     image: `${import.meta.env.BASE_URL}images/mumbai-university-building.jpg`,
     description: "2016 - 2020",
     longDescription:
-      "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I am so thankful for it. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning aboutcircuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make a path my own and I did. I started diving deep to understand myself, organised workshops along with my professors for my juniors, Headed my very first event in a tech-fest where I was Event Head, I was an active member of the Social Wing, the Summer Internship Student Coordinator and a proud member of the college dance crew. In short, I never let anything hold me back from pursuing my interests and doing what I loved.",
+      "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I'm thankful they did. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning aboutcircuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make a path my own and I did. College also gave me the space to discover more about myself beyond academics. I explored different interests, organised workshops alongside my professors for juniors, headed my very first event at our tech-fest, became an active member of the Social Wing, took on the role of Summer Internship Student Coordinator, and proudly became part of the college dance crew. Looking back, I think I simply tried to make the most of the opportunities and interests that came my way and discovered a little more about myself too.",
     skills: [
       "8.6 CGPA",
       "10 grade point in subjects",
@@ -330,6 +330,23 @@ const CardBack = ({ card, isHovered, theme }) => {
             <polygon points="0,-23 18,-9 0,0 -18,-9" fill={card.gemGlare} opacity="0.8" />
           </g>
         </g>
+        {/* Top Vector Crest Card Number Index - Light Mode */}
+        <g transform="translate(160, 68)">
+          <polygon points="0,-16 32,-8 32,8 0,16 -32,8 -32,-8" fill="#fbcfe8" stroke="#7c3aed" strokeWidth="2" />
+          <polygon points="0,-12 26,-6 26,6 0,12 -26,6 -26,-6" fill="#ffffff" opacity="0.9" />
+          <text
+            x="0"
+            y="3.5"
+            textAnchor="middle"
+            fill="#581c87"
+            fontSize="10"
+            fontWeight="900"
+            fontFamily="monospace"
+            letterSpacing="1.2"
+          >
+            {card.backTitle}
+          </text>
+        </g>
       </svg>
 
       {/* Top Layer: Center 3D Isometric Hexagon Gem - Dark Mode */}
@@ -347,6 +364,24 @@ const CardBack = ({ card, isHovered, theme }) => {
             <polygon points="0,-23 18,-9 18,9 0,23 -18,9 -18,-9" fill={card.gemCenter} opacity="0.9" />
             <polygon points="0,-23 18,-9 0,0 -18,-9" fill={card.gemGlare} opacity="0.8" />
           </g>
+        </g>
+
+        {/* Top Vector Crest Card Number Index - Dark Mode */}
+        <g transform="translate(160, 68)">
+          <polygon points="0,-16 32,-8 32,8 0,16 -32,8 -32,-8" fill="#1b1235" stroke="#7952c2" strokeWidth="2" />
+          <polygon points="0,-12 26,-6 26,6 0,12 -26,6 -26,-6" fill="#251744" opacity="0.9" />
+          <text
+            x="0"
+            y="3.5"
+            textAnchor="middle"
+            fill="#f3e8f5"
+            fontSize="10"
+            fontWeight="900"
+            fontFamily="monospace"
+            letterSpacing="1.2"
+          >
+            {card.backTitle}
+          </text>
         </g>
       </svg>
 
@@ -740,11 +775,11 @@ export const AboutContent = ({ theme }) => {
         }}
       >
         <span className={`text-[10px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
-          }`}>Profile Focus</span>
+          }`}>About Me</span>
         <h2 className={`text-2xl sm:text-3xl md:text-4xl font-black mt-0.5 mb-0.5 tracking-tight transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
           }`}>My Journey</h2>
         <p className={`text-[10px] sm:text-xs font-questrial transition-colors duration-700 ${isLight ? 'text-purple-900/80' : 'text-purple-200/60'
-          }`}>Rotate the deck and click a card to explore each discipline.</p>
+          }`}>Rotate the deck and click a card to explore my journey.</p>
       </div>
 
       {/* ── Main Interactive Section (Deck + Title linked together for CONSTANT spacing across all devices) ── */}

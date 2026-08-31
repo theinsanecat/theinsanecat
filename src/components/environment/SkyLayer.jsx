@@ -68,10 +68,10 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
               </feMerge>
             </filter>
 
-            {/* Magical Glowing Star Filter for Mobile & Tablet Night Sky */}
+            {/* Magical Glowing Star Filter for Mobile & Tablet Night Sky (Matches Desktop Dual Halo Glow) */}
             <filter id="starGlowMobile" x="-100%" y="-100%" width="300%" height="300%">
-              <feGaussianBlur stdDeviation="1.2" result="blur1" />
-              <feGaussianBlur stdDeviation="0.4" result="blur2" />
+              <feGaussianBlur stdDeviation="1.6" result="blur1" />
+              <feGaussianBlur stdDeviation="0.7" result="blur2" />
               <feMerge>
                 <feMergeNode in="blur1" />
                 <feMergeNode in="blur2" />
@@ -89,7 +89,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             fill="#ffffff"
           >
-            {/* Left Upper Sky Cloud (Scaled & Positioned High) */}
+            {/* Left Upper Sky Cloud */}
             <g transform="translate(15, 60) scale(0.40)" opacity="0.8">
               <rect x="0" y="40" width="240" height="65" rx="32.5" ry="32.5" />
               <circle cx="60" cy="25" r="48" />
@@ -97,7 +97,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
               <circle cx="180" cy="40" r="42" />
             </g>
 
-            {/* Right Upper Sky Cloud (Scaled & Positioned High) */}
+            {/* Right Upper Sky Cloud */}
             <g transform="translate(420, 85) scale(0.35)" opacity="0.7">
               <rect x="0" y="40" width="240" height="65" rx="32.5" ry="32.5" />
               <circle cx="60" cy="25" r="48" />
@@ -106,7 +106,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             </g>
           </motion.g>
 
-          {/* DEDICATED MOBILE SUN (Light Mode - Upper Left Sky at cx=120, cy=150) */}
+          {/* DEDICATED MOBILE SUN */}
           <motion.g
             animate={{ opacity: isLight ? 1.0 : 0, scale: isLight ? 1.0 : 0.4 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
@@ -116,7 +116,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             <circle cx="120" cy="150" r="44" fill="url(#sunGradMobile)" filter="url(#glowFilterMobile)" opacity="0.95" />
           </motion.g>
 
-          {/* DEDICATED MOBILE MOON (Dark Mode - Upper Right Sky at cx=450, cy=150 - Completely clear of avatar circle) */}
+          {/* DEDICATED MOBILE MOON */}
           <motion.g
             animate={{ opacity: isLight ? 0 : 1.0, scale: isLight ? 0.4 : 1.0 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
@@ -126,41 +126,49 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             <circle cx="450" cy="150" r="40" fill="url(#moonGradMobile)" filter="url(#glowFilterMobile)" opacity="0.95" />
           </motion.g>
 
-          {/* ================= MAGICAL GLOWING MOBILE STARFIELD (Night Mode) ================= */}
-          {/* Luminous Glowing Hero Stars (Refined smaller sizes for tablet & mobile) */}
+          {/* ================= MAGICAL GLOWING MOBILE STARFIELD (Matches Desktop Radiance) ================= */}
+          {/* Luminous Glowing Hero Stars */}
           <motion.g
             animate={{ opacity: isLight ? 0 : 1.0 }}
             transition={{ duration: 1.2 }}
             fill="#ffffff"
             filter="url(#starGlowMobile)"
           >
-            <circle cx="50" cy="90" r="1.6" opacity="0.95" />
-            <circle cx="130" cy="140" r="1.8" opacity="0.9" fill="#ffeec7" />
-            <circle cx="210" cy="70" r="1.4" opacity="0.85" />
-            <circle cx="280" cy="120" r="1.7" opacity="0.95" fill="#ffd1f9" />
-            <circle cx="370" cy="65" r="1.6" opacity="0.9" />
-            <circle cx="450" cy="115" r="1.8" opacity="0.95" fill="#ffeec7" />
-            <circle cx="530" cy="80" r="1.5" opacity="0.85" />
-            <circle cx="70" cy="270" r="1.3" opacity="0.75" />
-            <circle cx="510" cy="290" r="1.4" opacity="0.8" fill="#ffd1f9" />
+            <circle cx="40" cy="80" r="1.6" opacity="0.95" />
+            <circle cx="110" cy="120" r="1.9" opacity="0.9" fill="#ffeec7" />
+            <circle cx="180" cy="55" r="1.5" opacity="0.85" />
+            <circle cx="260" cy="100" r="1.8" opacity="0.95" fill="#ffd1f9" />
+            <circle cx="340" cy="50" r="1.6" opacity="0.9" />
+            <circle cx="420" cy="105" r="1.9" opacity="0.95" fill="#ffeec7" />
+            <circle cx="510" cy="70" r="1.5" opacity="0.85" />
+            <circle cx="60" cy="240" r="1.4" opacity="0.8" />
+            <circle cx="150" cy="280" r="1.6" opacity="0.9" fill="#ffd1f9" />
+            <circle cx="230" cy="210" r="1.3" opacity="0.75" />
+            <circle cx="380" cy="260" r="1.7" opacity="0.85" fill="#ffeec7" />
+            <circle cx="490" cy="250" r="1.5" opacity="0.8" fill="#ffd1f9" />
+            <circle cx="550" cy="300" r="1.4" opacity="0.7" />
           </motion.g>
 
-          {/* Dense Ambient Mobile Starfield (Refined extra delicate small stars) */}
+          {/* Crisp Multi-colored Ambient Mobile Stars */}
           <motion.g
-            animate={{ opacity: isLight ? 0 : 0.85 }}
+            animate={{ opacity: isLight ? 0 : 0.9 }}
             transition={{ duration: 1.2 }}
             fill="#ffffff"
           >
-            <circle cx="30" cy="160" r="0.7" opacity="0.6" />
-            <circle cx="90" cy="210" r="0.9" opacity="0.7" />
-            <circle cx="160" cy="85" r="0.6" opacity="0.5" />
-            <circle cx="190" cy="180" r="0.8" opacity="0.65" />
-            <circle cx="240" cy="130" r="0.6" opacity="0.55" />
-            <circle cx="320" cy="80" r="0.8" opacity="0.7" />
-            <circle cx="350" cy="170" r="0.7" opacity="0.5" />
-            <circle cx="410" cy="140" r="0.8" opacity="0.6" />
-            <circle cx="480" cy="200" r="0.7" opacity="0.65" />
-            <circle cx="560" cy="160" r="0.9" opacity="0.7" />
+            <circle cx="25" cy="140" r="1.0" opacity="0.7" />
+            <circle cx="85" cy="190" r="1.2" opacity="0.8" fill="#ffeec7" />
+            <circle cx="140" cy="75" r="0.9" opacity="0.65" />
+            <circle cx="175" cy="165" r="1.1" opacity="0.7" />
+            <circle cx="225" cy="115" r="0.9" opacity="0.6" fill="#ffd1f9" />
+            <circle cx="300" cy="70" r="1.2" opacity="0.8" />
+            <circle cx="330" cy="155" r="1.0" opacity="0.6" />
+            <circle cx="395" cy="130" r="1.1" opacity="0.7" fill="#ffeec7" />
+            <circle cx="465" cy="180" r="1.0" opacity="0.75" />
+            <circle cx="535" cy="140" r="1.2" opacity="0.8" fill="#ffd1f9" />
+            <circle cx="95" cy="320" r="1.0" opacity="0.65" />
+            <circle cx="280" cy="310" r="1.1" opacity="0.7" />
+            <circle cx="430" cy="330" r="0.9" opacity="0.6" />
+            <circle cx="570" cy="230" r="1.1" opacity="0.75" fill="#ffeec7" />
           </motion.g>
         </svg>
       ) : (
