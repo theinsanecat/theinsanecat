@@ -127,15 +127,29 @@ function App() {
     return window.innerWidth < 768;
   });
 
+  const VALID_SECTIONS = ['home', 'about', 'projects', 'contact', 'experience'];
+
   // State to track active section ('home', 'about', 'projects', 'experience', or 'contact')
   const [activeSection, setActiveSection] = useState(() => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      return 'home'; // Block sub-routes on mobile & tablet
-    }
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const hash = window.location.hash.replace('#', '');
-      if (['home', 'about', 'projects', 'contact', 'experience'].includes(hash)) {
-        return hash;
+    if (typeof window !== 'undefined') {
+      const isSmall = window.innerWidth < 1024;
+      const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
+
+      if (isSmall) {
+        if (rawHash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+        return 'home'; // Block sub-routes on mobile & tablet
+      }
+
+      if (rawHash) {
+        if (VALID_SECTIONS.includes(rawHash)) {
+          return rawHash;
+        } else {
+          // Edge case: unknown/invalid route entered -> redirect to home & clear URL hash
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          return 'home';
+        }
       }
     }
     return 'home';
@@ -177,33 +191,44 @@ function App() {
       }
       return;
     }
+
+    const targetSection = VALID_SECTIONS.includes(newSection) ? newSection : 'home';
+
     setActiveSection((prevSection) => {
-      if (prevSection === newSection) return prevSection;
+      if (prevSection === targetSection) return prevSection;
       if (typeof window !== 'undefined') {
-        const targetUrl = newSection === 'home'
+        const targetUrl = targetSection === 'home'
           ? window.location.pathname + window.location.search
-          : `#${newSection}`;
-        window.history.pushState({ section: newSection }, '', targetUrl);
+          : `#${targetSection}`;
+        window.history.pushState({ section: targetSection }, '', targetUrl);
       }
-      return newSection;
+      return targetSection;
     });
   }, []);
 
-  // Sync state with native browser Back & Forward button traversal and hash changes
+  // Sync state with native browser Back & Forward button traversal and hash changes across all devices
   useEffect(() => {
     const handlePopState = () => {
-      if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      if (typeof window === 'undefined') return;
+      const isSmall = window.innerWidth < 1024;
+      const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
+
+      if (isSmall) {
         setActiveSection('home');
-        if (window.location.hash) {
+        if (rawHash) {
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
         return;
       }
-      const hash = window.location.hash.replace('#', '');
-      if (['about', 'projects', 'contact', 'experience'].includes(hash)) {
-        setActiveSection(hash);
-      } else {
+
+      if (!rawHash || rawHash === 'home') {
         setActiveSection('home');
+      } else if (VALID_SECTIONS.includes(rawHash)) {
+        setActiveSection(rawHash);
+      } else {
+        // Edge case: invalid/unknown route entered on desktop -> redirect to home & clear invalid hash from URL
+        setActiveSection('home');
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
       }
     };
 
