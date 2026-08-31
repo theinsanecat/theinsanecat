@@ -521,7 +521,7 @@ const CoreMathematicsPill = ({ onOpen, isLight }) => {
       }}
       animate={{ y: [0, -3.5, 0] }}
       transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
-      className={`relative px-2 sm:px-2.5 py-0.5 rounded-full text-[9.5px] sm:text-[11px] font-semibold tracking-wide border border-pink-500 text-pink-500 bg-pink-500/10 shadow-[0_0_10px_rgba(236,72,153,0.7)] hover:shadow-[0_0_16px_rgba(236,72,153,0.9)] hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 overflow-visible select-none transition-all duration-300 ${isLight ? 'bg-pink-100/90 text-pink-700 border-pink-400' : 'bg-pink-950/40 text-pink-300 border-pink-500'
+      className={`relative px-1.5 xs:px-2 sm:px-2.5 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold tracking-wide border border-pink-500 text-pink-500 bg-pink-500/10 shadow-[0_0_10px_rgba(236,72,153,0.7)] hover:shadow-[0_0_16px_rgba(236,72,153,0.9)] hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 overflow-visible select-none transition-all duration-300 ${isLight ? 'bg-pink-100/90 text-pink-700 border-pink-400' : 'bg-pink-950/40 text-pink-300 border-pink-500'
         }`}
     >
       <span>Core Mathematics</span>
@@ -825,9 +825,9 @@ export const AboutContent = ({ theme }) => {
               if (isMobile) {
                 // Mobile screens: card centered at top, details text BELOW card cleanly
                 targetX = 0;
-                targetY = isSmallScreen ? -145 : -160;
+                targetY = isSmallScreen ? -165 : -175;
                 rotateZ = 0;
-                scale = isSmallScreen ? 0.38 : 0.42;
+                scale = isSmallScreen ? 0.32 : 0.36;
                 opacity = 1;
                 zIndex = 50;
               } else {
@@ -910,42 +910,42 @@ export const AboutContent = ({ theme }) => {
                 }`}
               style={{
                 left: '50%',
-                top: isMobile ? (isSmallScreen ? '175px' : '200px') : '50%',
+                top: isMobile ? (isSmallScreen ? '140px' : '165px') : '50%',
                 marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
                 width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
                 height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
-                maxHeight: isMobile ? '350px' : 'none',
+                maxHeight: isMobile ? (isSmallScreen ? '330px' : '360px') : 'none',
               }}
             >
               {/* Header Info */}
-              <div className="w-full shrink-0 flex flex-col items-start mb-0.5 sm:mb-1">
-                <span className={`text-[8.5px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
+              <div className="w-full shrink-0 flex flex-col items-start mb-0.5">
+                <span className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
                   }`}>
                   {selectedCard.category} FOCUS
                 </span>
-                <h2 className={`text-base sm:text-2xl md:text-3xl font-black tracking-tight leading-tight my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
+                <h2 className={`text-sm xs:text-base sm:text-2xl md:text-3xl font-black tracking-tight leading-tight my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
                   }`}>
                   {selectedCard.heading}
                 </h2>
-                <h3 className={`text-[10px] sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
+                <h3 className={`text-[9px] xs:text-[10px] sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
                   }`}>
                   {selectedCard.title}
                 </h3>
               </div>
 
               {/* Long Description Body */}
-              <div className={`w-full my-1 leading-snug text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[120px] sm:max-h-[160px] overflow-y-auto pr-1' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
+              <div className={`w-full my-1 leading-snug text-[9px] xs:text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[85px] xs:max-h-[105px] sm:max-h-[160px] overflow-y-auto pr-1 custom-scrollbar' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
                 } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
                 <p>{selectedCard.longDescription}</p>
               </div>
 
               {/* Bottom Section: Skills & Close Button */}
-              <div className="w-full shrink-0 flex flex-col items-start pt-0.5 sm:pt-1">
-                <h4 className={`text-[8.5px] sm:text-xs font-bold uppercase tracking-wider mb-0.5 sm:mb-1 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
+              <div className="w-full shrink-0 flex flex-col items-start pt-0.5">
+                <h4 className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-bold uppercase tracking-wider mb-0.5 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
                   }`}>
                   Key Stacks & Disciplines
                 </h4>
-                <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-1.5 sm:mb-3">
+                <div className="flex flex-wrap gap-1 mb-1.5 sm:mb-3">
                   {selectedCard.skills.map((skill, idx) => (
                     skill === "Core Mathematics" ? (
                       <CoreMathematicsPill
@@ -954,7 +954,7 @@ export const AboutContent = ({ theme }) => {
                         onOpen={() => setIsMathModalOpen(true)}
                       />
                     ) : (
-                      <span key={`${skill}-${idx}`} className={`px-2 py-0.5 rounded-full text-[8.5px] sm:text-[11px] font-semibold transition-all duration-700 ${isLight
+                      <span key={`${skill}-${idx}`} className={`px-1.5 xs:px-2 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold transition-all duration-700 ${isLight
                         ? 'bg-white/80 border border-purple-200 text-purple-900 shadow-sm'
                         : 'bg-white/5 border border-purple-500/20 text-purple-200'
                         }`}>
@@ -966,9 +966,9 @@ export const AboutContent = ({ theme }) => {
                 {isLight ? (
                   <button
                     onClick={() => setSelectedCardId(null)}
-                    className="self-start px-3.5 sm:px-5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-1.5 sm:gap-2"
+                    className="self-start px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                     </svg>
                     Close Expanded Card
@@ -979,16 +979,16 @@ export const AboutContent = ({ theme }) => {
                     glowColor="270 85 70"
                     colors={['#ab55f7', '#ec4899', '#3b82f6']}
                     edgeSensitivity={40}
-                    glowRadius={20}
+                    glowRadius={16}
                     glowIntensity={1.2}
                     backgroundColor="#1b1235"
                     className="self-start active:scale-95 transition-all duration-700 cursor-pointer w-max"
                   >
                     <button
                       onClick={() => setSelectedCardId(null)}
-                      className="px-3.5 sm:px-5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1.5 sm:gap-2"
+                      className="px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                       </svg>
                       Close Expanded Card
