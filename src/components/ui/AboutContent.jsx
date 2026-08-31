@@ -90,7 +90,7 @@ const cardsData = [
     image: `${import.meta.env.BASE_URL}images/mumbai-university-building.jpg`,
     description: "2016 - 2020",
     longDescription:
-      "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I'm thankful they did. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning aboutcircuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make a path my own and I did. College also gave me the space to discover more about myself beyond academics. I explored different interests, organised workshops alongside my professors for juniors, headed my very first event at our tech-fest, became an active member of the Social Wing, took on the role of Summer Internship Student Coordinator, and proudly became part of the college dance crew. Looking back, I think I simply tried to make the most of the opportunities and interests that came my way and discovered a little more about myself too.",
+      "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I'm thankful they did. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning about circuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make my own path and I did. College also gave me the space to discover more about myself beyond academics. I explored different interests, organised workshops alongside my professors for juniors, headed my very first event at our tech-fest, became an active member of the Social Wing, took on the role of Summer Internship Student Coordinator, and proudly became part of the college dance crew. Looking back, I think I simply tried to make the most of the opportunities and interests that came my way and discovered a little more about myself too.",
     skills: [
       "8.6 CGPA",
       "10 grade point in subjects",
@@ -204,7 +204,7 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
     <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu ${
       // On mobile: parent motion.div handles opacity — don't apply own opacity classes
       isMobile ? '' : `transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`
-    }`}>
+      }`}>
       {/* Background Gradient Face - Light Mode */}
       <div className={`absolute inset-0 w-full h-full bg-gradient-to-b from-[#e9d5ff] via-[#f5d0fe] to-[#fbcfe8] transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} />
 
@@ -446,11 +446,10 @@ const CardFront = ({ card, isSelected, theme, isMobile }) => {
     // On mobile: no rotateY (would mirror content backwards) and no self-managed opacity (parent handles it)
     // On desktop: keep backface-hidden + rotateY(180deg) for the full 3D CSS flip
     <div
-      className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col shadow-2xl p-6 ${
-        isMobile
-          ? ''
-          : `backface-hidden transition-opacity duration-300 ${isSelected ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`
-      }`}
+      className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col shadow-2xl p-6 ${isMobile
+        ? ''
+        : `backface-hidden transition-opacity duration-300 ${isSelected ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`
+        }`}
       style={isMobile ? {} : { transform: 'rotateY(180deg)' }}
     >
       {/* Light Mode Front Face Background */}
@@ -690,7 +689,7 @@ const MathReflectionModal = ({ isOpen, onClose, theme }) => {
                     Why I Love Mathematics
                   </h2>
                   <p className={`text-xs italic leading-relaxed ${isLight ? 'text-purple-700' : 'text-purple-300/80'}`}>
-                    "A subject where the rules were clear and the challenge was simply to understand."
+                    "A subject where the rules were clear and the challenge was simply to understand. Wait, is that why I love cats !?"
                   </p>
                 </div>
 
@@ -709,9 +708,9 @@ const MathReflectionModal = ({ isOpen, onClose, theme }) => {
                 }`}>
                 <p>I think I loved Mathematics for a slightly strange reason.</p>
                 <p className="font-bold text-pink-500 text-xs sm:text-sm">It never pretended to be something it wasn't.</p>
-                <p>A problem could be complicated, intricate and almost impossible to crack, but it never had a hidden agenda. No facade. No mind games(Maybe some mind games). No pretending. You worked through it, understood it, and eventually it gave you exactly what it was.</p>
+                <p>A problem could be complicated, intricate and almost impossible to crack, but it never had a hidden agenda. No facade. No mind games (Maybe some mind games XD). No pretending. You worked through it, understood it, and eventually it gave you exactly what it was.</p>
                 <p className="italic font-semibold text-purple-600 dark:text-purple-300">Maybe that honesty felt familiar.</p>
-                <p>I have always been drawn to things that are genuine. I don't particularly enjoy operating from strategy or playing games with people. So there was something comforting about a subject where the rules were clear and the challenge was simply to understand.</p>
+                <p>I have always been drawn to things that are genuine. I don't like operating from strategy or playing games with people. So there was something comforting about a subject where the rules were clear and the challenge was simply to understand.</p>
                 <p>And then there was the thrill of finally solving something that had refused to make sense few minutes earlier.</p>
                 <p className="font-bold text-pink-500 dark:text-pink-400">That part was addictive.</p>
                 <p>Maybe Mathematics wasn't just something I enjoyed.</p>
@@ -884,280 +883,280 @@ export const AboutContent = ({ theme }) => {
             : 'h-[360px] sm:h-[420px] md:h-[460px]'
             }`}
         >
-        {/* Circular Plate Disc */}
-        <div
-          className={`absolute left-1/2 -translate-x-1/2 rounded-full border pointer-events-none transition-all duration-700 ${isLight
-            ? 'border-purple-300/40 bg-gradient-to-t from-purple-200/20 to-transparent'
-            : 'border-purple-500/25 bg-gradient-to-t from-purple-950/30 to-transparent'
-            }`}
-          style={{ width: '1100px', height: '1100px', bottom: '-830px', opacity: selectedCardId ? 0 : 1 }}
-        />
+          {/* Circular Plate Disc */}
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 rounded-full border pointer-events-none transition-all duration-700 ${isLight
+              ? 'border-purple-300/40 bg-gradient-to-t from-purple-200/20 to-transparent'
+              : 'border-purple-500/25 bg-gradient-to-t from-purple-950/30 to-transparent'
+              }`}
+            style={{ width: '1100px', height: '1100px', bottom: '-830px', opacity: selectedCardId ? 0 : 1 }}
+          />
 
-        {/* Cards mapping - stays entirely mounted to morph dynamically */}
-        {cardsData.map((card, index) => {
-          const isSelected = selectedCardId === card.id;
-          const isAnySelected = selectedCardId !== null;
-          const isHovered = index === activeIndex;
-          const isCenterUnturned = index === activeIndex && !isAnySelected;
+          {/* Cards mapping - stays entirely mounted to morph dynamically */}
+          {cardsData.map((card, index) => {
+            const isSelected = selectedCardId === card.id;
+            const isAnySelected = selectedCardId !== null;
+            const isHovered = index === activeIndex;
+            const isCenterUnturned = index === activeIndex && !isAnySelected;
 
-          const arc = getArc(index, activeIndex, total, isLight);
+            const arc = getArc(index, activeIndex, total, isLight);
 
-          // Proportional card scaling based on screen size
-          let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 : arc.scale));
+            // Proportional card scaling based on screen size
+            let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 : arc.scale));
 
-          // Position targets
-          let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 : 1)));
-          let targetY = arc.y;
-          let rotateZ = arc.rotateZ;
-          let scale = baseScale;
-          let opacity = arc.opacity;
-          let zIndex = arc.zIndex;
+            // Position targets
+            let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 : 1)));
+            let targetY = arc.y;
+            let rotateZ = arc.rotateZ;
+            let scale = baseScale;
+            let opacity = arc.opacity;
+            let zIndex = arc.zIndex;
 
-          if (isAnySelected) {
-            if (isSelected) {
-              if (isMobile) {
-                // Mobile screens: card centered higher at top, details text BELOW card with clean 20px vertical gap
-                targetX = 0;
-                targetY = isSmallScreen ? -140 : -150;
-                rotateZ = 0;
-                scale = isSmallScreen ? 0.36 : 0.40;
-                opacity = 1;
-                zIndex = 50;
+            if (isAnySelected) {
+              if (isSelected) {
+                if (isMobile) {
+                  // Mobile screens: card centered higher at top, details text BELOW card with clean 20px vertical gap
+                  targetX = 0;
+                  targetY = isSmallScreen ? -140 : -150;
+                  rotateZ = 0;
+                  scale = isSmallScreen ? 0.36 : 0.40;
+                  opacity = 1;
+                  zIndex = 50;
+                } else {
+                  // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
+                  targetX = isTablet ? -135 : -200;
+                  targetY = 0;
+                  rotateZ = 0;
+                  scale = isTablet ? 0.80 : 0.92;
+                  opacity = 1;
+                  zIndex = 50;
+                }
               } else {
-                // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
-                targetX = isTablet ? -135 : -200;
-                targetY = 0;
-                rotateZ = 0;
-                scale = isTablet ? 0.80 : 0.92;
-                opacity = 1;
-                zIndex = 50;
+                // Other cards fly/fade out smoothly
+                targetX = arc.x;
+                targetY = arc.y + 180;
+                rotateZ = arc.rotateZ * 1.5;
+                scale = 0.35;
+                opacity = 0;
+                zIndex = 0;
               }
-            } else {
-              // Other cards fly/fade out smoothly
-              targetX = arc.x;
-              targetY = arc.y + 180;
-              rotateZ = arc.rotateZ * 1.5;
-              scale = 0.35;
-              opacity = 0;
-              zIndex = 0;
             }
-          }
 
-          return (
-            <motion.div
-              key={card.id}
-              initial={{
-                x: 0,
-                y: 0,
-                rotateZ: 0,
-                scale: 0.5,
-                opacity: 0,
-              }}
-              animate={{
-                x: targetX,
-                y: targetY,
-                rotateZ: rotateZ,
-                scale: scale,
-                opacity: opacity,
-                zIndex: zIndex,
-              }}
-              transition={{
-                type: 'spring',
-                stiffness: isMobile ? 85 : 110,
-                damping: isMobile ? 18 : 16,
-                mass: isMobile ? 0.6 : 0.8,
-              }}
-              onClick={() => handleCardClick(card, index)}
-              className="absolute w-[300px] h-[450px] transform-gpu"
-              style={{
-                top: '50%',
-                left: '50%',
-                marginTop: '-225px',
-                marginLeft: '-150px',
-                willChange: 'transform, opacity',
-                filter: arc.offset !== 0 && isLight ? 'brightness(0.92) saturate(0.9)' : 'none',
-                cursor: isLocked.current ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
-                pointerEvents: (!isAnySelected || isSelected) ? 'auto' : 'none',
-              }}
-            >
-              <CardVisual
-                card={card}
-                isSelected={isSelected}
-                isHovered={isHovered && !isAnySelected}
-                isCenterUnturned={isCenterUnturned}
-                theme={theme}
-                isMobile={isMobile}
-              />
-            </motion.div>
-          );
-        })}
+            return (
+              <motion.div
+                key={card.id}
+                initial={{
+                  x: 0,
+                  y: 0,
+                  rotateZ: 0,
+                  scale: 0.5,
+                  opacity: 0,
+                }}
+                animate={{
+                  x: targetX,
+                  y: targetY,
+                  rotateZ: rotateZ,
+                  scale: scale,
+                  opacity: opacity,
+                  zIndex: zIndex,
+                }}
+                transition={{
+                  type: 'spring',
+                  stiffness: isMobile ? 85 : 110,
+                  damping: isMobile ? 18 : 16,
+                  mass: isMobile ? 0.6 : 0.8,
+                }}
+                onClick={() => handleCardClick(card, index)}
+                className="absolute w-[300px] h-[450px] transform-gpu"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-225px',
+                  marginLeft: '-150px',
+                  willChange: 'transform, opacity',
+                  filter: arc.offset !== 0 && isLight ? 'brightness(0.92) saturate(0.9)' : 'none',
+                  cursor: isLocked.current ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
+                  pointerEvents: (!isAnySelected || isSelected) ? 'auto' : 'none',
+                }}
+              >
+                <CardVisual
+                  card={card}
+                  isSelected={isSelected}
+                  isHovered={isHovered && !isAnySelected}
+                  isCenterUnturned={isCenterUnturned}
+                  theme={theme}
+                  isMobile={isMobile}
+                />
+              </motion.div>
+            );
+          })}
 
-        {/* Details Description Panel (Below card on mobile with clean 32px vertical gap, side-by-side on tablet/desktop) */}
-        <AnimatePresence>
-          {selectedCard && (
-            <motion.div
-              key={`details-${selectedCard.id}`}
-              initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: isMobile ? '15px' : '-50%' }}
-              animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: isMobile ? '0px' : '-50%' }}
-              exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: isMobile ? '10px' : '-50%' }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
-              className={`absolute flex flex-col text-left px-3 sm:px-4 z-30 pointer-events-auto items-start ${isMobile ? 'justify-start' : 'justify-between py-1'
-                }`}
-              style={{
-                left: '50%',
-                top: isMobile ? (isSmallScreen ? 'calc(50% - 95px)' : 'calc(50% - 110px)') : '50%',
-                marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
-                width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
-                height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
-                maxHeight: isMobile ? (isSmallScreen ? '310px' : '350px') : 'none',
-              }}
-            >
-              {/* Header Info */}
-              <div className="w-full shrink-0 flex flex-col items-start mb-0.5">
-                <span className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
-                  }`}>
-                  {selectedCard.category} FOCUS
-                </span>
-                <h2 className={`text-sm xs:text-base sm:text-2xl md:text-3xl font-black tracking-tight leading-tight my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
-                  }`}>
-                  {selectedCard.heading}
-                </h2>
-                <h3 className={`text-[9px] xs:text-[10px] sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
-                  }`}>
-                  {selectedCard.title}
-                </h3>
-              </div>
-
-              {/* Long Description Body */}
-              <div className={`w-full my-1 leading-snug text-[9px] xs:text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[85px] xs:max-h-[105px] sm:max-h-[160px] overflow-y-auto pr-1 custom-scrollbar' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
-                } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
-                <p>{selectedCard.longDescription}</p>
-              </div>
-
-              {/* Bottom Section: Skills & Close Button */}
-              <div className="w-full shrink-0 flex flex-col items-start pt-0.5">
-                <h4 className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-bold uppercase tracking-wider mb-0.5 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
-                  }`}>
-                  Key Stacks & Disciplines
-                </h4>
-                <div className="flex flex-wrap gap-1 mb-1.5 sm:mb-3">
-                  {selectedCard.skills.map((skill, idx) => (
-                    skill === "Core Mathematics" ? (
-                      <CoreMathematicsPill
-                        key={`${skill}-${idx}`}
-                        isLight={isLight}
-                        onOpen={() => setIsMathModalOpen(true)}
-                      />
-                    ) : (
-                      <span key={`${skill}-${idx}`} className={`px-1.5 xs:px-2 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold transition-all duration-700 ${isLight
-                        ? 'bg-white/80 border border-purple-200 text-purple-900 shadow-sm'
-                        : 'bg-white/5 border border-purple-500/20 text-purple-200'
-                        }`}>
-                        {skill}
-                      </span>
-                    )
-                  ))}
+          {/* Details Description Panel (Below card on mobile with clean 32px vertical gap, side-by-side on tablet/desktop) */}
+          <AnimatePresence>
+            {selectedCard && (
+              <motion.div
+                key={`details-${selectedCard.id}`}
+                initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: isMobile ? '15px' : '-50%' }}
+                animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: isMobile ? '0px' : '-50%' }}
+                exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: isMobile ? '10px' : '-50%' }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+                className={`absolute flex flex-col text-left px-3 sm:px-4 z-30 pointer-events-auto items-start ${isMobile ? 'justify-start' : 'justify-between py-1'
+                  }`}
+                style={{
+                  left: '50%',
+                  top: isMobile ? (isSmallScreen ? 'calc(50% - 95px)' : 'calc(50% - 110px)') : '50%',
+                  marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
+                  width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
+                  height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
+                  maxHeight: isMobile ? (isSmallScreen ? '310px' : '350px') : 'none',
+                }}
+              >
+                {/* Header Info */}
+                <div className="w-full shrink-0 flex flex-col items-start mb-0.5">
+                  <span className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
+                    }`}>
+                    {selectedCard.category} FOCUS
+                  </span>
+                  <h2 className={`text-sm xs:text-base sm:text-2xl md:text-3xl font-black tracking-tight leading-tight my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
+                    }`}>
+                    {selectedCard.heading}
+                  </h2>
+                  <h3 className={`text-[9px] xs:text-[10px] sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
+                    }`}>
+                    {selectedCard.title}
+                  </h3>
                 </div>
-                {isLight ? (
-                  <button
-                    onClick={() => setSelectedCardId(null)}
-                    className="self-start px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                    </svg>
-                    Close Expanded Card
-                  </button>
-                ) : (
-                  <BorderGlow
-                    borderRadius={9999}
-                    glowColor="270 85 70"
-                    colors={['#ab55f7', '#ec4899', '#3b82f6']}
-                    edgeSensitivity={40}
-                    glowRadius={16}
-                    glowIntensity={1.2}
-                    backgroundColor="#1b1235"
-                    className="self-start active:scale-95 transition-all duration-700 cursor-pointer w-max"
-                  >
+
+                {/* Long Description Body */}
+                <div className={`w-full my-1 leading-snug text-[9px] xs:text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[85px] xs:max-h-[105px] sm:max-h-[160px] overflow-y-auto pr-1 custom-scrollbar' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
+                  } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
+                  <p>{selectedCard.longDescription}</p>
+                </div>
+
+                {/* Bottom Section: Skills & Close Button */}
+                <div className="w-full shrink-0 flex flex-col items-start pt-0.5">
+                  <h4 className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-bold uppercase tracking-wider mb-0.5 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
+                    }`}>
+                    Key Stacks & Disciplines
+                  </h4>
+                  <div className="flex flex-wrap gap-1 mb-1.5 sm:mb-3">
+                    {selectedCard.skills.map((skill, idx) => (
+                      skill === "Core Mathematics" ? (
+                        <CoreMathematicsPill
+                          key={`${skill}-${idx}`}
+                          isLight={isLight}
+                          onOpen={() => setIsMathModalOpen(true)}
+                        />
+                      ) : (
+                        <span key={`${skill}-${idx}`} className={`px-1.5 xs:px-2 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold transition-all duration-700 ${isLight
+                          ? 'bg-white/80 border border-purple-200 text-purple-900 shadow-sm'
+                          : 'bg-white/5 border border-purple-500/20 text-purple-200'
+                          }`}>
+                          {skill}
+                        </span>
+                      )
+                    ))}
+                  </div>
+                  {isLight ? (
                     <button
                       onClick={() => setSelectedCardId(null)}
-                      className="px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
+                      className="self-start px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                       </svg>
                       Close Expanded Card
                     </button>
-                  </BorderGlow>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Left Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
-        <button
-          onClick={() => navigate(-1)}
-          aria-label="Previous card"
-          className={`absolute left-2 sm:left-4 md:left-6 lg:left-8 xl:-left-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
-            ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
-            : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
-            }`}
-          style={{
-            opacity: selectedCardId ? 0 : 1,
-            pointerEvents: selectedCardId ? 'none' : 'auto'
-          }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:-translate-x-0.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
-        </button>
-
-        {/* Right Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
-        <button
-          onClick={() => navigate(1)}
-          aria-label="Next card"
-          className={`absolute right-2 sm:right-4 md:right-6 lg:right-8 xl:-right-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
-            ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
-            : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
-            }`}
-          style={{
-            opacity: selectedCardId ? 0 : 1,
-            pointerEvents: selectedCardId ? 'none' : 'auto'
-          }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:translate-x-0.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
-
-        {/* ── Single-Line Title Heading for Focused Card (Attached below card deck with comfortable gap) ── */}
-        <div
-          className="absolute left-1/2 -translate-x-1/2 text-center z-20 transition-all duration-700 pointer-events-none whitespace-nowrap"
-          style={{
-            top: 'calc(50% + 244px)',
-            opacity: selectedCardId ? 0 : 1,
-            transform: selectedCardId ? 'translateY(8px)' : 'none',
-          }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.h3
-              key={cardsData[activeIndex].id}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-              className={`text-base sm:text-lg md:text-xl font-black tracking-tight transition-colors duration-700 ${isLight
-                ? 'text-[#1e1832] drop-shadow-[0_0_12px_rgba(236,72,153,0.3)]'
-                : 'text-white drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]'
-                }`}
-            >
-              {cardsData[activeIndex].heading}
-            </motion.h3>
+                  ) : (
+                    <BorderGlow
+                      borderRadius={9999}
+                      glowColor="270 85 70"
+                      colors={['#ab55f7', '#ec4899', '#3b82f6']}
+                      edgeSensitivity={40}
+                      glowRadius={16}
+                      glowIntensity={1.2}
+                      backgroundColor="#1b1235"
+                      className="self-start active:scale-95 transition-all duration-700 cursor-pointer w-max"
+                    >
+                      <button
+                        onClick={() => setSelectedCardId(null)}
+                        className="px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                        </svg>
+                        Close Expanded Card
+                      </button>
+                    </BorderGlow>
+                  )}
+                </div>
+              </motion.div>
+            )}
           </AnimatePresence>
-        </div>
 
-      </motion.div>
+          {/* Left Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
+          <button
+            onClick={() => navigate(-1)}
+            aria-label="Previous card"
+            className={`absolute left-2 sm:left-4 md:left-6 lg:left-8 xl:-left-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
+              ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
+              : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
+              }`}
+            style={{
+              opacity: selectedCardId ? 0 : 1,
+              pointerEvents: selectedCardId ? 'none' : 'auto'
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:-translate-x-0.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+
+          {/* Right Arrow Navigation - Guaranteed inside screen on iPad Pro (1024px) & all tablet viewports */}
+          <button
+            onClick={() => navigate(1)}
+            aria-label="Next card"
+            className={`absolute right-2 sm:right-4 md:right-6 lg:right-8 xl:-right-12 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 backdrop-blur-md hover:scale-110 active:scale-95 transition-all duration-700 flex items-center justify-center focus:outline-none group cursor-pointer ${isLight
+              ? 'bg-white/90 border-purple-200 text-purple-900 shadow-lg shadow-purple-900/15 hover:border-pink-300 hover:text-pink-600'
+              : 'bg-[#18102e]/90 border-purple-500/50 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-600/50 hover:border-purple-300 hover:text-white hover:shadow-[0_0_30px_rgba(217,70,239,0.7)]'
+              }`}
+            style={{
+              opacity: selectedCardId ? 0 : 1,
+              pointerEvents: selectedCardId ? 'none' : 'auto'
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:translate-x-0.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+
+          {/* ── Single-Line Title Heading for Focused Card (Attached below card deck with comfortable gap) ── */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 text-center z-20 transition-all duration-700 pointer-events-none whitespace-nowrap"
+            style={{
+              top: 'calc(50% + 244px)',
+              opacity: selectedCardId ? 0 : 1,
+              transform: selectedCardId ? 'translateY(8px)' : 'none',
+            }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.h3
+                key={cardsData[activeIndex].id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className={`text-base sm:text-lg md:text-xl font-black tracking-tight transition-colors duration-700 ${isLight
+                  ? 'text-[#1e1832] drop-shadow-[0_0_12px_rgba(236,72,153,0.3)]'
+                  : 'text-white drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]'
+                  }`}
+              >
+                {cardsData[activeIndex].heading}
+              </motion.h3>
+            </AnimatePresence>
+          </div>
+
+        </motion.div>
       </div>
 
       {/* ── Pretty Overlay Modal for Math Reflection ── */}

@@ -16,6 +16,7 @@ import { ProjectsContent } from './components/ui/ProjectsContent';
 import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
 import { LotusWaterBody } from './components/ui/LotusWaterBody';
 import { MobileLotusWaterBody } from './components/ui/MobileLotusWaterBody';
+import rotatingEmblem from './assets/rotating-emblem.svg';
 
 // ================= GLOBAL FLOATING GUIDE CONTAINER WITH SPACE DRIFT =================
 const getRandomBorderCoords = (w, h) => {
@@ -154,6 +155,14 @@ function App() {
     }
     return 'home';
   });
+
+  // Preload heavy SVG emblem upfront so navigating to Contact page is instant
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const img = new Image();
+      img.src = rotatingEmblem;
+    }
+  }, []);
 
   // Cleanup any unknown/invalid URL pathname (e.g. /theinsanecat/sfk -> /theinsanecat/)
   useEffect(() => {
