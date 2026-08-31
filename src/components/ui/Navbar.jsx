@@ -122,22 +122,24 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         )}
       </div>
 
-      {/* Mobile & Tablet Laptop Recommendation Prompt */}
-      <div className="absolute top-[calc(100%+2px)] sm:top-[calc(100%+4px)] left-1/2 -translate-x-1/2 pointer-events-auto z-40 lg:hidden w-max max-w-[92vw]">
-        <div className={`text-[8.5px] xs:text-[9.5px] sm:text-[10px] font-semibold tracking-tight transition-colors duration-500 flex items-center justify-center gap-1.5 opacity-60 ${
-          isLight ? 'text-pink-600' : 'text-purple-300'
-        }`}>
-          <span className="relative flex h-1.5 w-1.5 shrink-0 opacity-75">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${
-              isLight ? 'bg-pink-400' : 'bg-purple-400'
-            }`}></span>
-            <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-              isLight ? 'bg-pink-500' : 'bg-purple-500'
-            }`}></span>
-          </span>
-          <span>Best experienced on a laptop or desktop</span>
+      {/* Mobile & Tablet Laptop Recommendation Prompt - Only shown on Home section to prevent collision on subpages */}
+      {activeSection === 'home' && (
+        <div className="absolute top-[calc(100%+2px)] sm:top-[calc(100%+4px)] left-1/2 -translate-x-1/2 pointer-events-auto z-40 lg:hidden w-max max-w-[92vw]">
+          <div className={`text-[8.5px] xs:text-[9.5px] sm:text-[10px] font-semibold tracking-tight transition-colors duration-500 flex items-center justify-center gap-1.5 opacity-60 ${
+            isLight ? 'text-pink-600' : 'text-purple-300'
+          }`}>
+            <span className="relative flex h-1.5 w-1.5 shrink-0 opacity-75">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${
+                isLight ? 'bg-pink-400' : 'bg-purple-400'
+              }`}></span>
+              <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
+                isLight ? 'bg-pink-500' : 'bg-purple-500'
+              }`}></span>
+            </span>
+            <span>Best experienced on a laptop or desktop</span>
+          </div>
         </div>
-      </div>
+      )}
     </motion.nav>
   );
 };

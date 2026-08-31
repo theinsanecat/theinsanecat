@@ -662,11 +662,15 @@ export const AboutContent = ({ theme }) => {
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
   const [isTablet, setIsTablet] = useState(() =>
-    typeof window !== 'undefined' ? (window.innerWidth >= 768 && window.innerWidth <= 1180) : false
+    typeof window !== 'undefined' ? window.innerWidth >= 768 && window.innerWidth <= 1180 : false
   );
   const [isSmallScreen, setIsSmallScreen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 640 : false
   );
+  const [isCompactHeight, setIsCompactHeight] = useState(() =>
+    typeof window !== 'undefined' ? window.innerHeight <= 700 : false
+  );
+
   const isLocked = useRef(false);
 
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
@@ -745,7 +749,9 @@ export const AboutContent = ({ theme }) => {
   };
 
   return (
-    <div className="relative w-screen h-screen max-h-screen flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-4 sm:pb-6">
+    <div className={`relative w-screen min-h-screen flex flex-col justify-between items-center select-none pointer-events-auto pb-4 sm:pb-6 ${
+      selectedCardId && isMobile ? 'overflow-y-auto' : 'overflow-hidden max-h-screen'
+    }`}>
 
       {/* Aurora Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -824,11 +830,11 @@ export const AboutContent = ({ theme }) => {
             if (isAnySelected) {
               if (isSelected) {
                 if (isMobile) {
-                  // Mobile screens: card centered at top, details text BELOW card with clean 50px gap
+                  // Mobile screens: card centered at top, details text BELOW card with clean gap
                   targetX = 0;
-                  targetY = isSmallScreen ? -175 : -190;
+                  targetY = isCompactHeight ? -200 : (isSmallScreen ? -180 : -190);
                   rotateZ = 0;
-                  scale = isSmallScreen ? 0.44 : 0.48;
+                  scale = isCompactHeight ? 0.38 : (isSmallScreen ? 0.42 : 0.46);
                   opacity = 1;
                   zIndex = 50;
                 } else {
@@ -911,11 +917,11 @@ export const AboutContent = ({ theme }) => {
                   }`}
                 style={{
                   left: '50%',
-                  top: isMobile ? (isSmallScreen ? '275px' : '290px') : '50%',
+                  top: isMobile ? (isCompactHeight ? '195px' : (isSmallScreen ? '240px' : '285px')) : '50%',
                   marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
-                  width: isMobile ? (isSmallScreen ? '92%' : '88%') : (isTablet ? '340px' : '440px'),
+                  width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
                   height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
-                  maxHeight: isMobile ? '380px' : 'none',
+                  maxHeight: isMobile ? (isCompactHeight ? 'calc(100vh - 210px)' : '360px') : 'none',
                 }}
               >
                 {/* Header Info */}
@@ -935,7 +941,7 @@ export const AboutContent = ({ theme }) => {
                 </div>
 
                 {/* Long Description Body - Scrollable if text exceeds card height */}
-                <div className={`w-full my-1.5 leading-relaxed text-xs sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[160px] overflow-y-auto pr-1' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
+                <div className={`w-full my-1 leading-relaxed text-[11px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? (isCompactHeight ? 'max-h-[90px] overflow-y-auto pr-1 custom-scrollbar' : 'max-h-[140px] overflow-y-auto pr-1 custom-scrollbar') : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
                   } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
                   <p>{selectedCard.longDescription}</p>
                 </div>
