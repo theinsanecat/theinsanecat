@@ -33,8 +33,8 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         </span>
       </button>
 
-      {/* Nav Links: Glassmorphism pill wrapper - Visible & centered on ALL screen sizes */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-10">
+      {/* Nav Links: Glassmorphism pill wrapper - Hidden on mobile & tablet (< lg), visible on desktop */}
+      <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-10">
         <div className={`flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-md border shadow-md transition-all duration-500 ${
           isLight
             ? 'bg-white/75 border-white/80 shadow-pink-900/5 text-slate-800'
@@ -65,7 +65,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         </div>
       </div>
 
-      {/* Right Controls: Theme Toggle & Say Hello CTA Button (Scaled for iPhone SE / Mobile) */}
+      {/* Right Controls: Theme Toggle & Say Hello CTA Button */}
       <div className="flex items-center gap-1 sm:gap-3 shrink-0 z-10">
         {/* Theme Toggle Button (Sun / Moon) */}
         <button
@@ -91,44 +91,46 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
           )}
         </button>
 
-        {/* Say Hello CTA Button */}
-        {isLight ? (
-          <div className="p-[1.5px] rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 shadow-md shadow-pink-500/10 active:scale-95 transition-all duration-300 cursor-pointer w-max">
-            <button
-              onClick={() => setActiveSection('contact')}
-              className="px-2.5 xs:px-3 sm:px-5 md:px-6 py-1 sm:py-2 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold text-pink-600 bg-white/95 hover:bg-white rounded-full transition-colors duration-300 cursor-pointer focus:outline-none flex items-center justify-center whitespace-nowrap"
+        {/* Say Hello CTA Button - Hidden on mobile & tablet (< lg) */}
+        <div className="hidden lg:block">
+          {isLight ? (
+            <div className="p-[1.5px] rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 shadow-md shadow-pink-500/10 active:scale-95 transition-all duration-300 cursor-pointer w-max">
+              <button
+                onClick={() => setActiveSection('contact')}
+                className="px-2.5 xs:px-3 sm:px-5 md:px-6 py-1 sm:py-2 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold text-pink-600 bg-white/95 hover:bg-white rounded-full transition-colors duration-300 cursor-pointer focus:outline-none flex items-center justify-center whitespace-nowrap"
+              >
+                Say Hello
+              </button>
+            </div>
+          ) : (
+            <BorderGlow
+              borderRadius={9999}
+              glowColor="270 85 70"
+              colors={['#ab55f7', '#ec4899', '#3b82f6']}
+              edgeSensitivity={40}
+              glowRadius={20}
+              glowIntensity={1.2}
+              backgroundColor="#1b1235"
+              className="shadow-lg active:scale-95 transition-transform duration-300 group cursor-pointer w-max"
             >
-              Say Hello
-            </button>
-          </div>
-        ) : (
-          <BorderGlow
-            borderRadius={9999}
-            glowColor="270 85 70"
-            colors={['#ab55f7', '#ec4899', '#3b82f6']}
-            edgeSensitivity={40}
-            glowRadius={20}
-            glowIntensity={1.2}
-            backgroundColor="#1b1235"
-            className="shadow-lg active:scale-95 transition-transform duration-300 group cursor-pointer w-max"
-          >
-            <button
-              onClick={() => setActiveSection('contact')}
-              className="px-2.5 xs:px-3 sm:px-5 md:px-6 py-1 sm:py-2 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold text-white cursor-pointer focus:outline-none flex items-center justify-center whitespace-nowrap"
-            >
-              Say Hello
-            </button>
-          </BorderGlow>
-        )}
+              <button
+                onClick={() => setActiveSection('contact')}
+                className="px-2.5 xs:px-3 sm:px-5 md:px-6 py-1 sm:py-2 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold text-white cursor-pointer focus:outline-none flex items-center justify-center whitespace-nowrap"
+              >
+                Say Hello
+              </button>
+            </BorderGlow>
+          )}
+        </div>
       </div>
 
       {/* Mobile & Tablet Laptop Recommendation Prompt */}
-      <div className="absolute top-[calc(100%+2px)] sm:top-[calc(100%+4px)] left-1/2 -translate-x-1/2 pointer-events-auto z-40 lg:hidden w-max max-w-[92vw]">
-        <div className={`text-[8.5px] xs:text-[9.5px] sm:text-[10px] font-semibold tracking-tight transition-colors duration-500 flex items-center justify-center gap-1.5 opacity-60 ${
+      <div className="absolute top-[calc(100%+4px)] sm:top-[calc(100%+6px)] left-1/2 -translate-x-1/2 pointer-events-auto z-40 lg:hidden w-max max-w-[92vw]">
+        <div className={`text-[9.5px] xs:text-[10.5px] sm:text-xs font-bold tracking-tight transition-colors duration-500 flex items-center justify-center gap-1.5 opacity-95 ${
           isLight ? 'text-pink-600' : 'text-purple-300'
         }`}>
-          <span className="relative flex h-1.5 w-1.5 shrink-0 opacity-75">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${
+          <span className="relative flex h-1.5 w-1.5 shrink-0 opacity-90">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
               isLight ? 'bg-pink-400' : 'bg-purple-400'
             }`}></span>
             <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${

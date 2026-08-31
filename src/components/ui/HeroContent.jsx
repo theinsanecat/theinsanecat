@@ -110,12 +110,12 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
         </span>
       </motion.h1>
 
-      {/* Interactive Call to Action buttons */}
+      {/* Interactive Call to Action buttons — Hidden on mobile & tablet (< lg), visible on desktop */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pointer-events-auto"
+        className="hidden lg:flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto pointer-events-auto"
       >
         {isLight ? (
           <button

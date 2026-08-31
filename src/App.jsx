@@ -116,22 +116,22 @@ function App() {
     localStorage.setItem('portfolio_theme', newTheme);
   };
 
-  // Detect mobile viewport (portrait screens < 768px wide)
+  // Detect mobile & tablet viewport (< 1024px)
+  const [isSmallViewport, setIsSmallViewport] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 1024;
+  });
+
   const [isMobileViewport, setIsMobileViewport] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.innerWidth < 768;
   });
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileViewport(window.innerWidth < 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   // State to track active section ('home', 'about', 'projects', 'experience', or 'contact')
   const [activeSection, setActiveSection] = useState(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      return 'home'; // Block sub-routes on mobile & tablet
+    }
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash.replace('#', '');
       if (['home', 'about', 'projects', 'contact', 'experience'].includes(hash)) {
@@ -141,8 +141,42 @@ function App() {
     return 'home';
   });
 
+  // Block route navigation on mobile & tablet viewport (< 1024px)
+  useEffect(() => {
+    const handleResize = () => {
+      const isSmall = window.innerWidth < 1024;
+      setIsSmallViewport(isSmall);
+      setIsMobileViewport(window.innerWidth < 768);
+      if (isSmall && activeSection !== 'home') {
+        setActiveSection('home');
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (isSmallViewport && activeSection !== 'home') {
+      setActiveSection('home');
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    }
+  }, [isSmallViewport, activeSection]);
+
   // Manual section navigation handler (pushes state to browser history stack)
   const handleSectionChange = useCallback((newSection) => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      // Redirect to home and clear hash if route change is attempted on mobile/tablet
+      setActiveSection('home');
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+      return;
+    }
     setActiveSection((prevSection) => {
       if (prevSection === newSection) return prevSection;
       if (typeof window !== 'undefined') {
@@ -155,9 +189,16 @@ function App() {
     });
   }, []);
 
-  // Sync state with native browser Back & Forward button traversal
+  // Sync state with native browser Back & Forward button traversal and hash changes
   useEffect(() => {
     const handlePopState = () => {
+      if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+        setActiveSection('home');
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+        return;
+      }
       const hash = window.location.hash.replace('#', '');
       if (['about', 'projects', 'contact', 'experience'].includes(hash)) {
         setActiveSection(hash);
