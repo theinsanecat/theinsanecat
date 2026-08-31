@@ -65,14 +65,13 @@ const FloatingUFOContainer = ({
 }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.6, y: 40 }}
-      animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
+      initial={{ opacity: 0, scale: 0.6 }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{
         opacity: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
         scale: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-        y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
       }}
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-8 z-50 pointer-events-auto cursor-pointer"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-8 z-50 pointer-events-auto cursor-pointer animate-hero-float"
       style={{
         width: "110px",
         height: "110px",

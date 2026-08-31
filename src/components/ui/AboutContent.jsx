@@ -535,18 +535,9 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMo
         }`}
     />
 
-    {/* Smooth Floating Container */}
-    <motion.div
-      animate={{
-        y: isCenterUnturned ? [0, -18, 0] : 0,
-        rotateZ: isCenterUnturned ? [-1.2, 1.2, -1.2] : 0,
-      }}
-      transition={
-        isCenterUnturned
-          ? { repeat: Infinity, duration: 3.2, ease: "easeInOut" }
-          : { duration: 0.4, ease: "easeInOut" }
-      }
-      className="w-full h-full relative preserve-3d transform-gpu"
+    {/* Smooth Floating Container — GPU CSS Accelerated */}
+    <div
+      className={`w-full h-full relative preserve-3d transform-gpu ${isCenterUnturned ? 'animate-card-float' : ''}`}
     >
       {isMobile ? (
         // ─── MOBILE: Opacity crossfade flip ─────────────────────────────────────
@@ -582,7 +573,7 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMo
           <CardFront card={card} isSelected={isSelected} theme={theme} />
         </motion.div>
       )}
-    </motion.div>
+    </div>
   </div>
 );
 

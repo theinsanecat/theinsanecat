@@ -224,7 +224,7 @@ const SlabAura = ({ isHovered, isActive }) => {
           {isActive && (
             <g filter="url(#particle-glow)">
               {particles.map((p, i) => (
-                <motion.line
+                <line
                   key={i}
                   x1={p.x}
                   y1={250}
@@ -233,17 +233,8 @@ const SlabAura = ({ isHovered, isActive }) => {
                   stroke="url(#cyan-glow)"
                   strokeWidth={activeOrHovered ? "1.8" : "1.2"}
                   strokeLinecap="round"
-                  initial={{ y: 50, opacity: 0 }}
-                  animate={{
-                    y: [-30, -180],
-                    opacity: [0, 0.9, 0]
-                  }}
-                  transition={{
-                    duration: activeOrHovered ? p.duration * 0.75 : p.duration,
-                    repeat: Infinity,
-                    delay: p.delay,
-                    ease: "linear"
-                  }}
+                  className="animate-rising-particle"
+                  style={{ animationDuration: `${p.duration}s`, animationDelay: `${p.delay}s` }}
                 />
               ))}
             </g>
@@ -332,23 +323,14 @@ const SlabBottom = ({ isHovered, isActive }) => {
           {isActive && (
             <g filter="url(#particle-glow)">
               {bottomDots.map((d, i) => (
-                <motion.circle
+                <circle
                   key={i}
                   cx={d.cx}
                   cy={d.cy}
                   r={d.r}
                   fill="#e879f9"
-                  initial={{ y: 0, opacity: 0 }}
-                  animate={{
-                    y: [-5, -135],
-                    opacity: [0, 0.95, 0.95, 0]
-                  }}
-                  transition={{
-                    duration: activeOrHovered ? d.duration * 0.75 : d.duration,
-                    repeat: Infinity,
-                    delay: d.delay,
-                    ease: "easeOut"
-                  }}
+                  className="animate-rising-dot"
+                  style={{ animationDuration: `${d.duration}s`, animationDelay: `${d.delay}s` }}
                 />
               ))}
             </g>
@@ -361,14 +343,6 @@ const SlabBottom = ({ isHovered, isActive }) => {
 
 // 3. SlabTop: The slightly smaller elevated circular/elliptical pedestal disc (thinned down, redundant z-index 40 overlay removed)
 const SlabTop = ({ isHovered, isActive, children }) => {
-  const floatTransition = {
-    y: {
-      repeat: Infinity,
-      repeatType: "mirror",
-      duration: 4,
-      ease: "easeInOut"
-    }
-  };
 
   const topDots = [
     { cx: 180 + 126 * Math.cos(0.4), cy: 84 + 26 * Math.sin(0.4), r: 2.2, delay: 0.2, duration: 3.1 },
@@ -450,23 +424,14 @@ const SlabTop = ({ isHovered, isActive, children }) => {
             {isActive && (
               <g filter="url(#particle-glow)">
                 {topDots.map((d, i) => (
-                  <motion.circle
+                  <circle
                     key={i}
                     cx={d.cx}
                     cy={d.cy}
                     r={d.r}
                     fill="#fda4af"
-                    initial={{ y: 0, opacity: 0 }}
-                    animate={{
-                      y: [-5, -135],
-                      opacity: [0, 0.95, 0.95, 0]
-                    }}
-                    transition={{
-                      duration: activeOrHovered ? d.duration * 0.75 : d.duration,
-                      repeat: Infinity,
-                      delay: d.delay,
-                      ease: "easeOut"
-                    }}
+                    className="animate-rising-dot"
+                    style={{ animationDuration: `${d.duration}s`, animationDelay: `${d.delay}s` }}
                   />
                 ))}
               </g>
@@ -983,7 +948,7 @@ const ChevronArrow = ({ onClick, direction = 'next' }) => {
       >
         {/* Loop animated chevrons pointing in designated direction */}
         {[0, 1, 2, 3].map((c) => (
-          <motion.path
+          <path
             key={c}
             d={direction === 'next' 
               ? `M ${18 + c * 13},10 L ${28 + c * 13},20 L ${18 + c * 13},30`
@@ -994,15 +959,8 @@ const ChevronArrow = ({ onClick, direction = 'next' }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             fill="none"
-            animate={{
-              opacity: [0.35, 1.0, 0.35],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 1.2,
-              delay: c * 0.18,
-              ease: "easeInOut"
-            }}
+            className="animate-chevron-pulse"
+            style={{ animationDelay: `${c * 0.18}s` }}
           />
         ))}
       </svg>

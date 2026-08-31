@@ -12,50 +12,20 @@ export const MountainLayer = ({ style, theme }) => {
         <defs>
           {/* Back mountains morphing gradient */}
           <linearGradient id="backMountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <motion.stop
-              offset="0%"
-              animate={{
-                stopColor: isLight ? "#e4d5f2" : "#1a0b35",
-                stopOpacity: isLight ? 0.95 : 0.85
-              }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            />
-            <motion.stop
-              offset="100%"
-              animate={{
-                stopColor: isLight ? "#d9c8eb" : "#0b0314",
-                stopOpacity: isLight ? 0.9 : 0.1
-              }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            />
+            <stop offset="0%" stopColor={isLight ? "#e4d5f2" : "#1a0b35"} stopOpacity={isLight ? 0.95 : 0.85} />
+            <stop offset="100%" stopColor={isLight ? "#d9c8eb" : "#0b0314"} stopOpacity={isLight ? 0.9 : 0.1} />
           </linearGradient>
 
           {/* Front mountains morphing gradient */}
           <linearGradient id="frontMountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <motion.stop
-              offset="0%"
-              animate={{ stopColor: isLight ? "#d5c4e8" : "#130726" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            />
-            <motion.stop
-              offset="100%"
-              animate={{ stopColor: isLight ? "#c5b0df" : "#080210" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            />
+            <stop offset="0%" stopColor={isLight ? "#d5c4e8" : "#130726"} />
+            <stop offset="100%" stopColor={isLight ? "#c5b0df" : "#080210"} />
           </linearGradient>
 
           {/* Intermediate Ridge Mist */}
           <linearGradient id="ridgeMist" x1="0%" y1="0%" x2="0%" y2="100%">
-            <motion.stop
-              offset="0%"
-              animate={{ stopColor: isLight ? "#eee5f6" : "#250937", stopOpacity: 0.0 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            />
-            <motion.stop
-              offset="100%"
-              animate={{ stopColor: isLight ? "#eee5f6" : "#250937", stopOpacity: isLight ? 0.6 : 0.4 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            />
+            <stop offset="0%" stopColor={isLight ? "#eee5f6" : "#250937"} stopOpacity={0.0} />
+            <stop offset="100%" stopColor={isLight ? "#eee5f6" : "#250937"} stopOpacity={isLight ? 0.6 : 0.4} />
           </linearGradient>
         </defs>
 

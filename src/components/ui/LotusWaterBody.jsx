@@ -23,70 +23,46 @@ export const LotusDefinitions = ({ theme }) => {
 
         {/* Water Layer Gradients (Serene Blueish Water in Light Mode, Dark Night Water in Night Mode) */}
         <linearGradient id="backWaterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <motion.stop
-            offset="0%"
-            animate={{ stopColor: isLight ? "#c7d2fe" : "#120c2e", stopOpacity: isLight ? 0.95 : 0.92 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          />
-          <motion.stop
-            offset="100%"
-            animate={{ stopColor: isLight ? "#b4c6fc" : "#080417", stopOpacity: isLight ? 0.98 : 0.99 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          />
+          <stop offset="0%" stopColor={isLight ? "#c7d2fe" : "#120c2e"} stopOpacity={isLight ? 0.95 : 0.92} />
+          <stop offset="100%" stopColor={isLight ? "#b4c6fc" : "#080417"} stopOpacity={isLight ? 0.98 : 0.99} />
         </linearGradient>
 
         <linearGradient id="midWaterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <motion.stop
-            offset="0%"
-            animate={{ stopColor: isLight ? "#dbeafe" : "#1a1042", stopOpacity: isLight ? 0.92 : 0.88 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          />
-          <motion.stop
-            offset="100%"
-            animate={{ stopColor: isLight ? "#bfdbfe" : "#0a051d", stopOpacity: isLight ? 0.98 : 0.99 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          />
+          <stop offset="0%" stopColor={isLight ? "#dbeafe" : "#1a1042"} stopOpacity={isLight ? 0.92 : 0.88} />
+          <stop offset="100%" stopColor={isLight ? "#bfdbfe" : "#0a051d"} stopOpacity={isLight ? 0.98 : 0.99} />
         </linearGradient>
 
         <linearGradient id="frontWaterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <motion.stop
-            offset="0%"
-            animate={{ stopColor: isLight ? "#e0e7ff" : "#25145c", stopOpacity: isLight ? 0.90 : 0.85 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          />
-          <motion.stop
-            offset="100%"
-            animate={{ stopColor: isLight ? "#c7d2fe" : "#0b0524", stopOpacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          />
+          <stop offset="0%" stopColor={isLight ? "#e0e7ff" : "#25145c"} stopOpacity={isLight ? 0.90 : 0.85} />
+          <stop offset="100%" stopColor={isLight ? "#c7d2fe" : "#0b0524"} stopOpacity={1} />
         </linearGradient>
 
         {/* Lotus Petal Gradients (Soft Glowing Baby Pink in Light Mode) */}
         <linearGradient id="lotusPetalGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-          <motion.stop offset="0%" animate={{ stopColor: isLight ? "#f472b6" : "#be185d" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="45%" animate={{ stopColor: isLight ? "#fb7185" : "#f43f5e" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="85%" animate={{ stopColor: isLight ? "#fbcfe8" : "#f472b6" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="100%" animate={{ stopColor: isLight ? "#fce7f3" : "#fbcfe8" }} transition={{ duration: 1.2 }} />
+          <stop offset="0%" stopColor={isLight ? "#f472b6" : "#be185d"} />
+          <stop offset="45%" stopColor={isLight ? "#fb7185" : "#f43f5e"} />
+          <stop offset="85%" stopColor={isLight ? "#fbcfe8" : "#f472b6"} />
+          <stop offset="100%" stopColor={isLight ? "#fce7f3" : "#fbcfe8"} />
         </linearGradient>
 
         <linearGradient id="lotusInnerPetalGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-          <motion.stop offset="0%" animate={{ stopColor: isLight ? "#fb7185" : "#e11d48" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="50%" animate={{ stopColor: isLight ? "#fbcfe8" : "#fb7185" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="85%" animate={{ stopColor: isLight ? "#fce7f3" : "#fce7f3" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="100%" animate={{ stopColor: "#ffffff" }} transition={{ duration: 1.2 }} />
+          <stop offset="0%" stopColor={isLight ? "#fb7185" : "#e11d48"} />
+          <stop offset="50%" stopColor={isLight ? "#fbcfe8" : "#fb7185"} />
+          <stop offset="85%" stopColor={isLight ? "#fce7f3" : "#fce7f3"} />
+          <stop offset="100%" stopColor="#ffffff" />
         </linearGradient>
 
         <linearGradient id="budPetalGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-          <motion.stop offset="0%" animate={{ stopColor: isLight ? "#f472b6" : "#9f1239" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="60%" animate={{ stopColor: isLight ? "#fb7185" : "#e11d48" }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="100%" animate={{ stopColor: isLight ? "#fbcfe8" : "#f472b6" }} transition={{ duration: 1.2 }} />
+          <stop offset="0%" stopColor={isLight ? "#f472b6" : "#9f1239"} />
+          <stop offset="60%" stopColor={isLight ? "#fb7185" : "#e11d48"} />
+          <stop offset="100%" stopColor={isLight ? "#fbcfe8" : "#f472b6"} />
         </linearGradient>
 
         {/* Radiant Glowing Baby Pink Water Reflection Gradient */}
         <linearGradient id="reflectionGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <motion.stop offset="0%" animate={{ stopColor: isLight ? "#f472b6" : "#ff4da6", stopOpacity: isLight ? 0.75 : 0.85 }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="50%" animate={{ stopColor: isLight ? "#fb7185" : "#e11d48", stopOpacity: isLight ? 0.5 : 0.65 }} transition={{ duration: 1.2 }} />
-          <motion.stop offset="100%" animate={{ stopColor: isLight ? "#fbcfe8" : "#9f1239", stopOpacity: 0.1 }} transition={{ duration: 1.2 }} />
+          <stop offset="0%" stopColor={isLight ? "#f472b6" : "#ff4da6"} stopOpacity={isLight ? 0.75 : 0.85} />
+          <stop offset="50%" stopColor={isLight ? "#fb7185" : "#e11d48"} stopOpacity={isLight ? 0.5 : 0.65} />
+          <stop offset="100%" stopColor={isLight ? "#fbcfe8" : "#9f1239"} stopOpacity={0.1} />
         </linearGradient>
       </defs>
     </svg>

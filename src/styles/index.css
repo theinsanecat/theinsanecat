@@ -404,3 +404,50 @@ svg path, svg rect, svg polygon, svg circle, svg ellipse, svg line, svg stop {
   animation: pedestalFloat 4s ease-in-out infinite;
   will-change: transform;
 }
+
+/* GPU-Accelerated Rising Neon Particles (0 JS Overhead) */
+@keyframes risingParticle {
+  0% { transform: translate3d(0, -30px, 0); opacity: 0; }
+  50% { opacity: 0.9; }
+  100% { transform: translate3d(0, -180px, 0); opacity: 0; }
+}
+
+.animate-rising-particle {
+  animation: risingParticle 3s linear infinite;
+  will-change: transform, opacity;
+}
+
+/* GPU-Accelerated Rising Pedestal Top Dots (0 JS Overhead) */
+@keyframes risingDot {
+  0% { transform: translate3d(0, -5px, 0); opacity: 0; }
+  25% { opacity: 0.95; }
+  85% { opacity: 0.95; }
+  100% { transform: translate3d(0, -135px, 0); opacity: 0; }
+}
+
+.animate-rising-dot {
+  animation: risingDot 3s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+/* GPU-Accelerated Chevron Pulse (0 JS Overhead) */
+@keyframes chevronPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1.0; }
+}
+
+.animate-chevron-pulse {
+  animation: chevronPulse 1.2s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* GPU-Accelerated Center Card Float (0 JS Overhead) */
+@keyframes cardFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) rotateZ(-1.2deg); }
+  50% { transform: translate3d(0, -18px, 0) rotateZ(1.2deg); }
+}
+
+.animate-card-float {
+  animation: cardFloat 3.2s ease-in-out infinite;
+  will-change: transform;
+}
