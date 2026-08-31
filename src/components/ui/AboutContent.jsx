@@ -681,6 +681,15 @@ export const AboutContent = ({ theme }) => {
     };
     checkResponsive();
     window.addEventListener('resize', checkResponsive);
+
+    // Preload card images into browser cache upfront so card flips render instantly on mobile WebKit
+    cardsData.forEach(card => {
+      if (card.image) {
+        const img = new Image();
+        img.src = card.image;
+      }
+    });
+
     return () => window.removeEventListener('resize', checkResponsive);
   }, []);
 
@@ -870,17 +879,18 @@ export const AboutContent = ({ theme }) => {
               }}
               transition={{
                 type: 'spring',
-                stiffness: 110,
-                damping: 16,
-                mass: 0.8,
+                stiffness: isMobile ? 85 : 110,
+                damping: isMobile ? 18 : 16,
+                mass: isMobile ? 0.6 : 0.8,
               }}
               onClick={() => handleCardClick(card, index)}
-              className="absolute w-[300px] h-[450px]"
+              className="absolute w-[300px] h-[450px] transform-gpu"
               style={{
                 top: '50%',
                 left: '50%',
                 marginTop: '-225px',
                 marginLeft: '-150px',
+                willChange: 'transform, opacity',
                 filter: arc.offset !== 0 && isLight ? 'brightness(0.92) saturate(0.9)' : 'none',
                 cursor: isLocked.current ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
                 pointerEvents: (!isAnySelected || isSelected) ? 'auto' : 'none',
