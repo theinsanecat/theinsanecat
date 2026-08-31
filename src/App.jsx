@@ -354,7 +354,7 @@ function App() {
   const constellationOpacity = useTransform(mouseY, [-1, -0.1, 0.4], [0.95, 0.5, 0]);
 
   return (
-    <main className={`relative w-screen h-screen overflow-hidden transition-colors duration-700 ${theme === 'light' ? 'bg-[#faf5f0]' : 'bg-[#07010e]'}`}>
+    <main className={`relative w-screen h-screen overflow-hidden theme-transition ${theme === 'light' ? 'bg-[#faf5f0]' : 'bg-[#07010e]'}`}>
       <GlobalSVGDefs />
       {/* 0. Header Navigation Overlay with Theme Switch */}
       <Navbar 
@@ -395,50 +395,58 @@ function App() {
       </motion.div>
 
       {/* 3. Middle Layer Forest */}
-      <motion.div
-        animate={{ 
-          opacity: showRecededLandscape ? 0 : 1,
-          y: showRecededLandscape ? 350 : 0
-        }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 w-full h-full z-10 pointer-events-none"
-      >
-        {isMobileViewport ? (
-          <MobileMidgroundTrees style={{ x: midX, y: midY, scale: 1.18 }} theme={theme} />
-        ) : (
-          <MidgroundTrees 
-            style={{ 
-              x: midX, 
-              y: midY,
-              scale: 1.14
-            }} 
-            theme={theme}
-          />
+      <AnimatePresence>
+        {!showRecededLandscape && (
+          <motion.div
+            key="midground-forest"
+            initial={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 350 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 w-full h-full z-10 pointer-events-none"
+          >
+            {isMobileViewport ? (
+              <MobileMidgroundTrees style={{ x: midX, y: midY, scale: 1.18 }} theme={theme} />
+            ) : (
+              <MidgroundTrees 
+                style={{ 
+                  x: midX, 
+                  y: midY,
+                  scale: 1.14
+                }} 
+                theme={theme}
+              />
+            )}
+          </motion.div>
         )}
-      </motion.div>
+      </AnimatePresence>
       
       {/* 4. Foreground Forest Floor */}
-      <motion.div
-        animate={{ 
-          opacity: showRecededLandscape ? 0 : 1,
-          y: showRecededLandscape ? 450 : 0
-        }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 w-full h-full z-20 pointer-events-none"
-      >
-        {isMobileViewport ? (
-          <MobileForegroundTrees style={{ x: foreX, y: foreY, scale: 1.20 }} theme={theme} />
-        ) : (
-          <ForegroundTrees 
-            style={{ 
-              x: foreX, 
-              y: foreY,
-              scale: 1.18
-            }} 
-            theme={theme}
-          />
+      <AnimatePresence>
+        {!showRecededLandscape && (
+          <motion.div
+            key="foreground-forest"
+            initial={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 450 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 w-full h-full z-20 pointer-events-none"
+          >
+            {isMobileViewport ? (
+              <MobileForegroundTrees style={{ x: foreX, y: foreY, scale: 1.20 }} theme={theme} />
+            ) : (
+              <ForegroundTrees 
+                style={{ 
+                  x: foreX, 
+                  y: foreY,
+                  scale: 1.18
+                }} 
+                theme={theme}
+              />
+            )}
+          </motion.div>
         )}
-      </motion.div>
+      </AnimatePresence>
 
       {/* 5. Interactive Pink Spotlight (Active in Dark mode) */}
       <motion.div 
@@ -465,14 +473,14 @@ function App() {
       {/* 6. UI Content Layer */}
       <div className="relative z-30 w-full h-full flex items-center justify-center pointer-events-none">
         <div className="w-full h-full flex items-center justify-center relative">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="sync">
             {activeSection === 'home' ? (
               <motion.div
                 key="home"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, scale: 0.99 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.99 }}
+                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full flex items-center justify-center pointer-events-auto"
               >
@@ -481,10 +489,10 @@ function App() {
             ) : activeSection === 'about' ? (
               <motion.div
                 key="about"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, scale: 0.99 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.99 }}
+                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full flex items-center justify-center pointer-events-auto"
               >
@@ -493,10 +501,10 @@ function App() {
             ) : activeSection === 'projects' ? (
               <motion.div
                 key="projects"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, scale: 0.99 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.99 }}
+                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full flex items-center justify-center pointer-events-auto"
               >
@@ -505,10 +513,10 @@ function App() {
             ) : activeSection === 'contact' ? (
               <motion.div
                 key="contact"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, scale: 0.99 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.99 }}
+                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
               >
@@ -517,10 +525,10 @@ function App() {
             ) : activeSection === 'experience' ? (
               <motion.div
                 key="experience"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, scale: 0.99 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.99 }}
+                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
                 style={{ willChange: 'opacity, transform' }}
                 className="absolute w-full flex items-center justify-center pointer-events-auto"
               >
