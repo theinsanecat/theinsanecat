@@ -15,12 +15,12 @@ export const MidgroundTrees = ({ style, theme }) => {
             <motion.stop
               offset="0%"
               animate={{ stopColor: isLight ? "#8ebf9b" : "#2c0e3e" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
             <motion.stop
               offset="100%"
               animate={{ stopColor: isLight ? "#74a380" : "#14061e" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
           </linearGradient>
 

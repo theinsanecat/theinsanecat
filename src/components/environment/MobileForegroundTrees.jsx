@@ -14,12 +14,12 @@ export const MobileForegroundTrees = ({ style, theme }) => {
             <motion.stop
               offset="0%"
               animate={{ stopColor: isLight ? "#457a55" : "#110520" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
             <motion.stop
               offset="100%"
               animate={{ stopColor: isLight ? "#335e40" : "#05010a" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
           </linearGradient>
 

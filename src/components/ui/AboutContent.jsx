@@ -18,7 +18,7 @@ const cardsData = [
     category: "ENTERPRISE FRONTEND",
     backTitle: "01/05",
     date: "Jan 2025 - Present",
-    image: `${import.meta.env.BASE_URL}images/infosys-building.webp`,
+    image: `${import.meta.env.BASE_URL}images/infosys-building.jpg`,
     description: "Jan 2025 - Present",
     longDescription:
       "I moved to Bangalore. For someone who had spent most of her life close to home, it was one of the most courageous and nerve-wracking decisions I had ever made, yes, EVER MADE. Not every brave decision feels brave while you're living it. Sometimes it just feels scary, but I am glad I did it, because I learned so much about myself and the people who love me. Somewhere along this journey, I also stopped thinking that good engineering meant making everything perfect, there's much more to it. Today, I care just as much about the people, the problem, and what happens beyond the code. At Infosys, I work on high-stakes banking applications, take ownership of messy production problems, work across teams, and build systems that can grow without becoming harder to live with. I’m still the girl who loves solving problems but I’ve also learned that the best solutions come from curiosity, consistency, empathy, and the courage to keep moving.",
@@ -41,7 +41,7 @@ const cardsData = [
     category: "FRONTEND DEVELOPER",
     backTitle: "02/05",
     date: "Oct 2020 - Dec 2024",
-    image: `${import.meta.env.BASE_URL}images/jio-building.webp`,
+    image: `${import.meta.env.BASE_URL}images/jio-building.jpg`,
     description: "Oct 2020 - Dec 2024",
     longDescription:
       "Jio was where I grew into the developer I am today. It wasn't just my first job; it was my college placement, my first company, and the place where my professional journey truly began. That makes this chapter especially dear to my heart. Over four years I went from writing code to leading projects, building products from scratch, creating reusable systems, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
@@ -64,7 +64,7 @@ const cardsData = [
     category: "POSTGRADUATE STUDIES",
     backTitle: "03/05",
     date: "2022 - 2024",
-    image: `${import.meta.env.BASE_URL}images/bits-pilani-building.webp`,
+    image: `${import.meta.env.BASE_URL}images/bits-pilani-building.jpg`,
     description: "2022 - 2024",
     longDescription:
       "Apparently, having a full-time career wasn't enough to satisfy my curiosity. While working, I went back to being a student and pursued my Master's in Data Science & Engineering at BITS Pilani. I dove into machine learning, deep learning, statistics, AI and the mathematics behind intelligent systems not because I needed another line on my résumé, but because I genuinely wanted to understand more. I've always enjoyed learning for the simple joy of understanding something I didn't understand before. Balancing a full-time career, academics, and everything in between demanded discipline, consistency, and the ability to keep showing up. It was one of the most demanding chapters of my life but also the one I'm incredibly proud of. Curiosity, I've learned, doesn't really care how busy you are.",
@@ -87,7 +87,7 @@ const cardsData = [
     category: "UNDERGRADUATE STUDIES",
     backTitle: "04/05",
     date: "2016 - 2020",
-    image: `${import.meta.env.BASE_URL}images/mumbai-university-building.webp`,
+    image: `${import.meta.env.BASE_URL}images/mumbai-university-building.jpg`,
     description: "2016 - 2020",
     longDescription:
       "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I'm thankful they did. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning about circuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make my own path and I did. College also gave me the space to discover more about myself beyond academics. I explored different interests, organised workshops alongside my professors for juniors, headed my very first event at our tech-fest, became an active member of the Social Wing, took on the role of Summer Internship Student Coordinator, and proudly became part of the college dance crew. Looking back, I think I simply tried to make the most of the opportunities and interests that came my way and discovered a little more about myself too.",
@@ -108,7 +108,7 @@ const cardsData = [
     category: "ACADEMICS & HONORS",
     backTitle: "05/05",
     date: "2014 - 2016",
-    image: `${import.meta.env.BASE_URL}images/dav-school-building.webp`,
+    image: `${import.meta.env.BASE_URL}images/dav-school-building.jpg`,
     description: "2014 - 2016",
     longDescription:
       "I was the studious kid. The one who usually came first or second, loved Mathematics and Science, had a soft spot for English Literature and Computer Science, and somehow managed to have a good rapport with her teachers. But studying was never the only thing I wanted to do. I played Handball, Throwball and Kho-Kho, ran Marathons, was a Choir Member, danced, debated, sketched, painted, wrote small plays/stories, competed in SpellBee and Olympiads, and even brought home medals in all of the above. Looking back, I think school revealed something that has stayed with me ever since: I have always desired to create, explore and pour myself into things, whether that thing was a mathematical problem, a dance floor, or eventually, a piece of code.",
@@ -499,25 +499,41 @@ const CardFront = ({ card, isSelected, theme, isMobile }) => {
 // ─── Full Card (flipper wrapper with standalone perspective camera) ─────────────
 const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile }) => (
   <div className="w-full h-full relative perspective-[1500px] transform-gpu">
-    {/* Radiant Glowing Aura & Ambient Drop Shadow Disks — Rendered ONLY for active center card to conserve GPU RAM */}
-    {isCenterUnturned && (
-      <>
-        <div
-          className={`absolute -inset-4 rounded-[2.5rem] blur-lg pointer-events-none z-0 transition-opacity duration-500 ease-in-out ${theme === 'light' ? 'bg-[#5b21b6]/25 opacity-90' : 'bg-black/60 opacity-90'
-            }`}
-        />
-        <div
-          className={`absolute -inset-6 rounded-[2.5rem] blur-xl pointer-events-none z-0 transition-opacity duration-500 ease-in-out ${theme === 'light'
-            ? 'bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 opacity-85'
-            : 'bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] opacity-85'
-            }`}
-        />
-        <div
-          className={`absolute inset-0 rounded-[2rem] blur-md pointer-events-none z-0 transition-opacity duration-500 ease-in-out ${theme === 'light' ? 'bg-[#c084fc]/45 opacity-90' : 'bg-[#ec4899]/35 opacity-90'
-            }`}
-        />
-      </>
-    )}
+    {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
+    <div
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
+    <div
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Radiant Glowing Aura Disk - Light Mode */}
+    <div
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-85' : 'opacity-0'
+        }`}
+    />
+
+    {/* Radiant Glowing Aura Disk - Dark Mode */}
+    <div
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-85' : 'opacity-0'
+        }`}
+    />
+
+    {/* Glowing Outer Card Frame Halo - Light Mode */}
+    <div
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Glowing Outer Card Frame Halo - Dark Mode */}
+    <div
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
 
     {/* Smooth Floating Container — GPU CSS Accelerated */}
     <div
@@ -620,9 +636,9 @@ const MathReflectionModal = ({ isOpen, onClose, theme }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 15 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative max-w-2xl sm:max-w-3xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 ${isLight
-              ? 'bg-white/95 border-pink-300 text-slate-900'
-              : 'bg-[#0f0921]/95 border-pink-500/50 text-purple-100'
+            className={`relative max-w-2xl sm:max-w-3xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 shadow-2xl ${isLight
+              ? 'bg-white/95 border-pink-300 text-slate-900 shadow-pink-500/20'
+              : 'bg-[#0f0921]/95 border-pink-500/50 text-purple-100 shadow-pink-500/30'
               }`}
           >
             {/* Background Glow Orbs */}
@@ -717,7 +733,7 @@ export const AboutContent = ({ theme }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 640 : false
   );
-  const [isCardAnimating, setIsCardAnimating] = useState(false);
+  const isLocked = useRef(false);
 
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
   const total = cardsData.length;
@@ -758,13 +774,13 @@ export const AboutContent = ({ theme }) => {
   }, [selectedCardId, activeIndex]);
 
   const navigate = (dir) => {
-    if (isCardAnimating || selectedCardId !== null) return;
+    if (isLocked.current || selectedCardId !== null) return;
     setActiveIndex(i => (i + dir + total) % total);
   };
 
   // Touch Swipe Gesture for mobile / tablet deck navigation
   const handlePanEnd = (e, info) => {
-    if (selectedCardId !== null || isCardAnimating) return;
+    if (selectedCardId !== null || isLocked.current) return;
     const threshold = 20;
     if (Math.abs(info.offset.x) > threshold && Math.abs(info.offset.x) > Math.abs(info.offset.y)) {
       if (info.offset.x < 0) {
@@ -776,31 +792,25 @@ export const AboutContent = ({ theme }) => {
   };
 
   const handleCardClick = (card, index) => {
-    if (isCardAnimating) return;
-    if (selectedCardId === null) {
-      if (index !== activeIndex) {
-        setActiveIndex(index);
-        return;
-      }
-      setIsCardAnimating(true);
-      setSelectedCardId(card.id);
-      setTimeout(() => {
-        setIsCardAnimating(false);
-      }, 550);
-    } else {
-      if (card.id === selectedCardId) {
-        collapse();
-      }
+    if (isLocked.current || selectedCardId !== null) return;
+    if (index !== activeIndex) {
+      setActiveIndex(index);
+      return;
     }
+    isLocked.current = true;
+    setSelectedCardId(card.id);
+    setTimeout(() => {
+      isLocked.current = false;
+    }, 700);
   };
 
   const collapse = () => {
-    if (isCardAnimating) return;
-    setIsCardAnimating(true);
+    if (isLocked.current) return;
+    isLocked.current = true;
     setSelectedCardId(null);
     setTimeout(() => {
-      setIsCardAnimating(false);
-    }, 550);
+      isLocked.current = false;
+    }, 700);
   };
 
   return (
@@ -814,26 +824,22 @@ export const AboutContent = ({ theme }) => {
       {/* Global SVG Filters */}
       <svg className="hidden">
         <defs>
-          <filter id="heavy-shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="8" stdDeviation="4" floodColor="#000000" floodOpacity="0.6" />
+          <filter id="heavy-shadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="12" stdDeviation="8" floodColor="#000000" floodOpacity="0.7" />
           </filter>
-          <filter id="gem-glow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+          <filter id="gem-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
       </svg>
 
       {/* Section Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{
-          opacity: selectedCardId ? 0 : 1,
-          y: selectedCardId ? -12 : 0,
-        }}
-        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center z-20 flex flex-col items-center pointer-events-none mt-16 sm:mt-20 md:mt-24 mb-2"
+      <div
+        className="text-center transition-all duration-700 z-20 flex flex-col items-center pointer-events-none mt-16 sm:mt-20 md:mt-24 mb-2"
         style={{
+          opacity: selectedCardId ? 0 : 1,
+          transform: selectedCardId ? 'translateY(-12px)' : 'none',
           pointerEvents: selectedCardId ? 'none' : 'auto'
         }}
       >
@@ -843,7 +849,7 @@ export const AboutContent = ({ theme }) => {
           }`}>My Journey</h2>
         <p className={`text-[10px] sm:text-xs font-questrial transition-colors duration-700 ${isLight ? 'text-purple-900/80' : 'text-purple-200/60'
           }`}>Rotate the deck and click a card to explore my journey.</p>
-      </motion.div>
+      </div>
 
       {/* ── Main Interactive Section ── */}
       <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center flex-1 px-4 sm:px-8">
@@ -917,10 +923,10 @@ export const AboutContent = ({ theme }) => {
               <motion.div
                 key={card.id}
                 initial={{
-                  x: targetX,
-                  y: targetY + 50,
-                  rotateZ: arc.rotateZ,
-                  scale: baseScale * 0.85,
+                  x: 0,
+                  y: 0,
+                  rotateZ: 0,
+                  scale: 0.5,
                   opacity: 0,
                 }}
                 animate={{
@@ -932,8 +938,10 @@ export const AboutContent = ({ theme }) => {
                   zIndex: zIndex,
                 }}
                 transition={{
-                  duration: 0.52,
-                  ease: [0.16, 1, 0.3, 1],
+                  type: 'spring',
+                  stiffness: isMobile ? 85 : 110,
+                  damping: isMobile ? 18 : 16,
+                  mass: isMobile ? 0.6 : 0.8,
                 }}
                 onClick={() => handleCardClick(card, index)}
                 className="absolute w-[300px] h-[450px] transform-gpu"
@@ -944,15 +952,15 @@ export const AboutContent = ({ theme }) => {
                   marginLeft: '-150px',
                   willChange: 'transform, opacity',
                   filter: arc.offset !== 0 && isLight ? 'brightness(0.92) saturate(0.9)' : 'none',
-                  cursor: isCardAnimating ? 'default' : (!isAnySelected || isSelected) ? 'pointer' : 'default',
-                  pointerEvents: (!isAnySelected || isSelected) ? 'auto' : 'none',
+                  cursor: (!isAnySelected && !isLocked.current) ? 'pointer' : 'default',
+                  pointerEvents: (!isAnySelected) ? 'auto' : 'none',
                 }}
               >
                 <CardVisual
                   card={card}
                   isSelected={isSelected}
                   isHovered={isHovered && !isAnySelected}
-                  isCenterUnturned={isCenterUnturned && !isCardAnimating}
+                  isCenterUnturned={isCenterUnturned}
                   theme={theme}
                   isMobile={isMobile}
                 />

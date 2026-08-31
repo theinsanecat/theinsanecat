@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { useTransform, motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from './hooks/useMouseParallax';
 import { SkyLayer } from './components/environment/SkyLayer';
@@ -9,14 +10,24 @@ import { MobileMidgroundTrees } from './components/environment/MobileMidgroundTr
 import { MobileForegroundTrees } from './components/environment/MobileForegroundTrees';
 import { Navbar } from './components/ui/Navbar';
 import { HeroContent } from './components/ui/HeroContent';
-import { AboutContent } from './components/ui/AboutContent';
-import { ContactContent } from './components/ui/ContactContent';
-import { ExperienceContent, UFOCatSpaceship, GlobalSVGDefs } from './components/ui/ExperienceContent';
-import { ProjectsContent } from './components/ui/ProjectsContent';
 import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
 import { LotusWaterBody } from './components/ui/LotusWaterBody';
 import { MobileLotusWaterBody } from './components/ui/MobileLotusWaterBody';
+import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship';
+import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
 import rotatingEmblem from './assets/rotating-emblem.svg';
+
+import { AboutContent } from './components/ui/AboutContent';
+import { ProjectsContent } from './components/ui/ProjectsContent';
+import { ContactContent } from './components/ui/ContactContent';
+
+/*
+const ExperienceContent = lazy(() =>
+  import('./components/ui/ExperienceContent').then((module) => ({
+    default: module.ExperienceContent,
+  }))
+);
+*/
 
 // ================= GLOBAL FLOATING GUIDE CONTAINER WITH SPACE DRIFT =================
 const getRandomBorderCoords = (w, h) => {
@@ -127,33 +138,20 @@ function App() {
     return window.innerWidth < 768;
   });
 
-  const VALID_SECTIONS = ['home', 'about', 'projects', 'contact', 'experience'];
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // State to track active section ('home', 'about', 'projects', 'experience', or 'contact')
-  const [activeSection, setActiveSection] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const isSmall = window.innerWidth < 1024;
-      const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
-
-      if (isSmall) {
-        if (rawHash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-        return 'home'; // Block sub-routes on mobile & tablet
-      }
-
-      if (rawHash) {
-        if (VALID_SECTIONS.includes(rawHash)) {
-          return rawHash;
-        } else {
-          // Edge case: unknown/invalid route entered -> redirect to home & clear URL hash
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-          return 'home';
-        }
-      }
-    }
+  // Sync activeSection with react-router-dom path
+  const getSectionFromPath = (path) => {
+    const cleanPath = path.replace(/^\//, '').toLowerCase();
+    if (!cleanPath || cleanPath === 'home') return 'home';
+    if (cleanPath === 'about') return 'about';
+    if (cleanPath === 'projects') return 'projects';
+    if (cleanPath === 'contact' || cleanPath === 'say-hello') return 'contact';
     return 'home';
-  });
+  };
+
+  const activeSection = getSectionFromPath(location.pathname);
 
   // Preload heavy SVG emblem upfront so navigating to Contact page is instant
   useEffect(() => {
@@ -163,106 +161,40 @@ function App() {
     }
   }, []);
 
-  // Cleanup any unknown/invalid URL pathname (e.g. /theinsanecat/sfk -> /theinsanecat/)
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const pathname = window.location.pathname;
-      const isBase = pathname === '/' || pathname === '/theinsanecat' || pathname === '/theinsanecat/';
-      if (!isBase) {
-        const basePath = pathname.startsWith('/theinsanecat') ? '/theinsanecat/' : '/';
-        window.history.replaceState(null, '', basePath + window.location.search);
-        setActiveSection('home');
-      }
-    }
-  }, []);
-
   // Block route navigation on mobile & tablet viewport (< 1024px)
   useEffect(() => {
     const handleResize = () => {
       const isSmall = window.innerWidth < 1024;
       setIsSmallViewport(isSmall);
       setIsMobileViewport(window.innerWidth < 768);
-      if (isSmall && activeSection !== 'home') {
-        setActiveSection('home');
-        if (window.location.hash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
+      if (isSmall && location.pathname !== '/') {
+        navigate('/', { replace: true });
       }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [activeSection]);
+  }, [location.pathname, navigate]);
 
   useEffect(() => {
-    if (isSmallViewport && activeSection !== 'home') {
-      setActiveSection('home');
-      if (window.location.hash) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
+    if (isSmallViewport && location.pathname !== '/') {
+      navigate('/', { replace: true });
     }
-  }, [isSmallViewport, activeSection]);
+  }, [isSmallViewport, location.pathname, navigate]);
 
-  // Manual section navigation handler (pushes state to browser history stack)
+  // Section navigation handler using react-router-dom navigate
   const handleSectionChange = useCallback((newSection) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      // Redirect to home and clear hash if route change is attempted on mobile/tablet
-      setActiveSection('home');
-      if (window.location.hash) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
+    if (isSmallViewport) {
+      navigate('/');
       return;
     }
-
-    const targetSection = VALID_SECTIONS.includes(newSection) ? newSection : 'home';
-
-    setActiveSection((prevSection) => {
-      if (prevSection === targetSection) return prevSection;
-      if (typeof window !== 'undefined') {
-        const targetUrl = targetSection === 'home'
-          ? window.location.pathname + window.location.search
-          : `#${targetSection}`;
-        window.history.pushState({ section: targetSection }, '', targetUrl);
-      }
-      return targetSection;
-    });
-  }, []);
-
-  // Sync state with native browser Back & Forward button traversal and hash changes across all devices
-  useEffect(() => {
-    const handlePopState = () => {
-      if (typeof window === 'undefined') return;
-      const isSmall = window.innerWidth < 1024;
-      const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
-
-      if (isSmall) {
-        setActiveSection('home');
-        if (rawHash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-        return;
-      }
-
-      if (!rawHash || rawHash === 'home') {
-        setActiveSection('home');
-      } else if (VALID_SECTIONS.includes(rawHash)) {
-        setActiveSection(rawHash);
-      } else {
-        // Edge case: invalid/unknown route entered on desktop -> redirect to home & clear invalid hash from URL
-        setActiveSection('home');
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    window.addEventListener('hashchange', handlePopState);
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-      window.removeEventListener('hashchange', handlePopState);
-    };
-  }, []);
+    if (newSection === 'home') navigate('/');
+    else if (newSection === 'about') navigate('/about');
+    else if (newSection === 'projects') navigate('/projects');
+    else if (newSection === 'contact') navigate('/contact');
+  }, [isSmallViewport, navigate]);
 
   const isAboutPage = activeSection === 'about';
-  const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'experience' || activeSection === 'projects';
+  const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'projects';
 
   // State for the global floating guide spaceship cat
   const [isSpaceshipSpawned, setIsSpaceshipSpawned] = useState(false);
@@ -448,16 +380,8 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* 5. Interactive Pink Spotlight (Active in Dark mode) */}
-      <motion.div 
-        className="fixed pointer-events-none rounded-full -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] z-8 mix-blend-screen transition-opacity duration-500"
-        style={{
-          x: mouseXpx,
-          y: mouseYpx,
-          opacity: theme === 'light' ? 0 : 0.9,
-          background: 'radial-gradient(circle, rgba(255, 117, 143, 0.18) 0%, rgba(138, 60, 93, 0.06) 50%, rgba(0, 0, 0, 0) 70%)',
-        }}
-      />
+      {/* 5. Interactive Pink Spotlight (Performance-aware) */}
+      <InteractiveSpotlight mouseXpx={mouseXpx} mouseYpx={mouseYpx} theme={theme} />
 
       {/* Serene Lotus Lake (Pops UP on Contact section, slides DOWN on return to Home) */}
       <AnimatePresence>
@@ -473,68 +397,76 @@ function App() {
       {/* 6. UI Content Layer */}
       <div className="relative z-30 w-full h-full flex items-center justify-center pointer-events-none">
         <div className="w-full h-full flex items-center justify-center relative">
-          <AnimatePresence mode="sync">
-            {activeSection === 'home' ? (
-              <motion.div
-                key="home"
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
-              </motion.div>
-            ) : activeSection === 'about' ? (
-              <motion.div
-                key="about"
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <AboutContent theme={theme} />
-              </motion.div>
-            ) : activeSection === 'projects' ? (
-              <motion.div
-                key="projects"
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <ProjectsContent theme={theme} />
-              </motion.div>
-            ) : activeSection === 'contact' ? (
-              <motion.div
-                key="contact"
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
-              >
-                <ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} />
-              </motion.div>
-            ) : activeSection === 'experience' ? (
-              <motion.div
-                key="experience"
-                initial={{ opacity: 0, scale: 0.99 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.99 }}
-                transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <ExperienceContent setActiveSection={handleSectionChange} />
-              </motion.div>
-            ) : null}
+          <AnimatePresence mode="popLayout">
+            <Routes location={location} key={activeSection}>
+              <Route
+                path="/"
+                element={
+                  <motion.div
+                    key="home"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/about"
+                element={
+                  <motion.div
+                    key="about"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <AboutContent theme={theme} />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/projects"
+                element={
+                  <motion.div
+                    key="projects"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <ProjectsContent theme={theme} />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/contact"
+                element={
+                  <motion.div
+                    key="contact"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} />
+                  </motion.div>
+                }
+              />
+              <Route path="/say-hello" element={<Navigate to="/contact" replace />} />
+              <Route path="/experience" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
           </AnimatePresence>
         </div>
       </div>

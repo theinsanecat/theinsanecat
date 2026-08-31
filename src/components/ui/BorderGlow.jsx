@@ -143,14 +143,26 @@ const BorderGlow = ({
     updateAngleAndEdge(e);
   }, [updateAngleAndEdge]);
 
-  const handlePointerMove = useCallback((e) => {
-    updateAngleAndEdge(e);
-  }, [updateAngleAndEdge]);
+  const moveRafIdRef = useRef(null);
 
   const handlePointerLeave = useCallback(() => {
     isHoveredRef.current = false;
     rectRef.current = null;
+    if (moveRafIdRef.current) {
+      cancelAnimationFrame(moveRafIdRef.current);
+      moveRafIdRef.current = null;
+    }
   }, []);
+
+  const handlePointerMove = useCallback((e) => {
+    if (moveRafIdRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    moveRafIdRef.current = requestAnimationFrame(() => {
+      updateAngleAndEdge({ clientX, clientY });
+      moveRafIdRef.current = null;
+    });
+  }, [updateAngleAndEdge]);
 
   useEffect(() => {
     if (!animated || !cardRef.current) return;

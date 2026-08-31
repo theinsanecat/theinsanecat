@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useId } from 'react';
+import { usePerformanceMode } from '../../context/PerformanceContext';
 import './GlassSurface.css';
 
 const GlassSurface = ({
@@ -9,20 +10,22 @@ const GlassSurface = ({
   borderWidth = 0.05,
   brightness = 50,
   opacity = 0.93,
-  blur = 2, // Reduced from 11 to keep the center of the surface crisp and prevent muddy blur
+  blur = 2,
   displace = 0,
   backgroundOpacity = 0.08,
   saturation = 1.8,
-  distortionScale = -10, // Keeps chromatic displacement extremely tight to prevent color smearing on background stars
+  distortionScale = -10,
   redOffset = 0,
   greenOffset = 2,
   blueOffset = 4,
   xChannel = 'R',
   yChannel = 'G',
   mixBlendMode = 'difference',
+  theme = 'dark',
   className = '',
   style = {}
 }) => {
+  const { isLite } = usePerformanceMode();
   const id = useId();
   const filterId = `glass-filter-${id}`;
   const redGradId = `red-grad-${id}`;
@@ -37,13 +40,11 @@ const GlassSurface = ({
     if (isWebkit || isFirefox) {
       return false;
     }
-    const div = document.createElement('div');
-    div.style.backdropFilter = 'url(#test)';
-    return div.style.backdropFilter !== '';
+    return true;
   };
 
-  // Initialize state synchronously to prevent post-mount visual pop or flicker
-  const [svgSupported, setSvgSupported] = useState(() => supportsSVGFilters());
+  const [svgSupported] = useState(() => supportsSVGFilters());
+  const useSVG = svgSupported && !isLite && theme !== 'light';
 
   const containerRef = useRef(null);
   const feImageRef = useRef(null);
@@ -87,7 +88,7 @@ const GlassSurface = ({
   };
 
   useEffect(() => {
-    if (!svgSupported) return;
+    if (!useSVG) return;
     updateDisplacementMap();
     [
       { ref: redChannelRef, offset: redOffset },
@@ -103,7 +104,7 @@ const GlassSurface = ({
 
     gaussianBlurRef.current?.setAttribute('stdDeviation', displace.toString());
   }, [
-    svgSupported,
+    useSVG,
     width,
     height,
     borderRadius,
@@ -122,7 +123,7 @@ const GlassSurface = ({
   ]);
 
   useEffect(() => {
-    if (!svgSupported || !containerRef.current) return;
+    if (!useSVG || !containerRef.current) return;
 
     const resizeObserver = new ResizeObserver(() => {
       setTimeout(updateDisplacementMap, 0);
@@ -133,13 +134,13 @@ const GlassSurface = ({
     return () => {
       resizeObserver.disconnect();
     };
-  }, [svgSupported]);
+  }, [useSVG]);
 
   useEffect(() => {
-    if (svgSupported) {
+    if (useSVG) {
       setTimeout(updateDisplacementMap, 0);
     }
-  }, [svgSupported, width, height]);
+  }, [useSVG, width, height]);
 
   const containerStyle = {
     ...style,
@@ -154,10 +155,10 @@ const GlassSurface = ({
   return (
     <div
       ref={containerRef}
-      className={`glass-surface ${svgSupported ? 'glass-surface--svg' : 'glass-surface--fallback'} ${className}`}
+      className={`glass-surface ${useSVG ? 'glass-surface--svg' : 'glass-surface--fallback'} ${className}`}
       style={containerStyle}
     >
-      {svgSupported && (
+      {useSVG && (
         <svg className="glass-surface__filter" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id={filterId} colorInterpolationFilters="sRGB" x="0%" y="0%" width="100%" height="100%">

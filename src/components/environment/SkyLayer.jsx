@@ -29,10 +29,10 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
         <svg viewBox="0 0 600 1080" className="w-full h-full object-cover" preserveAspectRatio="xMidYMin slice">
           <defs>
             <linearGradient id="skyGradMobile" x1="0%" y1="0%" x2="0%" y2="100%">
-              <motion.stop offset="0%" animate={{ stopColor: isLight ? "#dbeafe" : "#080211" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-              <motion.stop offset="40%" animate={{ stopColor: isLight ? "#e0e7ff" : "#120624" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-              <motion.stop offset="75%" animate={{ stopColor: isLight ? "#e9d5ff" : "#250937" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-              <motion.stop offset="100%" animate={{ stopColor: isLight ? "#f3e8f5" : "#46164f" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="0%" animate={{ stopColor: isLight ? "#dbeafe" : "#080211" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="40%" animate={{ stopColor: isLight ? "#e0e7ff" : "#120624" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="75%" animate={{ stopColor: isLight ? "#e9d5ff" : "#250937" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="100%" animate={{ stopColor: isLight ? "#f3e8f5" : "#46164f" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
             </linearGradient>
 
             <linearGradient id="moonGradMobile" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -86,7 +86,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
           {/* Mobile & Tablet Scaled Soft Day Clouds */}
           <motion.g
             animate={{ opacity: isLight ? 0.85 : 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             fill="#ffffff"
           >
             {/* Left Upper Sky Cloud */}
@@ -109,7 +109,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
           {/* DEDICATED MOBILE SUN */}
           <motion.g
             animate={{ opacity: isLight ? 1.0 : 0, scale: isLight ? 1.0 : 0.4 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{ originX: '120px', originY: '150px' }}
           >
             <circle cx="120" cy="150" r="115" fill="url(#sunCoronaMobile)" />
@@ -119,7 +119,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
           {/* DEDICATED MOBILE MOON */}
           <motion.g
             animate={{ opacity: isLight ? 0 : 1.0, scale: isLight ? 0.4 : 1.0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{ originX: '450px', originY: '150px' }}
           >
             <circle cx="450" cy="150" r="110" fill="url(#lunarGlowMobile)" />
@@ -179,10 +179,10 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
           <defs>
             {/* Deep cosmic & day morphing sky gradient */}
             <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <motion.stop offset="0%" animate={{ stopColor: isLight ? "#dbeafe" : "#080211" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-              <motion.stop offset="40%" animate={{ stopColor: isLight ? "#e0e7ff" : "#120624" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-              <motion.stop offset="75%" animate={{ stopColor: isLight ? "#e9d5ff" : "#250937" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
-              <motion.stop offset="100%" animate={{ stopColor: isLight ? "#f3e8f5" : "#46164f" }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="0%" animate={{ stopColor: isLight ? "#dbeafe" : "#080211" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="40%" animate={{ stopColor: isLight ? "#e0e7ff" : "#120624" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="75%" animate={{ stopColor: isLight ? "#e9d5ff" : "#250937" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
+              <motion.stop offset="100%" animate={{ stopColor: isLight ? "#f3e8f5" : "#46164f" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
             </linearGradient>
 
             <linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -264,20 +264,20 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             r="750"
             fill="url(#purpleNebula)"
             animate={{ opacity: isLight ? 0 : 1 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           />
 
           {/* Fluffy Soft Day Clouds */}
           <motion.g
             initial={false}
             animate={{ opacity: isLight ? 0.95 : 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             fill="#ffffff"
           >
             <motion.g
               initial={false}
               animate={{ x: isLight ? 0 : -900 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               opacity="0.85"
             >
               <rect x="130" y="240" width="280" height="75" rx="37.5" ry="37.5" />
@@ -289,7 +289,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             <motion.g
               initial={false}
               animate={{ x: isLight ? 0 : 900 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               opacity="0.75"
             >
               <rect x="1420" y="190" width="310" height="80" rx="40" ry="40" />
@@ -320,7 +320,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
               y: isAboutPage ? -140 : 0,
               opacity: isAboutPage ? 0 : (isLight ? 0 : 1.0),
             }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{ originX: '1400px', originY: '320px' }}
           >
             <circle cx="1400" cy="320" r="500" fill="url(#orangeGlow)" />
@@ -337,7 +337,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
               y: isLight ? (isAboutPage ? -60 : 0) : 250,
               opacity: isLight ? 1.0 : 0,
             }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{ originX: '480px', originY: '320px' }}
           >
             <circle cx="480" cy="320" r="450" fill="url(#sunCorona)" />
@@ -351,7 +351,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
               scale: isAboutPage ? 0.75 : 1.0,
               opacity: isLight ? 0 : 1.0
             }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{ originX: '960px', originY: '540px' }}
             fill="#ffffff"
             filter="url(#starGlow)"
@@ -363,7 +363,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             <circle cx="700" cy="120" r="2.5" opacity="0.8" />
             <circle cx="850" cy="120" r="3.2" opacity="0.85" />
             <circle cx="960" cy="200" r="2.6" opacity="0.7" />
-            <circle cx="1050" cy="80" r="3.0" opacity="0.9" fill="#ffd1f9" />
+            <circle cx="1050" cy="380" r="3.0" opacity="0.9" fill="#ffd1f9" />
             <circle cx="1150" cy="280" r="2.8" opacity="0.85" />
             <circle cx="1350" cy="180" r="3.2" opacity="0.75" />
             <circle cx="1500" cy="220" r="2.6" opacity="0.8" fill="#ffeec7" />
@@ -377,7 +377,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
               scale: isAboutPage ? 0.85 : 1.0,
               opacity: isLight ? 0 : (isAboutPage ? 0.75 : 1.0)
             }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{ originX: '960px', originY: '540px' }}
             fill="#ffffff"
           >
@@ -426,7 +426,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
           {!isAboutPage && !isLight && (
             <motion.g mask="url(#constellationMask)" style={{ opacity: constellationOpacity }}>
               <polyline points="120,100 200,150 550,220 450,80 120,100" stroke="#ffffff" strokeWidth="0.8" strokeDasharray="4 4" fill="none" opacity="0.45" />
-              <polyline points="700,120 850,120 960,200 1150,280 1050,80" stroke="#ffffff" strokeWidth="0.8" strokeDasharray="4 4" fill="none" opacity="0.45" />
+              <polyline points="700,120 850,120 960,200 1150,280 1050,380" stroke="#ffffff" strokeWidth="0.8" strokeDasharray="4 4" fill="none" opacity="0.45" />
               <polyline points="1350,180 1500,220 1600,120 1750,180 1850,400" stroke="#ffffff" strokeWidth="0.8" strokeDasharray="4 4" fill="none" opacity="0.45" />
             </motion.g>
           )}

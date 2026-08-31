@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { usePerformanceMode } from '../../context/PerformanceContext';
 
 // Solid Monochrome Wing Butterfly Component (Pastel Pink & Pastel Lavender in Light Mode)
 const MonochromeButterfly = ({
@@ -66,6 +67,8 @@ const MonochromeButterfly = ({
 };
 
 export const MagicalButterflies = ({ theme }) => {
+  const { isLite } = usePerformanceMode();
+
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -77,7 +80,11 @@ export const MagicalButterflies = ({ theme }) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 w-full h-full pointer-events-none z-20 overflow-hidden select-none">
+    <motion.div
+      animate={{ opacity: isLite ? 0 : 1 }}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
+      className={`fixed inset-0 w-full h-full pointer-events-none z-20 overflow-hidden select-none ${isLite ? 'hidden' : 'block'}`}
+    >
       {/* ================= BUTTERFLY 1: Purple Butterfly (Upper Left) — always shown ================= */}
       <motion.div
         animate={{
@@ -136,7 +143,7 @@ export const MagicalButterflies = ({ theme }) => {
           </motion.div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 };
 

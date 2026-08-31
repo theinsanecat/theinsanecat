@@ -1,8 +1,23 @@
 import { motion } from 'framer-motion';
+import { usePerformanceMode } from '../../context/PerformanceContext';
 import GlassSurface from './GlassSurface';
 import BorderGlow from './BorderGlow';
 
 export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => {
+  const { performanceMode, setPerformanceMode } = usePerformanceMode();
+
+  const cyclePerformanceMode = () => {
+    if (performanceMode === 'full') setPerformanceMode('balanced');
+    else if (performanceMode === 'balanced') setPerformanceMode('lite');
+    else setPerformanceMode('full');
+  };
+
+  const perfLabels = {
+    full: { label: 'Cinematic', tag: 'Cinematic' },
+    balanced: { label: 'Balanced', tag: 'Balanced' },
+    lite: { label: 'Lite', tag: 'Lite' }
+  };
+
   const navLinks = [
     { id: 'home', name: 'Home' },
     { id: 'about', name: 'About' },
@@ -24,7 +39,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         onClick={() => setActiveSection('home')} 
         className="group flex items-center gap-1 sm:gap-2 cursor-pointer focus:outline-none shrink-0 z-10"
       >
-        <span className={`text-[9px] xs:text-[10px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-300 whitespace-nowrap ${
+        <span className={`text-[9px] xs:text-[10px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-700 ease-in-out whitespace-nowrap ${
           isLight 
             ? 'text-[#1e1832] group-hover:text-pink-600' 
             : 'text-white group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
@@ -35,42 +50,80 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
 
       {/* Nav Links: Glassmorphism pill wrapper - Hidden on mobile & tablet (< lg), visible on desktop */}
       <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-10">
-        <div className={`flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-md border shadow-md transition-all duration-500 ${
-          isLight
-            ? 'bg-white/75 border-white/80 shadow-pink-900/5 text-slate-800'
-            : 'bg-white/10 border-white/10 shadow-black/20 text-white'
-        }`}>
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.id;
-            return (
-              <button
-                key={link.id}
-                onClick={() => setActiveSection(link.id)}
-                className={`relative px-1.5 sm:px-4 md:px-5 py-0.5 sm:py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm font-medium transition-colors duration-300 rounded-full group cursor-pointer focus:outline-none whitespace-nowrap ${
-                  isActive 
-                    ? (isLight ? 'text-[#1e1832] font-black' : 'text-white')
-                    : (isLight ? 'text-slate-600 hover:text-pink-600' : 'text-purple-100/70 hover:text-white')
-                }`}
-              >
-                {link.name}
-                {/* Active indicator dot */}
-                <span className={`absolute bottom-0.5 sm:bottom-1 left-1/2 -translate-x-1/2 w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full transition-transform duration-300 ease-out ${
-                  isLight ? 'bg-pink-500' : 'bg-purple-500'
-                } ${
-                  isActive ? 'scale-100' : 'scale-0 group-hover:scale-100'
-                }`} />
-              </button>
-            );
-          })}
-        </div>
+        {isLight ? (
+          <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-md border border-white/80 bg-white/75 shadow-md shadow-pink-900/5 text-slate-800 transition-all duration-500">
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => setActiveSection(link.id)}
+                  className={`relative px-1.5 sm:px-4 md:px-5 py-0.5 sm:py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm font-medium transition-colors duration-700 ease-in-out rounded-full group cursor-pointer focus:outline-none whitespace-nowrap ${
+                    isActive ? 'text-[#1e1832] font-black' : 'text-slate-600 hover:text-pink-600'
+                  }`}
+                >
+                  {link.name}
+                  <span className={`absolute bottom-0.5 sm:bottom-1 left-1/2 -translate-x-1/2 w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-pink-500 transition-transform duration-700 ease-in-out ease-out ${
+                    isActive ? 'scale-100' : 'scale-0 group-hover:scale-100'
+                  }`} />
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <GlassSurface
+            width="auto"
+            height="auto"
+            borderRadius={9999}
+            backgroundOpacity={0.08}
+            theme={theme}
+            className="px-1.5 sm:px-3 py-1 sm:py-1.5 text-white"
+          >
+            <div className="flex items-center gap-0.5 sm:gap-1">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <button
+                    key={link.id}
+                    onClick={() => setActiveSection(link.id)}
+                    className={`relative px-1.5 sm:px-4 md:px-5 py-0.5 sm:py-1.5 md:py-2 text-[10px] sm:text-xs md:text-sm font-medium transition-colors duration-700 ease-in-out rounded-full group cursor-pointer focus:outline-none whitespace-nowrap ${
+                      isActive 
+                        ? 'text-white font-bold' 
+                        : 'text-purple-100/70 hover:text-white'
+                    }`}
+                  >
+                    {link.name}
+                    <span className={`absolute bottom-0.5 sm:bottom-1 left-1/2 -translate-x-1/2 w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.9)] transition-transform duration-700 ease-in-out ease-out ${
+                      isActive ? 'scale-100' : 'scale-0 group-hover:scale-100'
+                    }`} />
+                  </button>
+                );
+              })}
+            </div>
+          </GlassSurface>
+        )}
       </div>
 
       {/* Right Controls: Theme Toggle & Say Hello CTA Button */}
       <div className="flex items-center gap-1 sm:gap-3 shrink-0 z-10">
+        {/* Performance Mode Switcher (Pure Text) */}
+        <button
+          onClick={cyclePerformanceMode}
+          className={`px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full backdrop-blur-md border text-[9px] sm:text-xs font-mono font-extrabold tracking-wider transition-all duration-700 ease-in-out cursor-pointer active:scale-95 flex items-center gap-1 uppercase ${
+            isLight
+              ? 'bg-white/80 border-pink-200 text-slate-800 hover:bg-pink-50 shadow-sm'
+              : 'bg-white/10 border-purple-500/30 text-purple-200 hover:bg-purple-500/20 shadow-md'
+          }`}
+          title={`Performance Mode: ${perfLabels[performanceMode].label} (Click to cycle)`}
+        >
+          <span className="opacity-50 font-normal text-[8px] sm:text-[9px] mr-0.5">Mode:</span>
+          <span className="font-bold inline-block text-center min-w-[58px] sm:min-w-[70px] transition-all duration-700 ease-in-out">{perfLabels[performanceMode].tag}</span>
+        </button>
+
         {/* Theme Toggle Button (Sun / Moon) */}
         <button
           onClick={() => setTheme(isLight ? 'dark' : 'light')}
-          className={`p-1 sm:p-2.5 rounded-full backdrop-blur-md border transition-all duration-300 cursor-pointer active:scale-95 flex items-center justify-center ${
+          className={`p-1 sm:p-2.5 rounded-full backdrop-blur-md border transition-all duration-700 ease-in-out cursor-pointer active:scale-95 flex items-center justify-center ${
             isLight
               ? 'bg-white/80 border-pink-200 text-amber-500 hover:bg-amber-50 shadow-sm'
               : 'bg-white/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20 shadow-md'
@@ -94,10 +147,10 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         {/* Say Hello CTA Button - Hidden on mobile & tablet (< lg) */}
         <div className="hidden lg:block">
           {isLight ? (
-            <div className="p-[1.5px] rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 shadow-md shadow-pink-500/10 active:scale-95 transition-all duration-300 cursor-pointer w-max">
+            <div className="p-[1.5px] rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 shadow-md shadow-pink-500/10 active:scale-95 transition-all duration-700 ease-in-out cursor-pointer w-max">
               <button
                 onClick={() => setActiveSection('contact')}
-                className="px-2.5 xs:px-3 sm:px-5 md:px-6 py-1 sm:py-2 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold text-pink-600 bg-white/95 hover:bg-white rounded-full transition-colors duration-300 cursor-pointer focus:outline-none flex items-center justify-center whitespace-nowrap"
+                className="px-2.5 xs:px-3 sm:px-5 md:px-6 py-1 sm:py-2 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold text-pink-600 bg-white/95 hover:bg-white rounded-full transition-colors duration-700 ease-in-out cursor-pointer focus:outline-none flex items-center justify-center whitespace-nowrap"
               >
                 Say Hello
               </button>
@@ -111,7 +164,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
               glowRadius={20}
               glowIntensity={1.2}
               backgroundColor="#1b1235"
-              className="shadow-lg active:scale-95 transition-transform duration-300 group cursor-pointer w-max"
+              className="shadow-lg active:scale-95 transition-transform duration-700 ease-in-out group cursor-pointer w-max"
             >
               <button
                 onClick={() => setActiveSection('contact')}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { usePerformanceMode } from '../../context/PerformanceContext';
 
 // Falling Sakura Petal Component originating from Right branch
 const SakuraPetal = ({ id, delay, theme }) => {
@@ -64,6 +65,7 @@ const SakuraPetal = ({ id, delay, theme }) => {
 };
 
 export const SakuraBranch = ({ theme }) => {
+  const { isLite } = usePerformanceMode();
   const isLight = theme === 'light';
 
   const [isMobile, setIsMobile] = useState(() =>
@@ -75,8 +77,8 @@ export const SakuraBranch = ({ theme }) => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // On mobile: 5 petals instead of 12 — eliminates 7 concurrent animation threads on mobile GPU
-  const petalCount = isMobile ? 5 : 12;
+  // In Lite mode: 0 ambient petals; Mobile: 4 petals; Desktop: 10 petals
+  const petalCount = isLite ? 0 : (isMobile ? 4 : 10);
   const petals = Array.from({ length: petalCount }, (_, i) => ({
     id: i,
     delay: i * (isMobile ? 2.4 : 1.2)

@@ -151,6 +151,7 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
             height="auto"
             borderRadius={9999}
             backgroundOpacity={0.08}
+            theme={theme}
             className="sm:w-auto hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
           >
             <button

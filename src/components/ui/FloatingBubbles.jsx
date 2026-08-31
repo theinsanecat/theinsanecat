@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePerformanceMode } from '../../context/PerformanceContext';
 
 const Bubble = ({ size, type, style }) => {
   const isSolid = type === 'solid';
@@ -93,6 +94,10 @@ const Bubble = ({ size, type, style }) => {
 };
 
 export const FloatingBubbles = () => {
+  const { isLite } = usePerformanceMode();
+
+  if (isLite) return null;
+
   const bubbles = [
     { id: 1, size: 28, x: "8%", y: "75%", type: "hollow", animName: "bubble-float-slow" },
     { id: 2, size: 45, x: "85%", y: "45%", type: "solid", animName: "bubble-float-medium" }, // solid pink/purple bubble
