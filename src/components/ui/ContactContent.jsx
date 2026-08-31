@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import meDarkImg from '../../assets/me.PNG';
-import meLightImg from '../../assets/me_light.PNG';
+import meDarkImg from '../../assets/me.webp';
+import meLightImg from '../../assets/me_light.webp';
 import rotatingEmblem from '../../assets/rotating-emblem.svg';
 import { SakuraBranch } from './SakuraBranch';
 import { LotusWaterBody } from './LotusWaterBody';

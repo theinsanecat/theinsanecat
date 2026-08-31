@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import meDarkImg from '../../assets/me.PNG';
-import meLightImg from '../../assets/me_light.PNG';
+import meDarkImg from '../../assets/me.webp';
+import meLightImg from '../../assets/me_light.webp';
 import GlassSurface from './GlassSurface';
 import BorderGlow from './BorderGlow';
 
