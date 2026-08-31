@@ -198,10 +198,10 @@ const CardFrame = ({ gid, theme }) => {
 };
 
 // ─── Card Back Face ─────────────────────────────────────────────────────────────
-const CardBack = ({ card, isHovered, theme }) => {
+const CardBack = ({ card, isHovered, isSelected, theme }) => {
   const isLight = theme === 'light';
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu">
+    <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
       {/* Background Gradient Face - Light Mode */}
       <div className={`absolute inset-0 w-full h-full bg-gradient-to-b from-[#e9d5ff] via-[#f5d0fe] to-[#fbcfe8] transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} />
 
@@ -391,10 +391,10 @@ const CardBack = ({ card, isHovered, theme }) => {
 };
 
 // ─── Card Front Face ────────────────────────────────────────────────────────────
-const CardFront = ({ card, theme }) => {
+const CardFront = ({ card, isSelected, theme }) => {
   const isLight = theme === 'light';
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden flex flex-col backface-hidden shadow-2xl p-6" style={{ transform: 'rotateY(180deg)' }}>
+    <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col backface-hidden shadow-2xl p-6 transition-opacity duration-300 ${isSelected ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} style={{ transform: 'rotateY(180deg)' }}>
       {/* Light Mode Front Face Background */}
       <div className={`absolute inset-0 w-full h-full bg-[#fcf8ff] shadow-purple-900/25 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} />
 
@@ -496,8 +496,8 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme }) =>
         transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
         className="w-full h-full relative preserve-3d"
       >
-        <CardBack card={card} isHovered={isHovered} theme={theme} />
-        <CardFront card={card} theme={theme} />
+        <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} />
+        <CardFront card={card} isSelected={isSelected} theme={theme} />
       </motion.div>
     </motion.div>
   </div>
