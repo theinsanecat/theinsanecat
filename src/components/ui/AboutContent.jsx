@@ -198,10 +198,13 @@ const CardFrame = ({ gid, theme }) => {
 };
 
 // ─── Card Back Face ─────────────────────────────────────────────────────────────
-const CardBack = ({ card, isHovered, isSelected, theme }) => {
+const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
   const isLight = theme === 'light';
   return (
-    <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+    <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu ${
+      // On mobile: parent motion.div handles opacity — don't apply own opacity classes
+      isMobile ? '' : `transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`
+    }`}>
       {/* Background Gradient Face - Light Mode */}
       <div className={`absolute inset-0 w-full h-full bg-gradient-to-b from-[#e9d5ff] via-[#f5d0fe] to-[#fbcfe8] transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} />
 
@@ -391,10 +394,19 @@ const CardBack = ({ card, isHovered, isSelected, theme }) => {
 };
 
 // ─── Card Front Face ────────────────────────────────────────────────────────────
-const CardFront = ({ card, isSelected, theme }) => {
+const CardFront = ({ card, isSelected, theme, isMobile }) => {
   const isLight = theme === 'light';
   return (
-    <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col backface-hidden shadow-2xl p-6 transition-opacity duration-300 ${isSelected ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} style={{ transform: 'rotateY(180deg)' }}>
+    // On mobile: no rotateY (would mirror content backwards) and no self-managed opacity (parent handles it)
+    // On desktop: keep backface-hidden + rotateY(180deg) for the full 3D CSS flip
+    <div
+      className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col shadow-2xl p-6 ${
+        isMobile
+          ? ''
+          : `backface-hidden transition-opacity duration-300 ${isSelected ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`
+      }`}
+      style={isMobile ? {} : { transform: 'rotateY(180deg)' }}
+    >
       {/* Light Mode Front Face Background */}
       <div className={`absolute inset-0 w-full h-full bg-[#fcf8ff] shadow-purple-900/25 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} />
 
@@ -503,7 +515,7 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMo
             className="absolute inset-0 w-full h-full"
             style={{ pointerEvents: isSelected ? 'none' : 'auto' }}
           >
-            <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} />
+            <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} isMobile={true} />
           </motion.div>
           <motion.div
             animate={{ opacity: isSelected ? 1 : 0 }}
@@ -511,7 +523,7 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMo
             className="absolute inset-0 w-full h-full"
             style={{ pointerEvents: isSelected ? 'auto' : 'none' }}
           >
-            <CardFront card={card} isSelected={isSelected} theme={theme} />
+            <CardFront card={card} isSelected={isSelected} theme={theme} isMobile={true} />
           </motion.div>
         </div>
       ) : (
