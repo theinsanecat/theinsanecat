@@ -823,11 +823,11 @@ export const AboutContent = ({ theme }) => {
           if (isAnySelected) {
             if (isSelected) {
               if (isMobile) {
-                // Mobile screens: card centered at top, details text BELOW card cleanly
+                // Mobile screens: card centered higher at top, details text BELOW card with clean 32px vertical gap
                 targetX = 0;
-                targetY = isSmallScreen ? -165 : -175;
+                targetY = isSmallScreen ? -185 : -195;
                 rotateZ = 0;
-                scale = isSmallScreen ? 0.32 : 0.36;
+                scale = isSmallScreen ? 0.30 : 0.34;
                 opacity = 1;
                 zIndex = 50;
               } else {
@@ -897,7 +897,7 @@ export const AboutContent = ({ theme }) => {
           );
         })}
 
-        {/* Details Description Panel (Below card on mobile, side-by-side on tablet/desktop) */}
+        {/* Details Description Panel (Below card on mobile with clean 32px vertical gap, side-by-side on tablet/desktop) */}
         <AnimatePresence>
           {selectedCard && (
             <motion.div
@@ -910,11 +910,11 @@ export const AboutContent = ({ theme }) => {
                 }`}
               style={{
                 left: '50%',
-                top: isMobile ? (isSmallScreen ? '140px' : '165px') : '50%',
+                top: isMobile ? (isSmallScreen ? '185px' : '210px') : '50%',
                 marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
                 width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
                 height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
-                maxHeight: isMobile ? (isSmallScreen ? '330px' : '360px') : 'none',
+                maxHeight: isMobile ? (isSmallScreen ? '310px' : '350px') : 'none',
               }}
             >
               {/* Header Info */}
