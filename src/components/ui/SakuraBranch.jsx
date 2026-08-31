@@ -65,10 +65,21 @@ const SakuraPetal = ({ id, delay, theme }) => {
 
 export const SakuraBranch = ({ theme }) => {
   const isLight = theme === 'light';
-  // Generate falling petals from right branch
-  const petals = Array.from({ length: 12 }, (_, i) => ({
+
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // On mobile: 5 petals instead of 12 — eliminates 7 concurrent animation threads on mobile GPU
+  const petalCount = isMobile ? 5 : 12;
+  const petals = Array.from({ length: petalCount }, (_, i) => ({
     id: i,
-    delay: i * 1.2
+    delay: i * (isMobile ? 2.4 : 1.2)
   }));
 
   return (
@@ -81,7 +92,8 @@ export const SakuraBranch = ({ theme }) => {
           x: [0, -4, 0]
         }}
         transition={{
-          duration: 8.5,
+          // On mobile: slow the sway to reduce GPU repaint frequency
+          duration: isMobile ? 16 : 8.5,
           repeat: Infinity,
           ease: "easeInOut",
           delay: 0.5

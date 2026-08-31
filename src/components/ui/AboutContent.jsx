@@ -440,7 +440,7 @@ const CardFront = ({ card, isSelected, theme }) => {
 };
 
 // ─── Full Card (flipper wrapper with standalone perspective camera) ─────────────
-const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme }) => (
+const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile }) => (
   <div className="w-full h-full relative perspective-[1500px] transform-gpu">
     {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
     <div
@@ -454,7 +454,7 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme }) =>
         }`}
     />
 
-    {/* Radiant Glowing Aura Disk - Light Mode (Blue in bottom area: Sky Blue -> Lavender -> Pink) */}
+    {/* Radiant Glowing Aura Disk - Light Mode */}
     <div
       className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-85' : 'opacity-0'
         }`}
@@ -478,7 +478,7 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme }) =>
         }`}
     />
 
-    {/* Smooth Floating Container (Pure GPU translateY, zero filter stutter) */}
+    {/* Smooth Floating Container */}
     <motion.div
       animate={{
         y: isCenterUnturned ? [0, -18, 0] : 0,
@@ -491,14 +491,40 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme }) =>
       }
       className="w-full h-full relative preserve-3d transform-gpu"
     >
-      <motion.div
-        animate={{ rotateY: isSelected ? 180 : 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
-        className="w-full h-full relative preserve-3d"
-      >
-        <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} />
-        <CardFront card={card} isSelected={isSelected} theme={theme} />
-      </motion.div>
+      {isMobile ? (
+        // ─── MOBILE: Opacity crossfade flip ─────────────────────────────────────
+        // iOS WebKit flattens preserve-3d when parent has a scale transform applied
+        // (arc cards use scale: 0.30–0.62), making rotateY invisible. We bypass this
+        // with a direct opacity crossfade: back fades out, front fades in simultaneously.
+        <div className="w-full h-full relative">
+          <motion.div
+            animate={{ opacity: isSelected ? 0 : 1 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className="absolute inset-0 w-full h-full"
+            style={{ pointerEvents: isSelected ? 'none' : 'auto' }}
+          >
+            <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} />
+          </motion.div>
+          <motion.div
+            animate={{ opacity: isSelected ? 1 : 0 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className="absolute inset-0 w-full h-full"
+            style={{ pointerEvents: isSelected ? 'auto' : 'none' }}
+          >
+            <CardFront card={card} isSelected={isSelected} theme={theme} />
+          </motion.div>
+        </div>
+      ) : (
+        // ─── DESKTOP: Full 3D CSS flip (preserve-3d / rotateY) ──────────────────
+        <motion.div
+          animate={{ rotateY: isSelected ? 180 : 0 }}
+          transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+          className="w-full h-full relative preserve-3d"
+        >
+          <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} />
+          <CardFront card={card} isSelected={isSelected} theme={theme} />
+        </motion.div>
+      )}
     </motion.div>
   </div>
 );
@@ -902,6 +928,7 @@ export const AboutContent = ({ theme }) => {
                 isHovered={isHovered && !isAnySelected}
                 isCenterUnturned={isCenterUnturned}
                 theme={theme}
+                isMobile={isMobile}
               />
             </motion.div>
           );

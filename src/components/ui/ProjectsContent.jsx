@@ -13,13 +13,13 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
     <AnimatePresence>
       {project && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto pointer-events-auto">
-          {/* Subtle Backdrop Overlay (Outside clicks blocked - close button required) */}
+          {/* Backdrop Overlay — no backdrop-blur on mobile (forces full-page GPU rasterization layer on WebKit) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-300 z-0"
+            className="fixed inset-0 bg-black/60 sm:backdrop-blur-xs transition-opacity duration-300 z-0"
           />
 
           {/* Modal Card Container (Expanded Card View) */}

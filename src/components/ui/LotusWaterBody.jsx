@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 // SVG Definitions for Gradients, Glows, and Blur Filters
@@ -347,6 +347,14 @@ export const LotusElement = ({ x, y, scale = 1, stage = "blooming", swayDuration
 };
 
 export const LotusWaterBody = ({ theme }) => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
   return (
     <motion.div
       initial={{ y: 120, opacity: 0 }}
@@ -367,7 +375,7 @@ export const LotusWaterBody = ({ theme }) => {
       >
         {/* ================= 1. RENDER ALL 3 WATER WAVE BACKGROUND PATHS FIRST ================= */}
         <g id="water-background-waves">
-          {/* Layer 1: Back Wave */}
+          {/* Layer 1: Back Wave — slower duration on mobile to halve repaint frequency */}
           <motion.path
             animate={{
               d: [
@@ -376,7 +384,7 @@ export const LotusWaterBody = ({ theme }) => {
                 "M -400,35 Q 360,20 720,35 T 1840,35 L 1840,600 L -400,600 Z",
               ]
             }}
-            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: isMobile ? 26 : 14, repeat: Infinity, ease: "easeInOut" }}
             fill="url(#backWaterGrad)"
           />
 
@@ -389,7 +397,7 @@ export const LotusWaterBody = ({ theme }) => {
                 "M -400,65 Q 360,85 720,60 T 1840,70 L 1840,600 L -400,600 Z",
               ]
             }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: isMobile ? 18 : 10, repeat: Infinity, ease: "easeInOut" }}
             fill="url(#midWaterGrad)"
           />
 
@@ -402,32 +410,34 @@ export const LotusWaterBody = ({ theme }) => {
                 "M -400,95 Q 360,75 720,100 T 1840,90 L 1840,600 L -400,600 Z",
               ]
             }}
-            transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: isMobile ? 14 : 7.5, repeat: Infinity, ease: "easeInOut" }}
             fill="url(#frontWaterGrad)"
           />
         </g>
 
-        {/* ================= 2. RENDER ALL LOTUSES AND REFLECTIONS ON TOP OF WATER ================= */}
+        {/* ================= 2. RENDER LOTUS ELEMENTS ================= */}
         <g id="lotus-elements-foreground">
-          {/* Back Lotuses (y ~ 40) */}
+          {/* Back Lotuses (y ~ 40) — always shown */}
           <LotusElement x={100} y={40} scale={0.48} stage="blooming" swayDuration={6.5} swayDelay={0.2} theme={theme} />
           <LotusElement x={360} y={38} scale={0.40} stage="bud" swayDuration={7.2} swayDelay={1.5} theme={theme} />
           <LotusElement x={680} y={42} scale={0.45} stage="budding" swayDuration={6.8} swayDelay={0.8} theme={theme} />
           <LotusElement x={1020} y={36} scale={0.40} stage="bud" swayDuration={7.5} swayDelay={2.1} theme={theme} />
           <LotusElement x={1340} y={41} scale={0.46} stage="blooming" swayDuration={6.2} swayDelay={1.0} theme={theme} />
 
-          {/* Midground Lotuses (y ~ 70) */}
-          <LotusElement x={240} y={70} scale={0.62} stage="budding" swayDuration={6.0} swayDelay={0.6} theme={theme} />
-          <LotusElement x={560} y={67} scale={0.68} stage="blooming" swayDuration={5.5} swayDelay={1.2} theme={theme} />
-          <LotusElement x={880} y={71} scale={0.60} stage="budding" swayDuration={6.4} swayDelay={1.8} theme={theme} />
-          <LotusElement x={1180} y={69} scale={0.62} stage="bud" swayDuration={5.8} swayDelay={0.3} theme={theme} />
-
-          {/* Foreground Hero Lotuses (y ~ 98) */}
-          <LotusElement x={160} y={98} scale={0.82} stage="blooming" swayDuration={5.2} swayDelay={0.1} theme={theme} />
-          <LotusElement x={460} y={102} scale={0.76} stage="budding" swayDuration={5.6} swayDelay={1.3} theme={theme} />
-          <LotusElement x={760} y={100} scale={0.88} stage="blooming" swayDuration={4.9} swayDelay={0.5} theme={theme} />
-          <LotusElement x={1080} y={99} scale={0.80} stage="blooming" swayDuration={5.4} swayDelay={1.7} theme={theme} />
-          <LotusElement x={1360} y={103} scale={0.74} stage="budding" swayDuration={5.0} swayDelay={0.9} theme={theme} />
+          {/* Midground & Foreground Lotuses — desktop only (8 fewer concurrent animation loops on mobile) */}
+          {!isMobile && (
+            <>
+              <LotusElement x={240} y={70} scale={0.62} stage="budding" swayDuration={6.0} swayDelay={0.6} theme={theme} />
+              <LotusElement x={560} y={67} scale={0.68} stage="blooming" swayDuration={5.5} swayDelay={1.2} theme={theme} />
+              <LotusElement x={880} y={71} scale={0.60} stage="budding" swayDuration={6.4} swayDelay={1.8} theme={theme} />
+              <LotusElement x={1180} y={69} scale={0.62} stage="bud" swayDuration={5.8} swayDelay={0.3} theme={theme} />
+              <LotusElement x={160} y={98} scale={0.82} stage="blooming" swayDuration={5.2} swayDelay={0.1} theme={theme} />
+              <LotusElement x={460} y={102} scale={0.76} stage="budding" swayDuration={5.6} swayDelay={1.3} theme={theme} />
+              <LotusElement x={760} y={100} scale={0.88} stage="blooming" swayDuration={4.9} swayDelay={0.5} theme={theme} />
+              <LotusElement x={1080} y={99} scale={0.80} stage="blooming" swayDuration={5.4} swayDelay={1.7} theme={theme} />
+              <LotusElement x={1360} y={103} scale={0.74} stage="budding" swayDuration={5.0} swayDelay={0.9} theme={theme} />
+            </>
+          )}
         </g>
       </svg>
     </motion.div>

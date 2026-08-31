@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import meDarkImg from '../../assets/me.PNG';
 import meLightImg from '../../assets/me_light.PNG';
@@ -11,6 +11,15 @@ import BorderGlow from './BorderGlow';
 export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => {
   const isLight = theme === 'light';
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const contactData = {
     category: "CONTACT",
@@ -138,34 +147,53 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
           isLight ? 'opacity-100' : 'opacity-0'
         }`} />
 
-        {/* Slowly Rotating SVG Emblem Background (Dual-layered static GPU crossfade, 0 filter recalculation lag) */}
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 70, ease: "linear" }}
-          className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu"
-          style={{
-            willChange: 'transform',
-            maskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
-            WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
-          }}
-        >
-          {/* Light Mode Emblem */}
-          <img 
-            src={rotatingEmblem} 
-            alt="" 
-            className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-opacity duration-700 ease-in-out transform-gpu filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18) opacity(0.9) drop-shadow(0 0 20px rgba(192,132,252,0.5)) ${
-              isLight ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-          {/* Dark Mode Emblem */}
-          <img 
-            src={rotatingEmblem} 
-            alt="" 
-            className={`absolute inset-0 w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none opacity-90 select-none transition-opacity duration-700 ease-in-out transform-gpu ${
-              isLight ? 'opacity-0' : 'opacity-90'
-            }`}
-          />
-        </motion.div>
+        {/* Slowly Rotating SVG Emblem Background */}
+        {isMobile ? (
+          // On mobile: pure CSS @keyframes spin — runs on GPU compositor thread, zero JS cost
+          <div
+            className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible"
+            style={{ animation: 'spin 70s linear infinite', willChange: 'transform' }}
+          >
+            <img
+              src={rotatingEmblem}
+              alt=""
+              className={`w-[500px] h-[500px] max-w-none select-none transition-opacity duration-700 ease-in-out transform-gpu ${
+                isLight
+                  ? 'filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18) opacity-90'
+                  : 'opacity-90'
+              }`}
+            />
+          </div>
+        ) : (
+          // On desktop: full Framer Motion rotation with maskImage (works perfectly)
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 70, ease: "linear" }}
+            className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu"
+            style={{
+              willChange: 'transform',
+              maskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
+              WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
+            }}
+          >
+            {/* Light Mode Emblem */}
+            <img
+              src={rotatingEmblem}
+              alt=""
+              className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-opacity duration-700 ease-in-out transform-gpu filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18) opacity(0.9) drop-shadow(0 0 20px rgba(192,132,252,0.5)) ${
+                isLight ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+            {/* Dark Mode Emblem */}
+            <img
+              src={rotatingEmblem}
+              alt=""
+              className={`absolute inset-0 w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none opacity-90 select-none transition-opacity duration-700 ease-in-out transform-gpu ${
+                isLight ? 'opacity-0' : 'opacity-90'
+              }`}
+            />
+          </motion.div>
+        )}
 
         {/* Circular Avatar Tile — Centered at Emblem Center */}
         <div
