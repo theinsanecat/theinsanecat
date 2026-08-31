@@ -145,7 +145,8 @@
   width: 65%; height: 55%;
   left: -10%; top: 10%;
   background: radial-gradient(ellipse, rgba(139, 92, 246, 0.22) 0%, transparent 70%);
-  filter: blur(70px);
+  filter: blur(32px);
+  will-change: transform;
   animation: aurora-float-1 9s ease-in-out infinite alternate;
 }
 .aurora-blob-2 {
@@ -153,7 +154,8 @@
   width: 60%; height: 65%;
   right: -10%; top: 25%;
   background: radial-gradient(ellipse, rgba(236, 72, 153, 0.16) 0%, transparent 70%);
-  filter: blur(80px);
+  filter: blur(36px);
+  will-change: transform;
   animation: aurora-float-2 12s ease-in-out infinite alternate;
 }
 .aurora-blob-3 {
@@ -161,7 +163,8 @@
   width: 55%; height: 45%;
   left: 22%; bottom: 0%;
   background: radial-gradient(ellipse, rgba(168, 85, 247, 0.14) 0%, transparent 70%);
-  filter: blur(65px);
+  filter: blur(30px);
+  will-change: transform;
   animation: aurora-float-1 15s ease-in-out infinite alternate-reverse;
 }
 

@@ -499,41 +499,25 @@ const CardFront = ({ card, isSelected, theme, isMobile }) => {
 // ─── Full Card (flipper wrapper with standalone perspective camera) ─────────────
 const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile }) => (
   <div className="w-full h-full relative perspective-[1500px] transform-gpu">
-    {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
-    <div
-      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
-
-    {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
-    <div
-      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
-
-    {/* Radiant Glowing Aura Disk - Light Mode */}
-    <div
-      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-85' : 'opacity-0'
-        }`}
-    />
-
-    {/* Radiant Glowing Aura Disk - Dark Mode */}
-    <div
-      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-85' : 'opacity-0'
-        }`}
-    />
-
-    {/* Glowing Outer Card Frame Halo - Light Mode */}
-    <div
-      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
-
-    {/* Glowing Outer Card Frame Halo - Dark Mode */}
-    <div
-      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
+    {/* Radiant Glowing Aura & Ambient Drop Shadow Disks — Rendered ONLY for active center card to conserve GPU RAM */}
+    {isCenterUnturned && (
+      <>
+        <div
+          className={`absolute -inset-4 rounded-[2.5rem] blur-lg pointer-events-none z-0 transition-opacity duration-500 ease-in-out ${theme === 'light' ? 'bg-[#5b21b6]/25 opacity-90' : 'bg-black/60 opacity-90'
+            }`}
+        />
+        <div
+          className={`absolute -inset-6 rounded-[2.5rem] blur-xl pointer-events-none z-0 transition-opacity duration-500 ease-in-out ${theme === 'light'
+            ? 'bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 opacity-85'
+            : 'bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] opacity-85'
+            }`}
+        />
+        <div
+          className={`absolute inset-0 rounded-[2rem] blur-md pointer-events-none z-0 transition-opacity duration-500 ease-in-out ${theme === 'light' ? 'bg-[#c084fc]/45 opacity-90' : 'bg-[#ec4899]/35 opacity-90'
+            }`}
+        />
+      </>
+    )}
 
     {/* Smooth Floating Container — GPU CSS Accelerated */}
     <div
@@ -830,11 +814,11 @@ export const AboutContent = ({ theme }) => {
       {/* Global SVG Filters */}
       <svg className="hidden">
         <defs>
-          <filter id="heavy-shadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="12" stdDeviation="8" floodColor="#000000" floodOpacity="0.7" />
+          <filter id="heavy-shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="8" stdDeviation="4" floodColor="#000000" floodOpacity="0.6" />
           </filter>
-          <filter id="gem-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
+          <filter id="gem-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
