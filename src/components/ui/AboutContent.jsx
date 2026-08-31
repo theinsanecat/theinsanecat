@@ -620,9 +620,9 @@ const MathReflectionModal = ({ isOpen, onClose, theme }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 15 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative max-w-2xl sm:max-w-3xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 shadow-2xl ${isLight
-              ? 'bg-white/95 border-pink-300 text-slate-900 shadow-pink-500/20'
-              : 'bg-[#0f0921]/95 border-pink-500/50 text-purple-100 shadow-pink-500/30'
+            className={`relative max-w-2xl sm:max-w-3xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 ${isLight
+              ? 'bg-white/95 border-pink-300 text-slate-900'
+              : 'bg-[#0f0921]/95 border-pink-500/50 text-purple-100'
               }`}
           >
             {/* Background Glow Orbs */}
@@ -825,11 +825,15 @@ export const AboutContent = ({ theme }) => {
       </svg>
 
       {/* Section Header */}
-      <div
-        className="text-center transition-all duration-700 z-20 flex flex-col items-center pointer-events-none mt-16 sm:mt-20 md:mt-24 mb-2"
-        style={{
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{
           opacity: selectedCardId ? 0 : 1,
-          transform: selectedCardId ? 'translateY(-12px)' : 'none',
+          y: selectedCardId ? -12 : 0,
+        }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        className="text-center z-20 flex flex-col items-center pointer-events-none mt-16 sm:mt-20 md:mt-24 mb-2"
+        style={{
           pointerEvents: selectedCardId ? 'none' : 'auto'
         }}
       >
@@ -839,7 +843,7 @@ export const AboutContent = ({ theme }) => {
           }`}>My Journey</h2>
         <p className={`text-[10px] sm:text-xs font-questrial transition-colors duration-700 ${isLight ? 'text-purple-900/80' : 'text-purple-200/60'
           }`}>Rotate the deck and click a card to explore my journey.</p>
-      </div>
+      </motion.div>
 
       {/* ── Main Interactive Section ── */}
       <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center flex-1 px-4 sm:px-8">
@@ -913,10 +917,10 @@ export const AboutContent = ({ theme }) => {
               <motion.div
                 key={card.id}
                 initial={{
-                  x: 0,
-                  y: 0,
-                  rotateZ: 0,
-                  scale: 0.5,
+                  x: targetX,
+                  y: targetY + 50,
+                  rotateZ: arc.rotateZ,
+                  scale: baseScale * 0.85,
                   opacity: 0,
                 }}
                 animate={{
@@ -928,10 +932,8 @@ export const AboutContent = ({ theme }) => {
                   zIndex: zIndex,
                 }}
                 transition={{
-                  type: 'spring',
-                  stiffness: isMobile ? 85 : 110,
-                  damping: isMobile ? 18 : 16,
-                  mass: isMobile ? 0.6 : 0.8,
+                  duration: 0.52,
+                  ease: [0.16, 1, 0.3, 1],
                 }}
                 onClick={() => handleCardClick(card, index)}
                 className="absolute w-[300px] h-[450px] transform-gpu"
@@ -950,7 +952,7 @@ export const AboutContent = ({ theme }) => {
                   card={card}
                   isSelected={isSelected}
                   isHovered={isHovered && !isAnySelected}
-                  isCenterUnturned={isCenterUnturned}
+                  isCenterUnturned={isCenterUnturned && !isLocked.current}
                   theme={theme}
                   isMobile={isMobile}
                 />
