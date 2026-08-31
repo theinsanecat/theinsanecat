@@ -155,6 +155,19 @@ function App() {
     return 'home';
   });
 
+  // Cleanup any unknown/invalid URL pathname (e.g. /theinsanecat/sfk -> /theinsanecat/)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname;
+      const isBase = pathname === '/' || pathname === '/theinsanecat' || pathname === '/theinsanecat/';
+      if (!isBase) {
+        const basePath = pathname.startsWith('/theinsanecat') ? '/theinsanecat/' : '/';
+        window.history.replaceState(null, '', basePath + window.location.search);
+        setActiveSection('home');
+      }
+    }
+  }, []);
+
   // Block route navigation on mobile & tablet viewport (< 1024px)
   useEffect(() => {
     const handleResize = () => {
