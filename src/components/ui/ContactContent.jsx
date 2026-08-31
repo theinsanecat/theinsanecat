@@ -78,21 +78,21 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
 
 
 
-      {/* Back Button - Positioned cleanly below the git commit logo line on mobile */}
+      {/* Back Button - Scaled down compact button positioned cleanly below git commit logo line on mobile */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-12 xs:top-14 sm:top-18 left-2 sm:left-6 md:left-16 z-40 transform-gpu"
+        className="fixed top-10 xs:top-12 sm:top-18 left-2 sm:left-6 md:left-16 z-40 transform-gpu"
       >
         <div className="relative">
           {/* Light Mode Back Button */}
           <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <button
               onClick={() => setActiveSection('home')}
-              className="px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-[#1e1832] bg-white/90 hover:bg-white border border-purple-200/90 shadow-sm rounded-full active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none flex items-center gap-1.5"
+              className="px-2.5 xs:px-3 sm:px-4 py-0.5 xs:py-1 sm:py-1.5 text-[8.5px] xs:text-[9.5px] sm:text-xs font-bold text-[#1e1832] bg-white/90 hover:bg-white border border-purple-200/90 shadow-sm rounded-full active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-1.5"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-3.5 sm:h-3.5">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
               <span>Back to Home</span>
@@ -106,16 +106,16 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
               glowColor="270 85 70"
               colors={['#ab55f7', '#ec4899', '#3b82f6']}
               edgeSensitivity={40}
-              glowRadius={20}
+              glowRadius={16}
               glowIntensity={1.2}
               backgroundColor="#1b1235"
               className="active:scale-95 transition-all duration-300 cursor-pointer w-max"
             >
               <button
                 onClick={() => setActiveSection('home')}
-                className="px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1.5"
+                className="px-2.5 xs:px-3 sm:px-4 py-0.5 xs:py-1 sm:py-1.5 text-[8.5px] xs:text-[9.5px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-1.5"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-3.5 sm:h-3.5">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
                 <span>Back to Home</span>
