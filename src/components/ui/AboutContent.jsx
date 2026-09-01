@@ -636,14 +636,12 @@ const MathReflectionModal = ({ isOpen, onClose, theme }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 15 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative max-w-2xl sm:max-w-3xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 shadow-2xl ${isLight
-              ? 'bg-white/95 border-pink-300 text-slate-900 shadow-pink-500/20'
-              : 'bg-[#0f0921]/95 border-pink-500/50 text-purple-100 shadow-pink-500/30'
+            className={`relative max-w-2xl sm:max-w-3xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 ${isLight
+              ? 'bg-white/95 border-pink-300 text-slate-900'
+              : 'bg-[#0f0921]/95 border-pink-500/50 text-purple-100'
               }`}
           >
-            {/* Background Glow Orbs */}
-            <div className="absolute -top-20 -right-20 w-48 h-48 bg-pink-500/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+
 
             {/* Close Cross Button */}
             <button
