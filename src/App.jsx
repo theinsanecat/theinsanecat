@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { useTransform, motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from './hooks/useMouseParallax';
@@ -11,15 +11,25 @@ import { MobileForegroundTrees } from './components/environment/MobileForeground
 import { Navbar } from './components/ui/Navbar';
 import { HeroContent } from './components/ui/HeroContent';
 import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
-import { LotusWaterBody } from './components/ui/LotusWaterBody';
-import { MobileLotusWaterBody } from './components/ui/MobileLotusWaterBody';
 import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship';
 import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
-import rotatingEmblem from './assets/rotating-emblem.svg';
+import { warmImage, runWhenIdle } from './lib/assetWarmup';
+import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
 
-import { AboutContent } from './components/ui/AboutContent';
-import { ProjectsContent } from './components/ui/ProjectsContent';
-import { ContactContent } from './components/ui/ContactContent';
+// ================= ROUTE-LEVEL CODE SPLITTING =================
+// Each page ships in its own chunk. All of them are prefetched in idle time after Home
+// has painted, so navigation stays instant while the first load only pays for Home.
+const loadAbout = () => import('./components/ui/AboutContent');
+const loadProjects = () => import('./components/ui/ProjectsContent');
+const loadContact = () => import('./components/ui/ContactContent');
+const loadLotus = () => import('./components/ui/LotusWaterBody');
+const loadMobileLotus = () => import('./components/ui/MobileLotusWaterBody');
+
+const AboutContent = lazy(() => loadAbout().then((m) => ({ default: m.AboutContent })));
+const ProjectsContent = lazy(() => loadProjects().then((m) => ({ default: m.ProjectsContent })));
+const ContactContent = lazy(() => loadContact().then((m) => ({ default: m.ContactContent })));
+const LotusWaterBody = lazy(() => loadLotus().then((m) => ({ default: m.LotusWaterBody })));
+const MobileLotusWaterBody = lazy(() => loadMobileLotus().then((m) => ({ default: m.MobileLotusWaterBody })));
 
 /*
 const ExperienceContent = lazy(() =>
@@ -153,12 +163,19 @@ function App() {
 
   const activeSection = getSectionFromPath(location.pathname);
 
-  // Preload heavy SVG emblem upfront so navigating to Contact page is instant
+  // Idle-time warm-up: page chunks first, then download + DECODE the heavy artwork,
+  // so opening Contact/About never waits on network, parsing or image decoding.
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const img = new Image();
-      img.src = rotatingEmblem;
-    }
+    const isMobile = window.innerWidth < 768;
+    return runWhenIdle([
+      loadContact,
+      loadAbout,
+      loadProjects,
+      isMobile ? loadMobileLotus : loadLotus,
+      () => warmImage(ROTATING_EMBLEM_SRC),
+      () => warmImage(SAKURA_BRANCH_SRC),
+      ...Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src)),
+    ]);
   }, []);
 
   // Block route navigation on mobile & tablet viewport (< 1024px)
@@ -386,11 +403,9 @@ function App() {
       {/* Serene Lotus Lake (Pops UP on Contact section, slides DOWN on return to Home) */}
       <AnimatePresence>
         {activeSection === 'contact' && (
-          isMobileViewport ? (
-            <MobileLotusWaterBody key="lotus-lake-mob" theme={theme} />
-          ) : (
-            <LotusWaterBody key="lotus-lake" theme={theme} />
-          )
+          <Suspense key={isMobileViewport ? 'lotus-lake-mob' : 'lotus-lake'} fallback={null}>
+            {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} />}
+          </Suspense>
         )}
       </AnimatePresence>
 
@@ -427,7 +442,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <AboutContent theme={theme} />
+                    <Suspense fallback={null}><AboutContent theme={theme} /></Suspense>
                   </motion.div>
                 }
               />
@@ -443,7 +458,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <ProjectsContent theme={theme} />
+                    <Suspense fallback={null}><ProjectsContent theme={theme} /></Suspense>
                   </motion.div>
                 }
               />
@@ -459,7 +474,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
                   >
-                    <ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} />
+                    <Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} /></Suspense>
                   </motion.div>
                 }
               />

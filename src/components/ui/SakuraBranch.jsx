@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePerformanceMode } from '../../context/PerformanceContext';
+import { SAKURA_BRANCH_SRC } from '../../lib/artAssets';
+import { useImageReady } from '../../hooks/useImageReady';
 
 // Falling Sakura Petal Component originating from Right branch
 const SakuraPetal = ({ id, delay, theme }) => {
@@ -67,6 +69,8 @@ const SakuraPetal = ({ id, delay, theme }) => {
 export const SakuraBranch = ({ theme }) => {
   const { isLite } = usePerformanceMode();
   const isLight = theme === 'light';
+  // Branch fades in only once decoded (normally already warmed up from Home), never pops in half-drawn
+  const branchReady = useImageReady(SAKURA_BRANCH_SRC);
 
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
@@ -90,9 +94,13 @@ export const SakuraBranch = ({ theme }) => {
         className="absolute top-0 right-0 w-[240px] md:w-[390px] origin-top-right opacity-100 animate-branch-sway"
       >
         <img
-          src={`${import.meta.env.BASE_URL}sakura-branch.svg`}
+          src={SAKURA_BRANCH_SRC}
           alt="Right Sakura Branch"
-          className={`w-full h-auto opacity-100 transition-all duration-500 ${isLight
+          width="780"
+          height="780"
+          decoding="async"
+          style={{ opacity: branchReady ? 1 : 0 }}
+          className={`w-full h-auto transition-all duration-500 ${isLight
               ? 'filter brightness-[1.1] contrast-[1.05] saturate-[1.25] drop-shadow(0 0 20px rgba(244,114,182,0.4))'
               : 'filter brightness-[0.88] contrast-[1.5] saturate-[1.15] drop-shadow(0 0 25px rgba(244,63,94,0.5)) drop-shadow(0 0 10px rgba(15,23,42,0.8))'
             }`}

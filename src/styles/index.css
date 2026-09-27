@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
+/* Fonts: subset (Latin + used symbols) WOFF2 builds of the originals kept in /design-source/fonts.
+   Questrial + Mileast are preloaded from main.jsx. */
 @font-face {
-  font-family: 'Maghfirea';
-  src: url('../assets/fonts/Maghfirea.otf') format('opentype'),
-    url('../assets/fonts/Maghfirea.ttf') format('truetype');
+  font-family: 'Mileast';
+  src: url('../assets/fonts/mileast.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -11,15 +12,7 @@
 
 @font-face {
   font-family: 'Mileast';
-  src: url('../assets/fonts/Mileast.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Mileast';
-  src: url('../assets/fonts/Mileast Italic.otf') format('opentype');
+  src: url('../assets/fonts/mileast-italic.woff2') format('woff2');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -27,8 +20,7 @@
 
 @font-face {
   font-family: 'Avengenz';
-  src: url('../assets/fonts/Avengenz.otf') format('opentype'),
-    url('../assets/fonts/Avengenz.ttf') format('truetype');
+  src: url('../assets/fonts/avengenz.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -36,7 +28,7 @@
 
 @font-face {
   font-family: 'Questrial';
-  src: url('../assets/fonts/Questrial-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/questrial.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import meDarkImg from '../../assets/me.webp';
 import meLightImg from '../../assets/me_light.webp';
-import rotatingEmblem from '../../assets/rotating-emblem.svg';
+import { ROTATING_EMBLEM_SRC } from '../../lib/artAssets';
+import { useImageReady } from '../../hooks/useImageReady';
 import { SakuraBranch } from './SakuraBranch';
-import { LotusWaterBody } from './LotusWaterBody';
 import MagicalButterflies from './MagicalButterflies';
 import BorderGlow from './BorderGlow';
 
 export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => {
   const isLight = theme === 'light';
   const [isHovered, setIsHovered] = useState(false);
+  // Emblem fades in once decoded (normally already warmed up from Home)
+  const emblemReady = useImageReady(ROTATING_EMBLEM_SRC);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -159,10 +161,12 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
         >
           {/* Single Dynamic Emblem Image — 50% VRAM memory reduction */}
           <img
-            src={rotatingEmblem}
+            src={ROTATING_EMBLEM_SRC}
             alt=""
             width="760"
             height="760"
+            decoding="async"
+            style={{ opacity: emblemReady ? undefined : 0 }}
             className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-all duration-700 ease-in-out transform-gpu ${
               isLight 
                 ? 'opacity-90 filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18)' 
