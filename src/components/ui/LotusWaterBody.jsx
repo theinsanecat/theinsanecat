@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 // SVG Definitions for Gradients, Glows, and Blur Filters
@@ -70,7 +70,9 @@ export const LotusDefinitions = ({ theme }) => {
 };
 
 // Vector Lotus Flower Component supporting 3 growth stages: "blooming", "budding", and "bud"
-export const LotusElement = ({ x, y, scale = 1, stage = "blooming", swayDuration = 6, swayDelay = 0, theme }) => {
+// Pure lotus artwork in local coordinates (origin = waterline centre). Shared by the desktop
+// layered lake and the mobile single-SVG lake.
+const LotusGraphic = ({ stage, theme }) => {
   const isLight = theme === 'light';
   const strokeColor1 = isLight ? "#f472b6" : "#9f1239";
   const strokeColor2 = isLight ? "#f472b6" : "#be185d";
@@ -78,21 +80,7 @@ export const LotusElement = ({ x, y, scale = 1, stage = "blooming", swayDuration
   const strokeOpacityVal = isLight ? 0.25 : 0.8;
 
   return (
-    <motion.g
-      animate={{
-        y: [y - 2, y + 3, y - 2],
-        rotate: [-1.2, 1.5, -1.2],
-        x: [x - 2, x + 2, x - 2],
-      }}
-      transition={{
-        duration: swayDuration,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: swayDelay,
-      }}
-      className="origin-bottom"
-    >
-      <g transform={`translate(${x}, ${y}) scale(${scale})`}>
+    <>
 
         {/* ================= 1. VIBRANT UPSIDE-DOWN WATER REFLECTION ================= */}
         <g opacity={isLight ? "0.65" : "0.85"} filter="url(#waterReflectionBlur)">
@@ -317,8 +305,119 @@ export const LotusElement = ({ x, y, scale = 1, stage = "blooming", swayDuration
             </g>
           )}
         </g>
-      </g>
-    </motion.g>
+    </>
+  );
+};
+
+// Legacy single-SVG lotus (used by MobileLotusWaterBody) — unchanged behaviour.
+export const LotusElement = ({ x, y, scale = 1, stage = "blooming", swayDuration = 6, swayDelay = 0, theme }) => (
+  <motion.g
+    animate={{
+      y: [y - 2, y + 3, y - 2],
+      rotate: [-1.2, 1.5, -1.2],
+      x: [x - 2, x + 2, x - 2],
+    }}
+    transition={{
+      duration: swayDuration,
+      repeat: Infinity,
+      ease: "easeInOut",
+      delay: swayDelay,
+    }}
+    className="origin-bottom"
+  >
+    <g transform={`translate(${x}, ${y}) scale(${scale})`}>
+      <LotusGraphic stage={stage} theme={theme} />
+    </g>
+  </motion.g>
+);
+
+// ─── Desktop lake data (identical to the former inline <LotusElement> props) ───
+const WAVES = [
+  { cls: 'lake-wave-1', d: 'M -400,35 Q 360,20 720,35 T 1840,35 L 1840,600 L -400,600 Z', fill: 'url(#backWaterGrad)' },
+  { cls: 'lake-wave-2', d: 'M -400,65 Q 360,85 720,60 T 1840,70 L 1840,600 L -400,600 Z', fill: 'url(#midWaterGrad)' },
+  { cls: 'lake-wave-3', d: 'M -400,95 Q 360,75 720,100 T 1840,90 L 1840,600 L -400,600 Z', fill: 'url(#frontWaterGrad)' },
+];
+const BACK_LOTUSES = [
+  { x: 100, y: 40, scale: 0.48, stage: 'blooming', dur: 6.5, delay: 0.2 },
+  { x: 360, y: 38, scale: 0.40, stage: 'bud', dur: 7.2, delay: 1.5 },
+  { x: 680, y: 42, scale: 0.45, stage: 'budding', dur: 6.8, delay: 0.8 },
+  { x: 1020, y: 36, scale: 0.40, stage: 'bud', dur: 7.5, delay: 2.1 },
+  { x: 1340, y: 41, scale: 0.46, stage: 'blooming', dur: 6.2, delay: 1.0 },
+];
+const FRONT_LOTUSES = [ // desktop only
+  { x: 240, y: 70, scale: 0.62, stage: 'budding', dur: 6.0, delay: 0.6 },
+  { x: 560, y: 67, scale: 0.68, stage: 'blooming', dur: 5.5, delay: 1.2 },
+  { x: 880, y: 71, scale: 0.60, stage: 'budding', dur: 6.4, delay: 1.8 },
+  { x: 1180, y: 69, scale: 0.62, stage: 'bud', dur: 5.8, delay: 0.3 },
+  { x: 160, y: 98, scale: 0.82, stage: 'blooming', dur: 5.2, delay: 0.1 },
+  { x: 460, y: 102, scale: 0.76, stage: 'budding', dur: 5.6, delay: 1.3 },
+  { x: 760, y: 100, scale: 0.88, stage: 'blooming', dur: 4.9, delay: 0.5 },
+  { x: 1080, y: 99, scale: 0.80, stage: 'blooming', dur: 5.4, delay: 1.7 },
+  { x: 1360, y: 103, scale: 0.74, stage: 'budding', dur: 5.0, delay: 0.9 },
+];
+
+// Rotation pivot ≈ centre of the lotus artwork's bounding box (Framer's default for SVG), in local units
+const PIVOT_Y = -7;
+
+/*
+ * Rendering strategy (performance):
+ * Previously the whole lake was ONE SVG whose lotus <g>s were swayed by Framer Motion and whose wave <path>s
+ * had CSS animations. Transforms on elements *inside* an SVG can't be GPU-composited, so every frame the entire
+ * strip (14 lotuses x blur/drop-shadow/glow filters) was repainted on the CPU.
+ * Now every wave and every lotus is its own small SVG in its own compositor layer, animated with CSS transforms:
+ * each is drawn once, then only moved by the GPU. Positions reproduce the old on-screen placement exactly,
+ * including the old Framer behaviour where the sway's x/y keyframes (x±2, y-2..y+3) were applied ON TOP of the
+ * inner translate(x, y) — i.e. lotuses sit at (2x, 2y) in lake units. Lotuses that fall completely outside the
+ * lake on the current screen are simply not rendered (they were invisible anyway).
+ */
+const useLakeGeometry = (ref) => {
+  const [geo, setGeo] = useState(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const measure = () => {
+      const W = el.clientWidth;
+      const H = el.clientHeight;
+      const s = Math.max(W / 1440, H / 180); // preserveAspectRatio="xMidYMax slice"
+      setGeo({ W, H, s, ox: (W - 1440 * s) / 2, oy: H - 180 * s });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  return geo;
+};
+
+const LotusLayer = ({ lotus, geo, theme }) => {
+  const { s, ox, oy, W, H } = geo;
+  const k = lotus.scale * s; // local lotus unit -> CSS px
+  const X = ox + 2 * lotus.x * s;
+  const Y = oy + 2 * lotus.y * s;
+  // cull lotuses that are entirely off-screen (incl. glow + sway margin)
+  if (X + 100 * k < 0 || X - 100 * k > W || Y - 90 * k > H) return null;
+  return (
+    <div
+      className="absolute lotus-sway"
+      style={{
+        left: X,
+        top: Y,
+        width: 0,
+        height: 0,
+        '--s': s,
+        transformOrigin: `0px ${PIVOT_Y * k}px`,
+        animationDuration: `${lotus.dur}s`,
+        animationDelay: `${lotus.delay}s`,
+      }}
+    >
+      <svg
+        viewBox="-110 -100 220 180"
+        overflow="visible"
+        style={{ position: 'absolute', left: -110 * k, top: -100 * k, width: 220 * k, height: 180 * k, overflow: 'visible' }}
+      >
+        <LotusGraphic stage={lotus.stage} theme={theme} />
+      </svg>
+    </div>
   );
 };
 
@@ -331,6 +430,11 @@ export const LotusWaterBody = ({ theme }) => {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  const lakeRef = useRef(null);
+  const geo = useLakeGeometry(lakeRef);
+  const lotuses = isMobile ? BACK_LOTUSES : [...BACK_LOTUSES, ...FRONT_LOTUSES];
+
   return (
     <motion.div
       initial={{ y: 120, opacity: 0 }}
@@ -340,64 +444,27 @@ export const LotusWaterBody = ({ theme }) => {
       style={{ willChange: 'transform, opacity' }}
       className="fixed bottom-0 left-0 right-0 w-full h-[65px] xs:h-[85px] sm:h-[130px] md:h-[165px] pointer-events-none z-40 overflow-hidden select-none transform-gpu"
     >
-      {/* SVG Definitions */}
+      {/* SVG Definitions (gradients + filters referenced by every wave/lotus SVG) */}
       <LotusDefinitions theme={theme} />
 
-      {/* Main Composite SVG Scene */}
-      <svg
-        className="w-full h-full"
-        viewBox="0 0 1440 180"
-        preserveAspectRatio="xMidYMax slice"
-      >
-        {/* ================= 1. RENDER ALL 3 WATER WAVE BACKGROUND PATHS FIRST — GPU CSS ANIMATED ================= */}
-        <g id="water-background-waves">
-          {/* Layer 1: Back Wave */}
-          <path
-            className="animate-wave-1"
-            d="M -400,35 Q 360,20 720,35 T 1840,35 L 1840,600 L -400,600 Z"
-            fill="url(#backWaterGrad)"
-          />
+      <div ref={lakeRef} className="absolute inset-0" style={{ '--s': geo ? geo.s : 1 }}>
+        {/* 1. Water waves — each its own layer, drawn once and slid by the compositor */}
+        {WAVES.map((w) => (
+          <svg
+            key={w.cls}
+            className={`absolute inset-0 w-full h-full ${w.cls}`}
+            viewBox="0 0 1440 180"
+            preserveAspectRatio="xMidYMax slice"
+            overflow="visible"
+            style={{ overflow: 'visible' }}
+          >
+            <path d={w.d} fill={w.fill} />
+          </svg>
+        ))}
 
-          {/* Layer 2: Mid Wave */}
-          <path
-            className="animate-wave-2"
-            d="M -400,65 Q 360,85 720,60 T 1840,70 L 1840,600 L -400,600 Z"
-            fill="url(#midWaterGrad)"
-          />
-
-          {/* Layer 3: Foreground Wave */}
-          <path
-            className="animate-wave-3"
-            d="M -400,95 Q 360,75 720,100 T 1840,90 L 1840,600 L -400,600 Z"
-            fill="url(#frontWaterGrad)"
-          />
-        </g>
-
-        {/* ================= 2. RENDER LOTUS ELEMENTS ================= */}
-        <g id="lotus-elements-foreground">
-          {/* Back Lotuses (y ~ 40) — always shown */}
-          <LotusElement x={100} y={40} scale={0.48} stage="blooming" swayDuration={6.5} swayDelay={0.2} theme={theme} />
-          <LotusElement x={360} y={38} scale={0.40} stage="bud" swayDuration={7.2} swayDelay={1.5} theme={theme} />
-          <LotusElement x={680} y={42} scale={0.45} stage="budding" swayDuration={6.8} swayDelay={0.8} theme={theme} />
-          <LotusElement x={1020} y={36} scale={0.40} stage="bud" swayDuration={7.5} swayDelay={2.1} theme={theme} />
-          <LotusElement x={1340} y={41} scale={0.46} stage="blooming" swayDuration={6.2} swayDelay={1.0} theme={theme} />
-
-          {/* Midground & Foreground Lotuses — desktop only (8 fewer concurrent animation loops on mobile) */}
-          {!isMobile && (
-            <>
-              <LotusElement x={240} y={70} scale={0.62} stage="budding" swayDuration={6.0} swayDelay={0.6} theme={theme} />
-              <LotusElement x={560} y={67} scale={0.68} stage="blooming" swayDuration={5.5} swayDelay={1.2} theme={theme} />
-              <LotusElement x={880} y={71} scale={0.60} stage="budding" swayDuration={6.4} swayDelay={1.8} theme={theme} />
-              <LotusElement x={1180} y={69} scale={0.62} stage="bud" swayDuration={5.8} swayDelay={0.3} theme={theme} />
-              <LotusElement x={160} y={98} scale={0.82} stage="blooming" swayDuration={5.2} swayDelay={0.1} theme={theme} />
-              <LotusElement x={460} y={102} scale={0.76} stage="budding" swayDuration={5.6} swayDelay={1.3} theme={theme} />
-              <LotusElement x={760} y={100} scale={0.88} stage="blooming" swayDuration={4.9} swayDelay={0.5} theme={theme} />
-              <LotusElement x={1080} y={99} scale={0.80} stage="blooming" swayDuration={5.4} swayDelay={1.7} theme={theme} />
-              <LotusElement x={1360} y={103} scale={0.74} stage="budding" swayDuration={5.0} swayDelay={0.9} theme={theme} />
-            </>
-          )}
-        </g>
-      </svg>
+        {/* 2. Lotuses — back row first, then front rows (same paint order as before) */}
+        {geo && lotuses.map((l) => <LotusLayer key={`${l.x}-${l.y}`} lotus={l} geo={geo} theme={theme} />)}
+      </div>
     </motion.div>
   );
 };

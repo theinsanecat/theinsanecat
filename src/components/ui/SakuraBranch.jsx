@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { usePerformanceMode } from '../../context/PerformanceContext';
 import { SAKURA_BRANCH_SRC } from '../../lib/artAssets';
 import { useImageReady } from '../../hooks/useImageReady';
@@ -33,36 +32,29 @@ const SakuraPetal = ({ id, delay, theme }) => {
 
   const { xStart, xEnd, yEnd, duration, scale, swayRange } = randomConfig;
 
+  // Compositor-only CSS animation (was a Framer Motion JS keyframe loop per petal).
+  // Same 4 evenly spaced keyframes, linear, same random wind path per petal via CSS variables.
   return (
-    <motion.div
-      initial={{ x: xStart, y: -20, opacity: 0, rotate: 0 }}
-      animate={{
-        x: [
-          xStart,
-          xStart - swayRange,
-          xStart - swayRange / 2,
-          xEnd
-        ],
-        y: [0, yEnd * 0.4, yEnd * 0.7, yEnd],
-        opacity: [0, 1.0, 1.0, 0],
-        rotate: [0, 120, 240, 360],
-      }}
-      transition={{
-        duration: duration,
-        repeat: Infinity,
-        delay: delay,
-        ease: "linear",
-      }}
-      className="absolute top-0 right-10 pointer-events-none z-5 select-none"
+    <div
+      className="absolute top-0 right-10 pointer-events-none z-5 select-none sakura-petal"
       style={{
         width: `${16 * scale}px`,
         height: `${24 * scale}px`,
+        '--x0': `${xStart}px`,
+        '--x1': `${xStart - swayRange}px`,
+        '--x2': `${xStart - swayRange / 2}px`,
+        '--x3': `${xEnd}px`,
+        '--y1': `${yEnd * 0.4}px`,
+        '--y2': `${yEnd * 0.7}px`,
+        '--y3': `${yEnd}px`,
+        animationDuration: `${duration}s`,
+        animationDelay: `${delay}s`,
       }}
     >
-      <svg viewBox="0 0 24 24" className={`w-full h-full ${isLight ? 'text-pink-400 drop-shadow(0 0 6px rgba(244,114,182,0.6))' : 'text-pink-300 drop-shadow(0 0 5px rgba(244,63,94,0.45))'}`} fill="currentColor">
+      <svg viewBox="0 0 24 24" className={`w-full h-full ${isLight ? 'text-pink-400' : 'text-pink-300'}`} fill="currentColor">
         <path d="M12,2C11,5 6,10 6,14C6,18 9,21 12,21C15,21 18,18 18,14C18,10 13,5 12,2Z" />
       </svg>
-    </motion.div>
+    </div>
   );
 };
 

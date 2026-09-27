@@ -6,7 +6,7 @@ export const ForegroundTrees = ({ style, theme }) => {
   return (
     <motion.div
       className="absolute inset-0 w-full h-full z-20 pointer-events-none"
-      style={style}
+      style={{ ...style, willChange: 'transform' }}
     >
       <svg viewBox="0 0 1920 1080" className="w-full h-full object-cover" preserveAspectRatio="xMidYMax slice">
         <defs>

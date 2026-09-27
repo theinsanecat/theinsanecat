@@ -25,7 +25,7 @@ const GlassSurface = ({
   className = '',
   style = {}
 }) => {
-  const { isLite } = usePerformanceMode();
+  const { isFull } = usePerformanceMode();
   const id = useId();
   const filterId = `glass-filter-${id}`;
   const redGradId = `red-grad-${id}`;
@@ -44,7 +44,10 @@ const GlassSurface = ({
   };
 
   const [svgSupported] = useState(() => supportsSVGFilters());
-  const useSVG = svgSupported && !isLite && theme !== 'light';
+  // The SVG displacement-map backdrop filter is one of the most expensive effects in Chromium and is
+  // recomputed whenever the parallax layers move underneath it. Only Cinematic (dedicated GPU) keeps it;
+  // Balanced/Lite get the visually close blur+saturate glass (.glass-surface--fallback).
+  const useSVG = svgSupported && isFull && theme !== 'light';
 
   const containerRef = useRef(null);
   const feImageRef = useRef(null);

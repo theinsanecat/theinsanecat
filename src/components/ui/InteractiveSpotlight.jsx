@@ -15,6 +15,8 @@ export const InteractiveSpotlight = ({ mouseXpx, mouseYpx, theme }) => {
       style={{
         x: mouseXpx,
         y: mouseYpx,
+        // Own compositor layer: without this Chromium re-rasterizes the 550px gradient on every sub-pixel move
+        willChange: 'transform',
         opacity: isLight || isLite ? 0 : isBalanced ? 0.45 : 0.9,
         background: 'radial-gradient(circle, rgba(255, 117, 143, 0.18) 0%, rgba(138, 60, 93, 0.06) 50%, rgba(0, 0, 0, 0) 70%)',
       }}

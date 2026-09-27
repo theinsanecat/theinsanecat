@@ -39,6 +39,8 @@ const ExperienceContent = lazy(() =>
 );
 */
 
+const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
+
 // ================= GLOBAL FLOATING GUIDE CONTAINER WITH SPACE DRIFT =================
 const getRandomBorderCoords = (w, h) => {
   const edge = Math.floor(Math.random() * 4);
@@ -343,59 +345,53 @@ function App() {
         />
       </motion.div>
 
-      {/* 3. Middle Layer Forest */}
-      <AnimatePresence>
-        {!showRecededLandscape && (
-          <motion.div
-            key="midground-forest"
-            initial={{ opacity: 1, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 350 }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-0 w-full h-full z-10 pointer-events-none"
-          >
-            {isMobileViewport ? (
-              <MobileMidgroundTrees style={{ x: midX, y: midY, scale: 1.18 }} theme={theme} />
-            ) : (
-              <MidgroundTrees 
-                style={{ 
-                  x: midX, 
-                  y: midY,
-                  scale: 1.14
-                }} 
-                theme={theme}
-              />
-            )}
-          </motion.div>
+      {/* 3. Middle Layer Forest
+          Kept mounted (not unmounted via AnimatePresence) so returning to Home reuses the already-rasterized
+          layer instead of rebuilding + redrawing both full-screen forest SVGs in one frame (the About -> Home stall). */}
+      <motion.div
+        initial={false}
+        animate={showRecededLandscape ? { opacity: 0, y: 350 } : { opacity: 1, y: 0 }}
+        transition={FOREST_TRANSITION}
+        aria-hidden={showRecededLandscape}
+        className="absolute inset-0 w-full h-full z-10 pointer-events-none"
+        style={{ willChange: 'transform, opacity' }}
+      >
+        {isMobileViewport ? (
+          <MobileMidgroundTrees style={{ x: midX, y: midY, scale: 1.18 }} theme={theme} />
+        ) : (
+          <MidgroundTrees 
+            style={{ 
+              x: midX, 
+              y: midY,
+              scale: 1.14
+            }} 
+            theme={theme}
+          />
         )}
-      </AnimatePresence>
+      </motion.div>
       
-      {/* 4. Foreground Forest Floor */}
-      <AnimatePresence>
-        {!showRecededLandscape && (
-          <motion.div
-            key="foreground-forest"
-            initial={{ opacity: 1, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 450 }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-0 w-full h-full z-20 pointer-events-none"
-          >
-            {isMobileViewport ? (
-              <MobileForegroundTrees style={{ x: foreX, y: foreY, scale: 1.20 }} theme={theme} />
-            ) : (
-              <ForegroundTrees 
-                style={{ 
-                  x: foreX, 
-                  y: foreY,
-                  scale: 1.18
-                }} 
-                theme={theme}
-              />
-            )}
-          </motion.div>
+      {/* 4. Foreground Forest Floor (kept mounted, same reason as above) */}
+      <motion.div
+        initial={false}
+        animate={showRecededLandscape ? { opacity: 0, y: 450 } : { opacity: 1, y: 0 }}
+        transition={FOREST_TRANSITION}
+        aria-hidden={showRecededLandscape}
+        className="absolute inset-0 w-full h-full z-20 pointer-events-none"
+        style={{ willChange: 'transform, opacity' }}
+      >
+        {isMobileViewport ? (
+          <MobileForegroundTrees style={{ x: foreX, y: foreY, scale: 1.20 }} theme={theme} />
+        ) : (
+          <ForegroundTrees 
+            style={{ 
+              x: foreX, 
+              y: foreY,
+              scale: 1.18
+            }} 
+            theme={theme}
+          />
         )}
-      </AnimatePresence>
+      </motion.div>
 
       {/* 5. Interactive Pink Spotlight (Performance-aware) */}
       <InteractiveSpotlight mouseXpx={mouseXpx} mouseYpx={mouseYpx} theme={theme} />

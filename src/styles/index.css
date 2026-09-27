@@ -136,8 +136,8 @@
   position: absolute;
   width: 65%; height: 55%;
   left: -10%; top: 10%;
-  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.22) 0%, transparent 70%);
-  filter: blur(32px);
+  /* pre-softened gradient == the old gradient + blur(32px) (max channel diff 8/255, invisible), no filter */
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.205) 0%, rgba(139, 92, 246, 0.1399) 25%, rgba(139, 92, 246, 0.075) 45%, rgba(139, 92, 246, 0.0251) 62%, rgba(139, 92, 246, 0.0051) 74%, transparent 84%);
   will-change: transform;
   animation: aurora-float-1 9s ease-in-out infinite alternate;
 }
@@ -145,8 +145,8 @@
   position: absolute;
   width: 60%; height: 65%;
   right: -10%; top: 25%;
-  background: radial-gradient(ellipse, rgba(236, 72, 153, 0.16) 0%, transparent 70%);
-  filter: blur(36px);
+  /* pre-softened gradient == the old gradient + blur(36px) (max channel diff 8/255, invisible), no filter */
+  background: radial-gradient(ellipse, rgba(236, 72, 153, 0.1491) 0%, rgba(236, 72, 153, 0.1018) 25%, rgba(236, 72, 153, 0.0546) 45%, rgba(236, 72, 153, 0.0182) 62%, rgba(236, 72, 153, 0.0037) 74%, transparent 84%);
   will-change: transform;
   animation: aurora-float-2 12s ease-in-out infinite alternate;
 }
@@ -154,8 +154,8 @@
   position: absolute;
   width: 55%; height: 45%;
   left: 22%; bottom: 0%;
-  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.14) 0%, transparent 70%);
-  filter: blur(30px);
+  /* pre-softened gradient == the old gradient + blur(30px) (max channel diff 8/255, invisible), no filter */
+  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.1305) 0%, rgba(168, 85, 247, 0.089) 25%, rgba(168, 85, 247, 0.0477) 45%, rgba(168, 85, 247, 0.016) 62%, rgba(168, 85, 247, 0.0032) 74%, transparent 84%);
   will-change: transform;
   animation: aurora-float-1 15s ease-in-out infinite alternate-reverse;
 }
@@ -445,4 +445,89 @@
 .animate-card-float {
   animation: cardFloat 3.2s ease-in-out infinite;
   will-change: transform;
+}
+/* ─── Contact lake: compositor-only animations (each wave / lotus is its own layer) ───
+   --s = lake scale (CSS px per lake unit), so offsets match the old in-SVG user-unit translations. */
+@keyframes lakeWave1 {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * -30px), 0, 0); }
+  50% { transform: translate3d(calc(var(--s, 1) * 30px), calc(var(--s, 1) * -4px), 0); }
+}
+@keyframes lakeWave2 {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * 25px), 0, 0); }
+  50% { transform: translate3d(calc(var(--s, 1) * -25px), calc(var(--s, 1) * 3px), 0); }
+}
+@keyframes lakeWave3 {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * -20px), 0, 0); }
+  50% { transform: translate3d(calc(var(--s, 1) * 20px), calc(var(--s, 1) * -3px), 0); }
+}
+.lake-wave-1 { animation: lakeWave1 14s ease-in-out infinite; will-change: transform; }
+.lake-wave-2 { animation: lakeWave2 10s ease-in-out infinite; will-change: transform; }
+.lake-wave-3 { animation: lakeWave3 7.5s ease-in-out infinite; will-change: transform; }
+
+@keyframes lotusSway {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * -2px), calc(var(--s, 1) * -2px), 0) rotate(-1.2deg); }
+  50% { transform: translate3d(calc(var(--s, 1) * 2px), calc(var(--s, 1) * 3px), 0) rotate(1.5deg); }
+}
+.lotus-sway {
+  animation-name: lotusSway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+
+/* ─── Contact butterflies: flight paths as compositor-only CSS keyframes (were 4 Framer Motion JS loops).
+   Same keyframes, evenly spaced, ease-in-out per segment, exactly like the Framer config. ─── */
+@keyframes butterflyFlight1 {
+  0.0% { transform: translate3d(0vw, 12vh, 0) rotate(12deg); }
+  20.0% { transform: translate3d(16vw, 32vh, 0) rotate(-15deg); }
+  40.0% { transform: translate3d(2vw, 52vh, 0) rotate(20deg); }
+  60.0% { transform: translate3d(22vw, 28vh, 0) rotate(-10deg); }
+  80.0% { transform: translate3d(8vw, 42vh, 0) rotate(15deg); }
+  100.0% { transform: translate3d(0vw, 12vh, 0) rotate(12deg); }
+}
+@keyframes butterflyFlight2 {
+  0.0% { transform: translate3d(18vw, 20vh, 0) rotate(-18deg); }
+  20.0% { transform: translate3d(1vw, 40vh, 0) rotate(12deg); }
+  40.0% { transform: translate3d(25vw, 64vh, 0) rotate(-22deg); }
+  60.0% { transform: translate3d(5vw, 78vh, 0) rotate(15deg); }
+  80.0% { transform: translate3d(20vw, 36vh, 0) rotate(-8deg); }
+  100.0% { transform: translate3d(18vw, 20vh, 0) rotate(-18deg); }
+}
+@keyframes butterflyFlight3 {
+  0.0% { transform: translate3d(-0.5vw, 42vh, 0) rotate(-10deg); }
+  20.0% { transform: translate3d(12vw, 65vh, 0) rotate(18deg); }
+  40.0% { transform: translate3d(1vw, 82vh, 0) rotate(-12deg); }
+  60.0% { transform: translate3d(20vw, 54vh, 0) rotate(16deg); }
+  80.0% { transform: translate3d(6vw, 34vh, 0) rotate(-22deg); }
+  100.0% { transform: translate3d(-0.5vw, 42vh, 0) rotate(-10deg); }
+}
+@keyframes butterflyFlight4 {
+  0.0% { transform: translate3d(75vw, 15vh, 0) rotate(10deg); }
+  20.0% { transform: translate3d(92vw, 32vh, 0) rotate(-14deg); }
+  40.0% { transform: translate3d(78vw, 54vh, 0) rotate(18deg); }
+  60.0% { transform: translate3d(95vw, 26vh, 0) rotate(-12deg); }
+  80.0% { transform: translate3d(84vw, 42vh, 0) rotate(14deg); }
+  100.0% { transform: translate3d(75vw, 15vh, 0) rotate(10deg); }
+}
+.butterfly-flight {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+
+/* ─── Sakura petals: compositor-only fall (were 10 Framer Motion JS loops) ─── */
+@keyframes sakuraPetalFall {
+  0% { transform: translate3d(var(--x0), 0, 0) rotate(0deg); opacity: 0; }
+  33.333% { transform: translate3d(var(--x1), var(--y1), 0) rotate(120deg); opacity: 1; }
+  66.667% { transform: translate3d(var(--x2), var(--y2), 0) rotate(240deg); opacity: 1; }
+  100% { transform: translate3d(var(--x3), var(--y3), 0) rotate(360deg); opacity: 0; }
+}
+.sakura-petal {
+  animation-name: sakuraPetalFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
 }
