@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const ANIMATION_CONFIG = {
   SMOOTH_TAU: 0.25,
@@ -76,7 +76,7 @@ const useAnimationLoop = (
   // Pure CSS animation is applied directly on the element style via CSS keyframes
 };
 
-export const LogoLoop = React.memo(
+export const LogoLoop = memo(
   ({
     logos,
     speed = 40,

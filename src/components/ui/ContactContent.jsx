@@ -168,7 +168,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
             style={{ opacity: emblemReady ? undefined : 0 }}
             className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-all duration-700 ease-in-out transform-gpu ${
               isLight 
-                ? 'opacity-90 filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18)' 
+                ? 'opacity-90' 
                 : 'opacity-90'
             }`}
           />

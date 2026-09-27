@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useId } from 'react';
+import { useEffect, useRef, useState, useId } from 'react';
 import { usePerformanceMode } from '../../context/PerformanceContext';
 import './GlassSurface.css';
 

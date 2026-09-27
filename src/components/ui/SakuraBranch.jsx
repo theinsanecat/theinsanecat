@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePerformanceMode } from '../../context/PerformanceContext';
 import { SAKURA_BRANCH_SRC } from '../../lib/artAssets';
 import { useImageReady } from '../../hooks/useImageReady';
@@ -93,8 +93,8 @@ export const SakuraBranch = ({ theme }) => {
           decoding="async"
           style={{ opacity: branchReady ? 1 : 0 }}
           className={`w-full h-auto transition-all duration-500 ${isLight
-              ? 'filter brightness-[1.1] contrast-[1.05] saturate-[1.25] drop-shadow(0 0 20px rgba(244,114,182,0.4))'
-              : 'filter brightness-[0.88] contrast-[1.5] saturate-[1.15] drop-shadow(0 0 25px rgba(244,63,94,0.5)) drop-shadow(0 0 10px rgba(15,23,42,0.8))'
+              ? 'brightness-[1.1] contrast-[1.05] saturate-[1.25]'
+              : 'brightness-[0.88] contrast-[1.5] saturate-[1.15]'
             }`}
         />
       </div>

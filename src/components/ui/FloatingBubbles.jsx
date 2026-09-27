@@ -1,4 +1,3 @@
-import React from 'react';
 import { usePerformanceMode } from '../../context/PerformanceContext';
 
 const Bubble = ({ size, type, style }) => {

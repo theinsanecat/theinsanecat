@@ -6,6 +6,8 @@ Welcome to my personal GitHub profile repository. My interactive portfolio is de
 
 **[https://theinsanecat.github.io/theinsanecat/](https://theinsanecat.github.io/theinsanecat/)**
 
+How it was made to run smoothly on low-end laptops (including machines without GPU acceleration): **[PERFORMANCE.md](./PERFORMANCE.md)**
+
 ---
 
 ## Featured Projects & Research

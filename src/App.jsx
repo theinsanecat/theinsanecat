@@ -46,53 +46,10 @@ const WarmupHost = ({ onDone, children }) => {
 
 const MobileLotusWaterBody = lazy(() => loadMobileLotus().then((m) => ({ default: m.MobileLotusWaterBody })));
 
-/*
-const ExperienceContent = lazy(() =>
-  import('./components/ui/ExperienceContent').then((module) => ({
-    default: module.ExperienceContent,
-  }))
-);
-*/
 
 const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
 
-// ================= GLOBAL FLOATING GUIDE CONTAINER WITH SPACE DRIFT =================
-const getRandomBorderCoords = (w, h) => {
-  const edge = Math.floor(Math.random() * 4);
-  let x = 0;
-  let y = 0;
-  
-  // Guard values for extremely small screen dimensions
-  const safeW = Math.max(w, 320);
-  const safeH = Math.max(h, 480);
-  
-  switch (edge) {
-    case 0: // Top Border (below navbar)
-      x = Math.floor(Math.random() * Math.max(safeW - 150, 50)) + 20;
-      y = Math.floor(Math.random() * 60) + 90; // Y: 90px to 150px
-      break;
-    case 1: // Bottom Border (above experience pedestals, out of center cards)
-      x = Math.floor(Math.random() * Math.max(safeW - 150, 50)) + 20;
-      y = safeH - 180 - Math.floor(Math.random() * 60); // Y: safeH-240px to safeH-180px
-      break;
-    case 2: // Left Border
-      x = Math.floor(Math.random() * 60) + 20; // X: 20px to 80px
-      y = Math.floor(Math.random() * Math.max(safeH - 280, 50)) + 120; // Y: 120px to safeH-160px
-      break;
-    case 3: // Right Border
-    default:
-      x = safeW - 130 - Math.floor(Math.random() * 60); // X: safeW-190px to safeW-130px
-      y = Math.floor(Math.random() * Math.max(safeH - 280, 50)) + 120; // Y: 120px to safeH-160px
-      break;
-  }
-  
-  // Final bounds sanity check to ensure the 110px UFO & speech bubble remain inside viewport
-  x = Math.max(20, Math.min(x, w - 140));
-  y = Math.max(80, Math.min(y, h - 140));
-  
-  return { x, y };
-};
-
+// ================= GLOBAL FLOATING GUIDE CONTAINER =================
 const FloatingUFOContainer = ({
   theme,
   isHovered,
@@ -255,7 +212,6 @@ function App() {
     else loader().then(() => navigate(path), () => navigate(path));
   }, [isSmallViewport, navigate]);
 
-  const isAboutPage = activeSection === 'about';
   const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'projects';
 
   // State for the global floating guide spaceship cat
@@ -263,7 +219,6 @@ function App() {
   const [dialogueText, setDialogueText] = useState('');
   const [isDialogueVisible, setIsDialogueVisible] = useState(false);
   const [isUFOHovered, setIsUFOHovered] = useState(false);
-  const [flightMode, setFlightMode] = useState('orbit'); // Default: Border Patrol (Orbit)
   const [hoverCount, setHoverCount] = useState(0);
 
   const getPageDisplayName = (section) => {
@@ -311,34 +266,12 @@ function App() {
     setIsDialogueVisible(false);
   };
 
-  // 1. Get the spring-smoothed mouse positions
+  // Spring-smoothed mouse positions (spotlight + constellation reveal)
   const { mouseX, mouseY, mouseXpx, mouseYpx } = useMouseParallax();
 
-  // 2. Create parallax transforms (desktop exact original multipliers vs mobile subtle shifts)
-  const maxForeX = isMobileViewport ? 12 : 68;
-  const maxForeY = isMobileViewport ? 8 : 35;
-  const maxMidX = isMobileViewport ? 8 : 40;
-  const maxMidY = isMobileViewport ? 5 : 22;
-  const maxMountX = isMobileViewport ? 5 : 24;
-  const maxMountY = isMobileViewport ? 3 : 14;
-
-  const skyX = useTransform(mouseX, [-1, 1], isMobileViewport ? [-6, 6] : [-12, 12]);
-  const skyY = useTransform(mouseY, [-1, 1], isMobileViewport ? [-4, 4] : [-8, 8]);
-
-  const mountX = useTransform(mouseX, [-1, 1], [-maxMountX, maxMountX]);
-  const mountY = useTransform(mouseY, [-1, 1], [-maxMountY, maxMountY]);
-
-  const midX = useTransform(mouseX, [-1, 1], [-maxMidX, maxMidX]);
-  const midY = useTransform(mouseY, [-1, 1], [-maxMidY, maxMidY]);
-
-  const foreX = useTransform(mouseX, [-1, 1], [-maxForeX, maxForeX]);
-  const foreY = useTransform(mouseY, [-1, 1], [-maxForeY, maxForeY]);
-
-  const houseFarX = useTransform(mouseX, [-1, 1], [-16, 16]);
-  const houseFarY = useTransform(mouseY, [-1, 1], [-9, 9]);
-
-  const houseNearX = useTransform(mouseX, [-1, 1], [-36, 36]);
-  const houseNearY = useTransform(mouseY, [-1, 1], [-20, 20]);
+  // Mouse parallax on the landscape layers was removed (design decision, perf/optimization Phase 5).
+  // The layers keep their original over-scale, so the composition at rest is unchanged.
+  // The mouse still drives the pink spotlight and the constellation reveal.
 
   // 3. Map the spring-smoothed mouse coordinates to the 1920x1080 SVG coordinate space
   const svgMouseX = useTransform(mouseX, [-1, 1], [0, 1920]);
@@ -361,8 +294,6 @@ function App() {
       {/* 1. Deepest Cosmic / Day Sky Layer */}
       <SkyLayer 
         style={{ 
-          x: skyX, 
-          y: skyY,
           scale: 1.04
         }} 
         isAboutPage={showRecededLandscape}
@@ -380,8 +311,6 @@ function App() {
       >
         <MountainLayer 
           style={{ 
-            x: mountX, 
-            y: mountY,
             scale: 1.08
           }} 
           theme={theme}
@@ -400,12 +329,10 @@ function App() {
         style={{ willChange: 'transform, opacity' }}
       >
         {isMobileViewport ? (
-          <MobileMidgroundTrees style={{ x: midX, y: midY, scale: 1.18 }} theme={theme} />
+          <MobileMidgroundTrees style={{ scale: 1.18 }} theme={theme} />
         ) : (
           <MidgroundTrees 
             style={{ 
-              x: midX, 
-              y: midY,
               scale: 1.14
             }} 
             theme={theme}
@@ -423,12 +350,10 @@ function App() {
         style={{ willChange: 'transform, opacity' }}
       >
         {isMobileViewport ? (
-          <MobileForegroundTrees style={{ x: foreX, y: foreY, scale: 1.20 }} theme={theme} />
+          <MobileForegroundTrees style={{ scale: 1.20 }} theme={theme} />
         ) : (
           <ForegroundTrees 
             style={{ 
-              x: foreX, 
-              y: foreY,
               scale: 1.18
             }} 
             theme={theme}
@@ -542,7 +467,6 @@ function App() {
       {isSpaceshipSpawned && activeSection !== 'experience' && (
         <FloatingUFOContainer
           activeSection={activeSection}
-          flightMode={flightMode}
           isHovered={isUFOHovered}
           theme={theme}
           isDialogueVisible={isDialogueVisible}
@@ -552,40 +476,6 @@ function App() {
         />
       )}
 
-      {/* UFO Flight Controller Widget (Commented out as requested - can be un-commented to enable mode switcher UI)
-      {isSpaceshipSpawned && activeSection !== 'experience' && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-6 right-6 z-40 p-2 glass-surface rounded-lg pointer-events-auto"
-        >
-          <div className="flex items-center space-x-3 select-none">
-            <span className="text-[7.5px] font-black tracking-widest text-cyan-400 uppercase font-mono border-r border-cyan-500/15 pr-2.5">
-              FLIGHT CORE
-            </span>
-            <div className="flex items-center space-x-1">
-              {[
-                { id: 'glide', label: 'Border Drift' },
-                { id: 'orbit', label: 'Border Patrol' },
-                { id: 'stationary', label: 'Stationary' }
-              ].map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => setFlightMode(m.id)}
-                  className={`px-2 py-0.5 text-[7px] font-mono font-black uppercase rounded tracking-wider border transition-all duration-200 ${
-                    flightMode === m.id
-                      ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/60 shadow-[0_0_8px_rgba(34,211,238,0.2)]'
-                      : 'text-purple-300/60 border-transparent hover:text-purple-200 hover:bg-purple-950/20'
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      )}
-      */}
     </main>
   );
 }
