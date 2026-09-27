@@ -1,10 +1,38 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { ABOUT_IMAGES } from '../../lib/artAssets';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import BorderGlow from './BorderGlow';
 
 // ─── Card Data ─────────────────────────────────────────────────────────────────
+// ─── Theme layer rendering (performance) ─────────────────────────────────────
+// Every card draws separate light- and dark-theme SVG artwork (with shadow/glow filters) and cross-fades
+// them on theme change. Rendering BOTH sets all the time doubled the page's mount cost. Now only the
+// active theme's artwork is mounted; both are mounted just for the ~0.7 s cross-fade after a theme switch.
+const ThemeLayersContext = createContext({ light: true, dark: true });
+
+const useThemeLayers = (theme) => {
+  const [visualTheme, setVisualTheme] = useState(theme);
+  const [crossfading, setCrossfading] = useState(false);
+  useEffect(() => {
+    if (theme === visualTheme) return undefined;
+    // 1) mount both sets while still showing the old theme, 2) two frames later flip -> CSS cross-fade
+    setCrossfading(true);
+    let r2;
+    const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setVisualTheme(theme)); });
+    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+  }, [theme, visualTheme]);
+  useEffect(() => {
+    if (!crossfading || theme !== visualTheme) return undefined;
+    const t = setTimeout(() => setCrossfading(false), 800); // after the 700 ms opacity transition
+    return () => clearTimeout(t);
+  }, [crossfading, theme, visualTheme]);
+  return {
+    visualTheme,
+    layers: { light: crossfading || visualTheme === 'light', dark: crossfading || visualTheme === 'dark' },
+  };
+};
+
 const GEM = {
   gemBase: "#4d1234", gemTop: "#ec4899", gemRight: "#a21caf",
   gemBottom: "#4a044e", gemLeft: "#c084fc", gemBottomLeft: "#701a75",
@@ -145,9 +173,11 @@ const getArc = (index, activeIndex, total, isLight = false) => {
 // ─── Shared Card Frame (corners + border) ──────────────────────────────────────
 const CardFrame = ({ gid, theme }) => {
   const isLight = theme === 'light';
+  const themeLayers = useContext(ThemeLayersContext);
   return (
     <div className="absolute inset-0 w-full h-full z-40 pointer-events-none transform-gpu">
       {/* Light Mode Card Frame */}
+      {themeLayers.light && (
       <svg className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480">
         <rect x="0" y="0" width="320" height="480" fill="none" stroke="#a78bfa" strokeWidth="24" />
         <rect x="12" y="12" width="296" height="456" fill="none" stroke="#7c3aed" strokeWidth="8" />
@@ -170,8 +200,10 @@ const CardFrame = ({ gid, theme }) => {
           </g>
         ))}
       </svg>
+      )}
 
       {/* Dark Mode Card Frame */}
+      {themeLayers.dark && (
       <svg className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480">
         <rect x="0" y="0" width="320" height="480" fill="none" stroke="#251744" strokeWidth="24" />
         <rect x="12" y="12" width="296" height="456" fill="none" stroke="#4a2e85" strokeWidth="8" />
@@ -194,6 +226,7 @@ const CardFrame = ({ gid, theme }) => {
           </g>
         ))}
       </svg>
+      )}
     </div>
   );
 };
@@ -201,6 +234,7 @@ const CardFrame = ({ gid, theme }) => {
 // ─── Card Back Face ─────────────────────────────────────────────────────────────
 const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
   const isLight = theme === 'light';
+  const themeLayers = useContext(ThemeLayersContext);
   return (
     <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu ${
       // On mobile: parent motion.div handles opacity — don't apply own opacity classes
@@ -247,6 +281,7 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
       </svg>
 
       {/* Middle Layer: Shield & Contours - Light Mode */}
+      {themeLayers.light && (
       <svg className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
         <g transform="translate(160,240)">
           <path d="M 0 -130 L 35 -80 L 100 -20 L 70 50 L 0 110 L -70 50 L -100 -20 L -35 -80 Z" fill="#c4b5fd" stroke="#7c3aed" strokeWidth="4" strokeLinejoin="round" />
@@ -255,8 +290,10 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
           <motion.polygon points="0,-70 56,-32 56,32 0,70 -56,32 -56,-32" fill="#ec4899" animate={{ opacity: isLight ? 0.48 : (isHovered ? 0.48 : 0.25) }} transition={{ duration: 0.3 }} filter="url(#gem-glow)" />
         </g>
       </svg>
+      )}
 
       {/* Middle Layer: Shield & Contours - Dark Mode */}
+      {themeLayers.dark && (
       <svg className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
         <g transform="translate(160,240)">
           <path d="M 0 -130 L 35 -80 L 100 -20 L 70 50 L 0 110 L -70 50 L -100 -20 L -35 -80 Z" fill="#18102e" stroke="#5b399c" strokeWidth="4" strokeLinejoin="round" />
@@ -265,8 +302,10 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
           <motion.polygon points="0,-70 56,-32 56,32 0,70 -56,32 -56,-32" fill="#ff1493" animate={{ opacity: isHovered ? 0.48 : 0.2 }} transition={{ duration: 0.3 }} filter="url(#gem-glow)" />
         </g>
       </svg>
+      )}
 
       {/* Dual Blades Layer - Light Mode */}
+      {themeLayers.light && (
       <svg className={`absolute inset-0 w-full h-full z-20 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
         <defs>
           <linearGradient id={`blade-l-${card.id}`} x1="0%" y1="100%" x2="100%" y2="0%">
@@ -291,8 +330,10 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
           <rect x="-10" y="65" width="20" height="8" rx="2" fill="#fbbf24" />
         </g>
       </svg>
+      )}
 
       {/* Dual Blades Layer - Dark Mode */}
+      {themeLayers.dark && (
       <svg className={`absolute inset-0 w-full h-full z-20 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
         <defs>
           <linearGradient id={`blade-d-${card.id}`} x1="0%" y1="100%" x2="100%" y2="0%">
@@ -317,8 +358,10 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
           <rect x="-10" y="65" width="20" height="8" rx="2" fill="#5b399c" />
         </g>
       </svg>
+      )}
 
       {/* Top Layer: Center 3D Isometric Hexagon Gem - Light Mode */}
+      {themeLayers.light && (
       <svg className={`absolute inset-0 w-full h-full z-30 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
         <g transform="translate(160,240)">
           <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="#c4b5fd" stroke="#7c3aed" strokeWidth="4" />
@@ -375,8 +418,10 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
           </text>
         </g>
       </svg>
+      )}
 
       {/* Top Layer: Center 3D Isometric Hexagon Gem - Dark Mode */}
+      {themeLayers.dark && (
       <svg className={`absolute inset-0 w-full h-full z-30 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
         <g transform="translate(160,240)">
           <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="#251744" stroke="#4a2e85" strokeWidth="4" />
@@ -434,6 +479,7 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
           </text>
         </g>
       </svg>
+      )}
 
       <CardFrame gid={`gb-${card.id}`} theme={theme} />
     </div>
@@ -720,6 +766,7 @@ const MathReflectionModal = ({ isOpen, onClose, theme }) => {
 };
 
 export const AboutContent = ({ theme }) => {
+  const { visualTheme: cardTheme, layers: themeLayers } = useThemeLayers(theme);
   const isLight = theme === 'light';
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedCardId, setSelectedCardId] = useState(null);
@@ -814,6 +861,7 @@ export const AboutContent = ({ theme }) => {
   };
 
   return (
+    <ThemeLayersContext.Provider value={themeLayers}>
     <div className="relative w-screen h-screen max-h-screen flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-4 sm:pb-6">
 
       {/* Aurora Background */}
@@ -961,7 +1009,7 @@ export const AboutContent = ({ theme }) => {
                   isSelected={isSelected}
                   isHovered={isHovered && !isAnySelected}
                   isCenterUnturned={isCenterUnturned}
-                  theme={theme}
+                  theme={cardTheme}
                   isMobile={isMobile}
                 />
               </motion.div>
@@ -1143,5 +1191,6 @@ export const AboutContent = ({ theme }) => {
         theme={theme}
       />
     </div>
+    </ThemeLayersContext.Provider>
   );
 };

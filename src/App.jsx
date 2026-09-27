@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { useTransform, motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from './hooks/useMouseParallax';
@@ -17,8 +17,9 @@ import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
-// Each page ships in its own chunk. All of them are prefetched in idle time after Home
-// has painted, so navigation stays instant while the first load only pays for Home.
+// Each page ships in its own chunk. They are all fetched in parallel right after Home's first paint,
+// then each page is "warm-rendered" once off-screen (see WarmupHost), so the FIRST visit to a page is
+// as fast as a repeat visit and its content animates in together with the landscape transition.
 const loadAbout = () => import('./components/ui/AboutContent');
 const loadProjects = () => import('./components/ui/ProjectsContent');
 const loadContact = () => import('./components/ui/ContactContent');
@@ -29,6 +30,20 @@ const AboutContent = lazy(() => loadAbout().then((m) => ({ default: m.AboutConte
 const ProjectsContent = lazy(() => loadProjects().then((m) => ({ default: m.ProjectsContent })));
 const ContactContent = lazy(() => loadContact().then((m) => ({ default: m.ContactContent })));
 const LotusWaterBody = lazy(() => loadLotus().then((m) => ({ default: m.LotusWaterBody })));
+const ROUTE_LOADERS = { about: loadAbout, projects: loadProjects, contact: loadContact };
+
+// Renders its children once (invisibly), waits two frames so React commits + the browser computes
+// style/layout for them, then reports done. Pays the one-time "first mount" cost (JS compilation,
+// lazy-component init, style resolution) while the user is still on Home.
+const WarmupHost = ({ onDone, children }) => {
+  useEffect(() => {
+    let r2;
+    const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(onDone); });
+    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+  }, [onDone]);
+  return children;
+};
+
 const MobileLotusWaterBody = lazy(() => loadMobileLotus().then((m) => ({ default: m.MobileLotusWaterBody })));
 
 /*
@@ -165,20 +180,46 @@ function App() {
 
   const activeSection = getSectionFromPath(location.pathname);
 
-  // Idle-time warm-up: page chunks first, then download + DECODE the heavy artwork,
-  // so opening Contact/About never waits on network, parsing or image decoding.
+  // ---------- First-visit warm-up ----------
+  // 1. ~300 ms after first paint: fetch every page chunk IN PARALLEL (tiny files, no idle waiting).
+  // 2. Then, in idle slots: decode the heavy artwork and warm-render each page once, off-screen.
+  const [warmPage, setWarmPage] = useState(null);
+  const warmDoneRef = useRef(null);
+  const visitedRef = useRef(new Set());
+  useEffect(() => { visitedRef.current.add(activeSection); }, [activeSection]);
+
+  const warmRender = useCallback((name) => new Promise((resolve) => {
+    if (visitedRef.current.has(name) || window.innerWidth < 1024) { resolve(); return; }
+    warmDoneRef.current = resolve;
+    setWarmPage(name);
+  }), []);
+
+  const finishWarm = useCallback(() => {
+    setWarmPage(null);
+    const resolve = warmDoneRef.current;
+    warmDoneRef.current = null;
+    if (resolve) requestAnimationFrame(() => resolve());
+  }, []);
+
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
-    return runWhenIdle([
-      loadContact,
-      loadAbout,
-      loadProjects,
-      isMobile ? loadMobileLotus : loadLotus,
-      () => warmImage(ROTATING_EMBLEM_SRC),
-      () => warmImage(SAKURA_BRANCH_SRC),
-      ...Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src)),
-    ]);
-  }, []);
+    let cancelIdle = () => {};
+    const t = setTimeout(() => {
+      Promise.all([loadContact(), loadAbout(), loadProjects(), isMobile ? loadMobileLotus() : loadLotus()])
+        .catch(() => {})
+        .then(() => {
+          cancelIdle = runWhenIdle([
+            () => warmImage(ROTATING_EMBLEM_SRC),
+            () => warmImage(SAKURA_BRANCH_SRC),
+            () => warmRender('contact'),
+            ...Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src)),
+            () => warmRender('about'),
+            () => warmRender('projects'),
+          ], 0);
+        });
+    }, 300);
+    return () => { clearTimeout(t); cancelIdle(); };
+  }, [warmRender]);
 
   // Block route navigation on mobile & tablet viewport (< 1024px)
   useEffect(() => {
@@ -206,10 +247,12 @@ function App() {
       navigate('/');
       return;
     }
-    if (newSection === 'home') navigate('/');
-    else if (newSection === 'about') navigate('/about');
-    else if (newSection === 'projects') navigate('/projects');
-    else if (newSection === 'contact') navigate('/contact');
+    const path = newSection === 'home' ? '/' : `/${newSection}`;
+    const loader = ROUTE_LOADERS[newSection];
+    // Make sure the page's code is there BEFORE switching, so the page content and the landscape
+    // transition start in the same frame (instead of the landscape moving and the content popping in later).
+    if (!loader) navigate(path);
+    else loader().then(() => navigate(path), () => navigate(path));
   }, [isSmallViewport, navigate]);
 
   const isAboutPage = activeSection === 'about';
@@ -481,6 +524,19 @@ function App() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Off-screen, invisible one-time warm render of a page (see WarmupHost) */}
+      {warmPage && (
+        <div aria-hidden="true" className="fixed inset-0 pointer-events-none" style={{ visibility: 'hidden', zIndex: -1, contain: 'strict' }}>
+          <Suspense fallback={null}>
+            <WarmupHost onDone={finishWarm}>
+              {warmPage === 'about' && <AboutContent theme={theme} />}
+              {warmPage === 'projects' && <ProjectsContent theme={theme} />}
+              {warmPage === 'contact' && <ContactContent setActiveSection={() => {}} theme={theme} onAvatarTrigger={() => {}} />}
+            </WarmupHost>
+          </Suspense>
+        </div>
+      )}
 
       {/* 7. Global Floating Guide Spaceship Cat */}
       {isSpaceshipSpawned && activeSection !== 'experience' && (
