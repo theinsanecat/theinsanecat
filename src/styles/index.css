@@ -531,3 +531,32 @@
   animation-fill-mode: both;
   will-change: transform, opacity;
 }
+
+/* Contact emblem rotation (was an inline style) */
+.emblem-spin { animation: spin 70s linear infinite; }
+
+/* ─── Performance tiers (html[data-perf] is set by PerformanceContext) ───────────────────────────────
+   Every element stays on screen in every tier; lower tiers only stop *continuous* ambient motion,
+   which on machines without GPU acceleration forces the CPU to repaint those areas every frame. */
+html[data-perf="balanced"] .lotus-sway.lotus-front { animation: none; }
+
+html[data-perf="lite"] .lotus-sway,
+html[data-perf="lite"] .emblem-spin,
+html[data-perf="lite"] .animate-branch-sway,
+html[data-perf="lite"] .aurora-blob-1,
+html[data-perf="lite"] .aurora-blob-2,
+html[data-perf="lite"] .aurora-blob-3,
+html[data-perf="lite"] .animate-card-float,
+html[data-perf="lite"] .animate-pulse,
+html[data-perf="lite"] .animate-ping {
+  animation: none; /* small, but in software compositing their damage merges with other moving areas */
+}
+/* keep the resting pose of animations whose first keyframe isn't "no transform" */
+html[data-perf="lite"] .animate-branch-sway { transform: rotate(-5deg) translate(8%, -8%); }
+html[data-perf="lite"] .aurora-blob-2 { transform: scale(1.08); }
+html[data-perf="lite"] .lotus-sway,
+html[data-perf="lite"] .emblem-spin,
+html[data-perf="lite"] .animate-branch-sway,
+html[data-perf="lite"] [class^="aurora-blob-"] {
+  will-change: auto; /* nothing moves: let the browser flatten these into fewer layers */
+}

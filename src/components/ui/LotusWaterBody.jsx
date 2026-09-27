@@ -389,7 +389,7 @@ const useLakeGeometry = (ref) => {
   return geo;
 };
 
-const LotusLayer = ({ lotus, geo, theme }) => {
+const LotusLayer = ({ lotus, geo, theme, front = false }) => {
   const { s, ox, oy, W, H } = geo;
   const k = lotus.scale * s; // local lotus unit -> CSS px
   const X = ox + 2 * lotus.x * s;
@@ -398,7 +398,7 @@ const LotusLayer = ({ lotus, geo, theme }) => {
   if (X + 100 * k < 0 || X - 100 * k > W || Y - 90 * k > H) return null;
   return (
     <div
-      className="absolute lotus-sway"
+      className={`absolute lotus-sway${front ? ' lotus-front' : ''}`}
       style={{
         left: X,
         top: Y,
@@ -433,7 +433,7 @@ export const LotusWaterBody = ({ theme }) => {
 
   const lakeRef = useRef(null);
   const geo = useLakeGeometry(lakeRef);
-  const lotuses = isMobile ? BACK_LOTUSES : [...BACK_LOTUSES, ...FRONT_LOTUSES];
+  const lotuses = isMobile ? BACK_LOTUSES : [...BACK_LOTUSES, ...FRONT_LOTUSES.map((l) => ({ ...l, front: true }))];
 
   return (
     <motion.div
@@ -463,7 +463,7 @@ export const LotusWaterBody = ({ theme }) => {
         ))}
 
         {/* 2. Lotuses — back row first, then front rows (same paint order as before) */}
-        {geo && lotuses.map((l) => <LotusLayer key={`${l.x}-${l.y}`} lotus={l} geo={geo} theme={theme} />)}
+        {geo && lotuses.map((l) => <LotusLayer key={`${l.x}-${l.y}`} lotus={l} geo={geo} theme={theme} front={l.front} />)}
       </div>
     </motion.div>
   );

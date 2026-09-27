@@ -59,7 +59,7 @@ const SakuraPetal = ({ id, delay, theme }) => {
 };
 
 export const SakuraBranch = ({ theme }) => {
-  const { isLite } = usePerformanceMode();
+  const { isLite, isBalanced } = usePerformanceMode();
   const isLight = theme === 'light';
   // Branch fades in only once decoded (normally already warmed up from Home), never pops in half-drawn
   const branchReady = useImageReady(SAKURA_BRANCH_SRC);
@@ -73,8 +73,8 @@ export const SakuraBranch = ({ theme }) => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // In Lite mode: 0 ambient petals; Mobile: 4 petals; Desktop: 10 petals
-  const petalCount = isLite ? 0 : (isMobile ? 4 : 10);
+  // Lite: 0 ambient petals; Mobile: 4; Balanced: 6; Cinematic: 10
+  const petalCount = isLite ? 0 : isMobile ? 4 : isBalanced ? 6 : 10;
   const petals = Array.from({ length: petalCount }, (_, i) => ({
     id: i,
     delay: i * (isMobile ? 2.4 : 1.2)

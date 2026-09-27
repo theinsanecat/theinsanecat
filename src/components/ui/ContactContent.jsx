@@ -151,9 +151,8 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
 
         {/* Slowly Rotating SVG Emblem Background — Pure CSS @keyframes spin running on GPU compositor thread (0 JS overhead) */}
         <div
-          className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu"
+          className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu emblem-spin"
           style={{
-            animation: 'spin 70s linear infinite',
             willChange: 'transform',
             maskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
             WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
