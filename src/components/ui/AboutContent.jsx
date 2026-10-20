@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, createContext, useContext } from 'react';
-import { ABOUT_IMAGES } from '../../lib/artAssets';
+import { ABOUT_IMAGES, ABOUT_CARD_IMAGES } from '../../lib/artAssets';
+import { IS_TOUCH_DEVICE } from '../../context/PerformanceContext';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import BorderGlow from './BorderGlow';
@@ -240,6 +241,23 @@ const CardFrame = ({ gid, theme }) => {
 const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
   const isLight = theme === 'light';
   const themeLayers = useContext(ThemeLayersContext);
+  // Phones & tablets: the same artwork as a pre-rendered picture (scripts/render-about-cards.mjs).
+  // Five live SVG cards with shadow/glow filters were too heavy to animate on a phone.
+  if (isMobile || IS_TOUCH_DEVICE) {
+    return (
+      <div className={`absolute inset-0 w-full h-full overflow-hidden backface-hidden ${
+        isMobile ? '' : `transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`
+        }`}>
+        <img
+          src={ABOUT_CARD_IMAGES[`${isLight ? 'light' : 'dark'}-${card.id}`]}
+          alt=""
+          draggable={false}
+          decoding="async"
+          className="absolute inset-0 w-full h-full select-none pointer-events-none"
+        />
+      </div>
+    );
+  }
   return (
     <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu ${
       // On mobile: parent motion.div handles opacity: don't apply own opacity classes
@@ -611,23 +629,9 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMo
         // iOS WebKit flattens preserve-3d when parent has a scale transform applied
         // (arc cards use scale: 0.30–0.62), making rotateY invisible. We bypass this
         // with a direct opacity crossfade: back fades out, front fades in simultaneously.
+        // Phones only ever show the card back: tapping a card fades the whole deck and shows the story
         <div className="w-full h-full relative">
-          <motion.div
-            animate={{ opacity: isSelected ? 0 : 1 }}
-            transition={{ duration: 0.35, ease: 'easeInOut' }}
-            className="absolute inset-0 w-full h-full"
-            style={{ pointerEvents: isSelected ? 'none' : 'auto' }}
-          >
-            <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} isMobile={true} />
-          </motion.div>
-          <motion.div
-            animate={{ opacity: isSelected ? 1 : 0 }}
-            transition={{ duration: 0.35, ease: 'easeInOut' }}
-            className="absolute inset-0 w-full h-full"
-            style={{ pointerEvents: isSelected ? 'auto' : 'none' }}
-          >
-            <CardFront card={card} isSelected={isSelected} theme={theme} isMobile={true} />
-          </motion.div>
+          <CardBack card={card} isHovered={isHovered} isSelected={isSelected} theme={theme} isMobile={true} />
         </div>
       ) : (
         // ─── DESKTOP: Full 3D CSS flip (preserve-3d / rotateY) ──────────────────

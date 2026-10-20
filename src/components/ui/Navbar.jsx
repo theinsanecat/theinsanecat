@@ -4,7 +4,7 @@ import GlassSurface from './GlassSurface';
 import BorderGlow from './BorderGlow';
 
 export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitScale = 1 }) => {
-  const { performanceMode, setPerformanceMode } = usePerformanceMode();
+  const { performanceMode, setPerformanceMode, modeLocked } = usePerformanceMode();
 
   const cyclePerformanceMode = () => {
     if (performanceMode === 'full') setPerformanceMode('balanced');
@@ -114,7 +114,8 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
 
       {/* Right Controls: Theme Toggle & Say Hello CTA Button */}
       <div className="flex items-center gap-1 sm:gap-3 shrink-0 z-10">
-        {/* Performance Mode Switcher (Pure Text) */}
+        {/* Performance Mode Switcher (Pure Text). Not on phones/tablets: they always run the basic version */}
+        {!modeLocked && (
         <button
           onClick={cyclePerformanceMode}
           className={`px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full backdrop-blur-md border text-[9px] sm:text-xs font-mono font-extrabold tracking-wider transition-all duration-700 ease-in-out cursor-pointer active:scale-95 flex items-center gap-1 uppercase ${
@@ -128,6 +129,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
           <span className="opacity-50 font-normal text-[8px] sm:text-[9px] mr-0.5">Quality:</span>
           <span className="font-bold inline-block text-center min-w-[58px] sm:min-w-[70px] transition-all duration-700 ease-in-out">{perfLabels[performanceMode].tag}</span>
         </button>
+        )}
 
         {/* Theme Toggle Button (Sun / Moon) */}
         <button

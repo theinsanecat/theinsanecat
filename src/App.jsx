@@ -17,7 +17,8 @@ import { ResumeViewer } from './components/ui/ResumeViewer';
 import { RotateNotice } from './components/ui/RotateNotice';
 import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { usePageFit } from './lib/pageFit';
-import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
+import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES, ABOUT_CARD_IMAGES } from './lib/artAssets';
+import { IS_TOUCH_DEVICE } from './context/PerformanceContext';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
 // Each page ships in its own chunk. They are all fetched in parallel right after Home's first paint,
@@ -79,6 +80,13 @@ const FitBox = ({ fit, children }) => {
       {children}
     </div>
   );
+};
+
+const aboutCardWarmOrder = () => {
+  let first = 'dark';
+  try { first = localStorage.getItem('portfolio_theme') === 'light' ? 'light' : 'dark'; } catch { /* storage unavailable */ }
+  const keys = Object.keys(ABOUT_CARD_IMAGES);
+  return [...keys.filter((k) => k.startsWith(first)), ...keys.filter((k) => !k.startsWith(first))].map((k) => ABOUT_CARD_IMAGES[k]);
 };
 
 // Touch phone or small tablet (coarse pointer, under laptop width)
@@ -214,7 +222,10 @@ function App() {
             () => warmImage(ROTATING_EMBLEM_SRC),
             () => warmImage(SAKURA_BRANCH_SRC),
             () => warmRender('contact'),
-            ...Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src)),
+            // Phones & tablets draw the About card backs from pictures: current theme first, then the other
+            ...(IS_TOUCH_DEVICE ? aboutCardWarmOrder().map((src) => () => warmImage(src)) : []),
+            // Building photos are on the card fronts, which phones never show
+            ...(isMobile ? [] : Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src))),
             () => warmRender('about'),
             () => warmRender('projects'),
           ], 0);
