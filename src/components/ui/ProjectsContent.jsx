@@ -427,6 +427,7 @@ const SECTION_TONES = [
   { light: 'bg-cyan-50/80 border-cyan-200', dark: 'bg-cyan-950/20 border-cyan-500/20', heading: 'text-cyan-500' },
   { light: 'bg-emerald-50/80 border-emerald-200', dark: 'bg-emerald-950/20 border-emerald-500/20', heading: 'text-emerald-500' },
   { light: 'bg-indigo-50/80 border-indigo-200', dark: 'bg-indigo-950/20 border-indigo-500/20', heading: 'text-indigo-400' },
+  { light: 'bg-amber-50/80 border-amber-200', dark: 'bg-amber-950/20 border-amber-500/20', heading: 'text-amber-500' },
 ];
 
 // Frontend work: case studies from my day job, plus this site's performance story
@@ -440,12 +441,13 @@ const workData = [
     description: "A unified UI library I built and published at Jio. It is used across Jio's enterprise applications, including JioWorks, JioCampaigns, JioFace and JioMiddleware.",
     sections: [
       { label: "The Goal", text: "Give Jio's enterprise products one shared, consistent set of UI building blocks, so teams could build screens faster instead of each rebuilding the same inputs, dropdowns and headers." },
-      { label: "What I Built", text: "The initial setup took three months: input boxes, checkboxes, radios, buttons, dropdowns, multi-selects, search, headers, icons and custom scrollbars. The components are plain HTML, CSS and JavaScript, and developers copy ready-made code straight from the library's website." },
-      { label: "Design Decisions", text: "Three themes, primary, secondary and tertiary, are built into every component through shared mixins, so every product stays visually consistent." },
+      { label: "What I Built", text: "The initial setup took three months and covers the basics you'd expect from a library like Material UI. Inputs: text fields, textareas, checkboxes, radios, toggle switches, dropdowns, multi-selects, search, date pickers and sliders. Feedback: modals, toasts, tooltips and loaders. Data display: tables, cards, chips and badges. Plus buttons, headers, icons and custom scrollbars." },
+      { label: "How Teams Use It", text: "Components are built with HTML, CSS and JavaScript. Developers integrate one by adding the code and APIs documented on the library's website." },
+      { label: "Design Decisions", text: "Three themes, primary, secondary and tertiary, are built into every component, so every product stays visually consistent." },
       { label: "Adoption & Impact", text: "Hosted internally at Jio and consumed by its enterprise applications, including JioWorks, JioCampaigns, JioFace and JioMiddleware. Feature delivery became 30% faster. jioworks.io is built with it." },
     ],
     fullDetails: { liveUrl: "https://www.jioworks.io", liveLabel: "See JioWorks" },
-    tech: ["HTML", "CSS", "JavaScript", "Mixins & Themes", "Angular", "React"],
+    tech: ["HTML", "CSS", "JavaScript", "Theming", "Angular", "React"],
     glow: "from-violet-500 to-fuchsia-600",
     metrics: "30% Faster",
     lightBg: "bg-gradient-to-b from-[#ddd6fe] via-[#ede9fe] to-[#ddd6fe] border border-violet-400 shadow-md shadow-violet-900/10 group-hover:border-violet-500 group-hover:shadow-violet-400/20",
