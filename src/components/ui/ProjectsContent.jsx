@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogoLoop } from './LogoLoop';
+import { getPageFit } from '../../lib/pageFit';
 import { FloatingBubbles } from './FloatingBubbles';
 import angularLogo from '../../assets/tech/angular.svg';
 import css3Logo from '../../assets/tech/css3.svg';
@@ -530,9 +531,8 @@ export const ProjectsContent = ({ theme }) => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [viewportHeight, setViewportHeight] = useState(() =>
-    typeof window !== 'undefined' ? window.innerHeight : 800
-  );
+  // page height after any short-screen fit (see lib/pageFit)
+  const [viewportHeight, setViewportHeight] = useState(() => getPageFit().h);
 
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? (window.innerWidth < 768 || window.innerHeight < 520) : false
@@ -542,7 +542,7 @@ export const ProjectsContent = ({ theme }) => {
     const handleResize = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      setViewportHeight(h);
+      setViewportHeight(getPageFit().h);
       setIsMobile(w < 768 || h < 520);
     };
     handleResize();
@@ -603,7 +603,7 @@ export const ProjectsContent = ({ theme }) => {
   const currentProject = projectsData[activeMobileIndex];
 
   return (
-    <div className="w-screen h-screen max-h-screen flex flex-col justify-between items-center select-none pointer-events-auto relative overflow-hidden py-2 sm:py-4 px-3 sm:px-6">
+    <div className="w-[var(--page-w,100vw)] h-[var(--page-h,100vh)] max-h-[var(--page-h,100vh)] flex flex-col justify-between items-center select-none pointer-events-auto relative overflow-hidden py-2 sm:py-4 px-3 sm:px-6">
 
       {/* Floating Bubbles Backdrop */}
       <FloatingBubbles />

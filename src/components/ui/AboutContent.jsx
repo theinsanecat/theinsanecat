@@ -865,7 +865,7 @@ export const AboutContent = ({ theme }) => {
 
   return (
     <ThemeLayersContext.Provider value={themeLayers}>
-    <div className="relative w-screen h-screen max-h-screen flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 lg:pb-6">
+    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100vh)] max-h-[var(--page-h,100vh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 lg:pb-6">
 
       {/* Aurora Background */}
       <div className="absolute inset-0 pointer-events-none z-0">

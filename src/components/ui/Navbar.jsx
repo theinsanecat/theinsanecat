@@ -3,7 +3,7 @@ import { usePerformanceMode } from '../../context/PerformanceContext';
 import GlassSurface from './GlassSurface';
 import BorderGlow from './BorderGlow';
 
-export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => {
+export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitScale = 1 }) => {
   const { performanceMode, setPerformanceMode } = usePerformanceMode();
 
   const cyclePerformanceMode = () => {
@@ -32,6 +32,8 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      // short laptop-width screens: scaled together with the page content (see lib/pageFit)
+      style={fitScale < 1 ? { scale: fitScale, originX: 0, originY: 0, width: `${100 / fitScale}vw` } : undefined}
       className="fixed top-0 left-0 w-full z-50 px-2 sm:px-6 md:px-16 py-3 sm:py-5 flex items-center justify-between pointer-events-auto"
     >
       {/* Logo: Glowing typography with responsive scaling */}

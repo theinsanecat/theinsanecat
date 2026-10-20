@@ -15,6 +15,7 @@ import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship'
 import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
 import { ResumeViewer } from './components/ui/ResumeViewer';
 import { warmImage, runWhenIdle } from './lib/assetWarmup';
+import { usePageFit } from './lib/pageFit';
 import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
@@ -56,6 +57,27 @@ const ResumeDeepLink = ({ onOpen }) => {
     navigate('/', { replace: true });
   }, [onOpen, navigate]);
   return null;
+};
+
+// Short laptop-width screens: lay the page out at the design height, then scale it to fit.
+// At normal heights (s === 1) this renders the children untouched.
+const FitBox = ({ fit, children }) => {
+  if (fit.s === 1) return children;
+  return (
+    <div
+      className="relative shrink-0 flex items-center justify-center"
+      style={{
+        width: `${fit.w}px`,
+        height: `${fit.h}px`,
+        transform: `scale(${fit.s})`,
+        transformOrigin: '50% 50%',
+        '--page-w': `${fit.w}px`,
+        '--page-h': `${fit.h}px`,
+      }}
+    >
+      {children}
+    </div>
+  );
 };
 
 const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
@@ -128,6 +150,7 @@ function App() {
   });
 
   const location = useLocation();
+  const pageFit = usePageFit();
   const navigate = useNavigate();
 
   // Sync activeSection with react-router-dom path
@@ -282,8 +305,7 @@ function App() {
         activeSection={activeSection} 
         setActiveSection={handleSectionChange} 
         theme={theme} 
-        setTheme={setTheme} 
-      />
+        setTheme={setTheme} fitScale={pageFit.s} />
       <ResumeViewer isOpen={isResumeOpen} onClose={closeResume} theme={theme} />
 
       {/* 1. Deepest Cosmic / Day Sky Layer */}
@@ -363,7 +385,7 @@ function App() {
       <AnimatePresence>
         {activeSection === 'contact' && (
           <Suspense key={isMobileViewport ? 'lotus-lake-mob' : 'lotus-lake'} fallback={null}>
-            {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} />}
+            {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} fitScale={pageFit.s} />}
           </Suspense>
         )}
       </AnimatePresence>
@@ -385,7 +407,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
+                    <FitBox fit={pageFit}><HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} /></FitBox>
                   </motion.div>
                 }
               />
@@ -401,7 +423,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <Suspense fallback={null}><AboutContent theme={theme} /></Suspense>
+                    <FitBox fit={pageFit}><Suspense fallback={null}><AboutContent theme={theme} /></Suspense></FitBox>
                   </motion.div>
                 }
               />
@@ -417,7 +439,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <Suspense fallback={null}><ProjectsContent theme={theme} /></Suspense>
+                    <FitBox fit={pageFit}><Suspense fallback={null}><ProjectsContent theme={theme} /></Suspense></FitBox>
                   </motion.div>
                 }
               />
@@ -433,7 +455,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
                   >
-                    <Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} onOpenResume={openResume} /></Suspense>
+                    <FitBox fit={pageFit}><Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} onOpenResume={openResume} /></Suspense></FitBox>
                   </motion.div>
                 }
               />
