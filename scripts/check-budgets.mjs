@@ -16,7 +16,7 @@ const BUDGETS = {
   imageBytes: 200 * KB, // any single image (webp/avif/png/jpg/svg) that ships
   fontBytes: 20 * KB, // any single font file (should be subset woff2)
   pdfBytes: 1024 * KB, // the résumé
-  totalBytes: 1.6 * 1024 * KB, // whole dist folder, uncompressed
+  totalBytes: 2.0 * 1024 * KB, // whole dist folder, uncompressed (includes ~220 KB of About card pictures that only phones/tablets load)
 };
 
 if (!fs.existsSync(DIST)) {

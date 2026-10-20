@@ -14,9 +14,11 @@ import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
 import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship';
 import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
 import { ResumeViewer } from './components/ui/ResumeViewer';
+import { RotateNotice } from './components/ui/RotateNotice';
 import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { usePageFit } from './lib/pageFit';
-import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
+import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES, ABOUT_CARD_IMAGES } from './lib/artAssets';
+import { IS_TOUCH_DEVICE } from './context/PerformanceContext';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
 // Each page ships in its own chunk. They are all fetched in parallel right after Home's first paint,
@@ -80,6 +82,17 @@ const FitBox = ({ fit, children }) => {
   );
 };
 
+const aboutCardWarmOrder = () => {
+  let first = 'dark';
+  try { first = localStorage.getItem('portfolio_theme') === 'light' ? 'light' : 'dark'; } catch { /* storage unavailable */ }
+  const keys = Object.keys(ABOUT_CARD_IMAGES);
+  return [...keys.filter((k) => k.startsWith(first)), ...keys.filter((k) => !k.startsWith(first))].map((k) => ABOUT_CARD_IMAGES[k]);
+};
+
+// Touch phone or small tablet (coarse pointer, under laptop width)
+const IS_TOUCH_PHONE = () =>
+  typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024;
+
 const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
 
 // ================= GLOBAL FLOATING GUIDE CONTAINER =================
@@ -140,6 +153,13 @@ function App() {
   });
 
   const setTheme = (newTheme) => {
+    // Phones: switch instantly. Cross-fading every layer of both themes at once needs more graphics
+    // memory than iPhone Safari gives a tab, and it blanks the screen (gray, then black) mid-fade.
+    if (IS_TOUCH_PHONE()) {
+      const root = document.documentElement;
+      root.dataset.themeSwitch = 'instant';
+      requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(() => { delete root.dataset.themeSwitch; }, 50)));
+    }
     setThemeState(newTheme);
     localStorage.setItem('portfolio_theme', newTheme);
   };
@@ -202,7 +222,10 @@ function App() {
             () => warmImage(ROTATING_EMBLEM_SRC),
             () => warmImage(SAKURA_BRANCH_SRC),
             () => warmRender('contact'),
-            ...Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src)),
+            // Phones & tablets draw the About card backs from pictures: current theme first, then the other
+            ...(IS_TOUCH_DEVICE ? aboutCardWarmOrder().map((src) => () => warmImage(src)) : []),
+            // Building photos are on the card fronts, which phones never show
+            ...(isMobile ? [] : Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src))),
             () => warmRender('about'),
             () => warmRender('projects'),
           ], 0);
@@ -298,7 +321,7 @@ function App() {
   const constellationOpacity = useTransform(mouseY, [-1, -0.1, 0.4], [0.95, 0.5, 0]);
 
   return (
-    <main className={`relative w-screen h-screen overflow-hidden theme-transition ${theme === 'light' ? 'bg-[#faf5f0]' : 'bg-[#07010e]'}`}>
+    <main className={`relative w-screen h-app overflow-hidden theme-transition ${theme === 'light' ? 'bg-[#faf5f0]' : 'bg-[#07010e]'}`}>
       <GlobalSVGDefs />
       {/* 0. Header Navigation Overlay with Theme Switch */}
       <Navbar 
@@ -306,6 +329,7 @@ function App() {
         setActiveSection={handleSectionChange} 
         theme={theme} 
         setTheme={setTheme} fitScale={pageFit.s} />
+      <RotateNotice theme={theme} />
       <ResumeViewer isOpen={isResumeOpen} onClose={closeResume} theme={theme} />
 
       {/* 1. Deepest Cosmic / Day Sky Layer */}

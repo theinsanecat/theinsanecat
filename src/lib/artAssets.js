@@ -17,3 +17,10 @@ export const ABOUT_IMAGES = {
   mumbai: `${base}images/mumbai-university-building.webp`,
   dav: `${base}images/dav-school-building.webp`,
 };
+
+// About card backs as pictures for phones & tablets, keyed `${theme}-${cardId}` (e.g. "dark-3").
+// Rendered from the live SVG cards by scripts/render-about-cards.mjs (run it again if the card art changes).
+const cardFiles = import.meta.glob('../assets/art/about-cards/*.webp', { eager: true, query: '?url', import: 'default' });
+export const ABOUT_CARD_IMAGES = Object.fromEntries(
+  Object.entries(cardFiles).map(([path, url]) => [path.split('/').pop().replace('.webp', ''), url])
+);

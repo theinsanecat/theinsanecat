@@ -788,7 +788,7 @@ export const ProjectsContent = ({ theme }) => {
   const currentProject = list[activeMobileIndex] || list[0];
 
   return (
-    <div className="w-[var(--page-w,100vw)] h-[var(--page-h,100vh)] max-h-[var(--page-h,100vh)] flex flex-col justify-between items-center select-none pointer-events-auto relative overflow-hidden py-2 sm:py-4 px-3 sm:px-6">
+    <div className="w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto relative overflow-hidden py-2 sm:py-4 px-3 sm:px-6">
 
       {/* Floating Bubbles Backdrop */}
       <FloatingBubbles />
@@ -854,9 +854,10 @@ export const ProjectsContent = ({ theme }) => {
             </button>
 
             {/* Main Featured Mobile Card */}
-            <AnimatePresence mode="wait" initial={false}>
+            {/* popLayout: the outgoing card slides out while the next slides in, so the screen is never empty */}
+            <AnimatePresence mode="popLayout" initial={false} custom={direction}>
               <motion.div
-                key={currentProject.id}
+                key={`${tab}-${currentProject.id}`}
                 onClick={() => setSelectedProject(currentProject)}
                 initial={{ opacity: 0, x: direction * 45, scale: 0.96 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -864,7 +865,7 @@ export const ProjectsContent = ({ theme }) => {
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 className={`relative w-full rounded-2xl p-[1px] overflow-hidden flex flex-col transform-gpu shadow-xl cursor-pointer ${isLight
                   ? currentProject.lightBg
-                  : 'glass-surface glass-surface-hoverable border border-white/10 group-hover:border-pink-500/50 shadow-black/40'
+                  : 'glass-surface-flat border border-white/10 shadow-black/40'
                   }`}
               >
                 {/* Dynamic glowing background trail */}

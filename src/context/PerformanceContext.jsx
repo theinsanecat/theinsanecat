@@ -11,6 +11,11 @@ const PerformanceContext = createContext({
 
 const MODES = ['full', 'balanced', 'lite'];
 
+// Phones and tablets (touch screen, under laptop width) always get the basic Lite version, with no switch.
+// Read once at load: a phone doesn't become a laptop by rotating.
+export const IS_TOUCH_DEVICE =
+  typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024;
+
 /*
  * One-time hardware probe.
  *  - `failIfMajorPerformanceCaveat: true` makes the browser refuse a WebGL context when it would be
@@ -89,12 +94,12 @@ const readStoredMode = () => {
 
 export const PerformanceProvider = ({ children }) => {
   const [performanceMode, setPerformanceModeState] = useState(() =>
-    typeof window === 'undefined' ? 'full' : readStoredMode() || getDetection().mode
+    typeof window === 'undefined' ? 'full' : IS_TOUCH_DEVICE ? 'lite' : readStoredMode() || getDetection().mode
   );
   const [detectedGpu] = useState(() => (typeof window === 'undefined' ? '' : getDetection().renderer));
 
   const setPerformanceMode = useCallback((mode) => {
-    if (!MODES.includes(mode)) return;
+    if (!MODES.includes(mode) || IS_TOUCH_DEVICE) return;
     setPerformanceModeState(mode);
     try {
       localStorage.setItem('portfolio_perf_mode', mode);
@@ -156,6 +161,7 @@ export const PerformanceProvider = ({ children }) => {
     isFull: performanceMode === 'full',
     isBalanced: performanceMode === 'balanced',
     isLite: performanceMode === 'lite',
+    modeLocked: IS_TOUCH_DEVICE,
     detectedGpu,
   }), [performanceMode, setPerformanceMode, detectedGpu]);
 
