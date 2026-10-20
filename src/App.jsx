@@ -122,12 +122,6 @@ function App() {
     localStorage.setItem('portfolio_theme', newTheme);
   };
 
-  // Detect mobile & tablet viewport (< 1024px)
-  const [isSmallViewport, setIsSmallViewport] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth < 1024;
-  });
-
   const [isMobileViewport, setIsMobileViewport] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.innerWidth < 768;
@@ -194,39 +188,23 @@ function App() {
     return () => { clearTimeout(t); cancelIdle(); };
   }, [warmRender]);
 
-  // Block route navigation on mobile & tablet viewport (< 1024px)
+  // Track phone-sized viewport (< 768px)
   useEffect(() => {
-    const handleResize = () => {
-      const isSmall = window.innerWidth < 1024;
-      setIsSmallViewport(isSmall);
-      setIsMobileViewport(window.innerWidth < 768);
-      if (isSmall && location.pathname !== '/') {
-        navigate('/', { replace: true });
-      }
-    };
+    const handleResize = () => setIsMobileViewport(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [location.pathname, navigate]);
+  }, []);
 
-  useEffect(() => {
-    if (isSmallViewport && location.pathname !== '/') {
-      navigate('/', { replace: true });
-    }
-  }, [isSmallViewport, location.pathname, navigate]);
 
   // Section navigation handler using react-router-dom navigate
   const handleSectionChange = useCallback((newSection) => {
-    if (isSmallViewport) {
-      navigate('/');
-      return;
-    }
     const path = newSection === 'home' ? '/' : `/${newSection}`;
     const loader = ROUTE_LOADERS[newSection];
     // Make sure the page's code is there BEFORE switching, so the page content and the landscape
     // transition start in the same frame (instead of the landscape moving and the content popping in later).
     if (!loader) navigate(path);
     else loader().then(() => navigate(path), () => navigate(path));
-  }, [isSmallViewport, navigate]);
+  }, [navigate]);
 
   const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'projects';
 

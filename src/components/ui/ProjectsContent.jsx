@@ -844,7 +844,7 @@ export const ProjectsContent = ({ theme }) => {
       )}
 
       {/* ── Tech Stack Loop (ReactBits LogoLoop Component) at the bottom ── */}
-      <div className={`w-full mt-1 sm:mt-4 max-w-5xl z-20 border-t pt-2 sm:pt-3 flex flex-col items-center shrink-0 pointer-events-none select-none transition-colors duration-500 ease-in-out ${isLight ? 'border-purple-200' : 'border-purple-500/10'
+      <div className={`w-full mt-1 sm:mt-4 mb-16 lg:mb-0 max-w-5xl z-20 border-t pt-2 sm:pt-3 flex flex-col items-center shrink-0 pointer-events-none select-none transition-colors duration-500 ease-in-out ${isLight ? 'border-purple-200' : 'border-purple-500/10'
         }`}>
         <span className={`text-[8px] sm:text-[9px] font-black tracking-widest uppercase mb-1.5 sm:mb-3 transition-colors duration-500 ease-in-out ${isLight ? 'text-pink-600' : 'text-cyan-400'
           }`}>

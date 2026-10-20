@@ -966,7 +966,7 @@ export const AboutContent = ({ theme }) => {
                 if (isMobile) {
                   // Mobile screens: card centered higher at top, details text BELOW card with clean 20px vertical gap
                   targetX = 0;
-                  targetY = isSmallScreen ? -140 : -150;
+                  targetY = isSmallScreen ? -215 : -225; // keep the card clear of the details heading below it
                   rotateZ = 0;
                   scale = isSmallScreen ? 0.36 : 0.40;
                   opacity = 1;

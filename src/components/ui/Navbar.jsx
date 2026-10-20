@@ -178,20 +178,32 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         </div>
       </div>
 
-      {/* Mobile & Tablet Laptop Recommendation Prompt */}
-      <div className="absolute top-[calc(100%+4px)] sm:top-[calc(100%+6px)] left-1/2 -translate-x-1/2 pointer-events-auto z-40 lg:hidden w-max max-w-[92vw]">
-        <div className={`text-[9.5px] xs:text-[10.5px] sm:text-xs font-bold tracking-tight transition-colors duration-500 flex items-center justify-center gap-1.5 opacity-95 ${
-          isLight ? 'text-pink-600' : 'text-purple-300'
+      {/* Mobile & tablet navigation (< lg): bottom tab bar, thumb-reachable */}
+      <div
+        className="lg:hidden fixed left-1/2 -translate-x-1/2 z-50 pointer-events-auto"
+        style={{ bottom: 'calc(10px + env(safe-area-inset-bottom, 0px))' }}
+      >
+        <div className={`flex items-center gap-0.5 p-1 rounded-full border shadow-lg transition-colors duration-700 ${
+          isLight ? 'bg-white/90 border-pink-200 shadow-pink-900/10' : 'bg-[#1b1235]/90 border-purple-500/30 shadow-black/40'
         }`}>
-          <span className="relative flex h-1.5 w-1.5 shrink-0 opacity-90">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-              isLight ? 'bg-pink-400' : 'bg-purple-400'
-            }`}></span>
-            <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-              isLight ? 'bg-pink-500' : 'bg-purple-500'
-            }`}></span>
-          </span>
-          <span>Best experienced on a laptop or desktop</span>
+          {[...navLinks, { id: 'contact', name: 'Say Hello' }].map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => setActiveSection(link.id)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`px-3 xs:px-3.5 py-1.5 rounded-full text-[11px] xs:text-xs font-semibold whitespace-nowrap transition-colors duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 ${
+                  isActive
+                    ? (isLight ? 'bg-pink-500 text-white focus-visible:ring-pink-300' : 'bg-purple-600 text-white focus-visible:ring-purple-300')
+                    : (isLight ? 'text-slate-700 hover:text-pink-600 focus-visible:ring-pink-300' : 'text-purple-100/80 hover:text-white focus-visible:ring-purple-300')
+                }`}
+              >
+                {link.name}
+              </button>
+            );
+          })}
         </div>
       </div>
     </motion.nav>
