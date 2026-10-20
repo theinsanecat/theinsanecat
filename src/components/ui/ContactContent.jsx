@@ -88,7 +88,9 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
       <MagicalButterflies theme={theme} />
       
       {/* GLOBAL DEFINITIONS (Glows & Shadows) */}
-      <svg className="hidden">
+      {/* Shared SVG filters. Not display:none: Safari (every iPhone browser) refuses to draw anything
+          whose filter points into a display:none SVG, so the artwork using these vanished on iOS */}
+      <svg aria-hidden="true" width="0" height="0" className="absolute w-0 h-0 overflow-hidden pointer-events-none">
         <defs>
           <filter id="heavy-shadow-contact" x="-30%" y="-30%" width="160%" height="160%">
             <feDropShadow dx="0" dy="12" stdDeviation="8" floodColor="#000000" floodOpacity="0.7"/>

@@ -35,6 +35,14 @@
 }
 
 @layer base {
+  /* Single-screen site: nothing should scroll the page itself (modals and panels scroll inside) */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
   body {
     @apply bg-black text-white antialiased overflow-x-hidden selection:bg-purple-500/30 selection:text-purple-200;
     font-family: 'Questrial', 'Inter', system-ui, -apple-system, sans-serif;
@@ -169,6 +177,15 @@
               inset 0 -1px 0 0 rgba(255, 255, 255, 0.03),
               0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Same look as .glass-surface without the live backdrop blur: for cards that slide/fade on phones,
+   where a backdrop blur is rebuilt every frame of the fade and flickers */
+.glass-surface-flat {
+  background: rgba(24, 14, 46, 0.72);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+              inset 0 -1px 0 0 rgba(255, 255, 255, 0.03),
+              0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 .glass-surface-hoverable:hover {
@@ -559,4 +576,30 @@ html[data-perf="lite"] .emblem-spin,
 html[data-perf="lite"] .animate-branch-sway,
 html[data-perf="lite"] [class^="aurora-blob-"] {
   will-change: auto; /* nothing moves: let the browser flatten these into fewer layers */
+}
+
+/* Full visible screen height. 100vh on phones includes the area behind the browser's address bar,
+   which pushed the bottom of each page under the toolbar and made the page scroll; dvh is the
+   height you can actually see. 100vh stays as the fallback for older browsers. */
+.h-app {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Phone held sideways: cover the site with the rotate notice (see RotateNotice.jsx) */
+.rotate-notice { display: none; }
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  .rotate-notice { display: flex; }
+}
+@keyframes rotate-notice-turn {
+  0%, 20% { transform: rotate(-90deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+.rotate-notice-phone { animation: rotate-notice-turn 2.4s ease-in-out infinite; }
+
+/* Phones: theme switch without cross-fade (see setTheme in App.jsx) */
+html[data-theme-switch="instant"] *,
+html[data-theme-switch="instant"] *::before,
+html[data-theme-switch="instant"] *::after {
+  transition: none !important;
 }

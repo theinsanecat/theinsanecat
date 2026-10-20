@@ -16,6 +16,11 @@ const useThemeLayers = (theme) => {
   const [crossfading, setCrossfading] = useState(false);
   useEffect(() => {
     if (theme === visualTheme) return undefined;
+    // Phones swap straight away: mounting both artwork sets at once is too much for iPhone Safari
+    if (window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024) {
+      const r = requestAnimationFrame(() => setVisualTheme(theme));
+      return () => cancelAnimationFrame(r);
+    }
     // 1) mount both sets while still showing the old theme, 2) two frames later flip -> CSS cross-fade
     setCrossfading(true);
     let r2;
@@ -544,45 +549,59 @@ const CardFront = ({ card, isSelected, theme, isMobile }) => {
   );
 };
 
+// ─── Glow behind the front card ────────────────────────────────────────────────
+// One fixed layer at the front-card position (not inside each card), so the glow stays put while
+// the deck turns instead of leaving with the old card and fading back in on the new one.
+const CenterGlow = ({ theme, scale, visible }) => (
+  <div
+    aria-hidden="true"
+    className="absolute pointer-events-none transition-opacity duration-700 ease-in-out"
+    style={{
+      top: '50%', left: '50%', width: 300, height: 450, marginTop: -225, marginLeft: -150,
+      transform: `scale(${scale})`, zIndex: 1, opacity: visible ? 1 : 0,
+    }}
+  >
+      {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
+      <div
+        className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-90' : 'opacity-0'
+          }`}
+      />
+
+      {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
+      <div
+        className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-90' : 'opacity-0'
+          }`}
+      />
+
+      {/* Radiant Glowing Aura Disk - Light Mode */}
+      <div
+        className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-85' : 'opacity-0'
+          }`}
+      />
+
+      {/* Radiant Glowing Aura Disk - Dark Mode */}
+      <div
+        className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-85' : 'opacity-0'
+          }`}
+      />
+
+      {/* Glowing Outer Card Frame Halo - Light Mode */}
+      <div
+        className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-90' : 'opacity-0'
+          }`}
+      />
+
+      {/* Glowing Outer Card Frame Halo - Dark Mode */}
+      <div
+        className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-90' : 'opacity-0'
+          }`}
+      />
+  </div>
+);
+
 // ─── Full Card (flipper wrapper with standalone perspective camera) ─────────────
 const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile }) => (
   <div className="w-full h-full relative perspective-[1500px] transform-gpu">
-    {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
-    <div
-      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
-
-    {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
-    <div
-      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
-
-    {/* Radiant Glowing Aura Disk - Light Mode */}
-    <div
-      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-85' : 'opacity-0'
-        }`}
-    />
-
-    {/* Radiant Glowing Aura Disk - Dark Mode */}
-    <div
-      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-85' : 'opacity-0'
-        }`}
-    />
-
-    {/* Glowing Outer Card Frame Halo - Light Mode */}
-    <div
-      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'light' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
-
-    {/* Glowing Outer Card Frame Halo - Dark Mode */}
-    <div
-      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${isCenterUnturned && theme === 'dark' ? 'opacity-90' : 'opacity-0'
-        }`}
-    />
-
     {/* Smooth Floating Container: GPU CSS Accelerated */}
     <div
       className={`w-full h-full relative preserve-3d transform-gpu ${isCenterUnturned ? 'animate-card-float' : ''}`}
@@ -865,7 +884,7 @@ export const AboutContent = ({ theme }) => {
 
   return (
     <ThemeLayersContext.Provider value={themeLayers}>
-    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100vh)] max-h-[var(--page-h,100vh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 lg:pb-6">
+    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 lg:pb-6">
 
       {/* Aurora Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -873,7 +892,9 @@ export const AboutContent = ({ theme }) => {
       </div>
 
       {/* Global SVG Filters */}
-      <svg className="hidden">
+      {/* Shared SVG filters. Not display:none: Safari (every iPhone browser) refuses to draw anything
+          whose filter points into a display:none SVG, so the artwork using these vanished on iOS */}
+      <svg aria-hidden="true" width="0" height="0" className="absolute w-0 h-0 overflow-hidden pointer-events-none">
         <defs>
           <filter id="heavy-shadow" x="-30%" y="-30%" width="160%" height="160%">
             <feDropShadow dx="0" dy="12" stdDeviation="8" floodColor="#000000" floodOpacity="0.7" />
@@ -919,6 +940,8 @@ export const AboutContent = ({ theme }) => {
               }`}
             style={{ width: '1100px', height: '1100px', bottom: '-830px', opacity: selectedCardId ? 0 : 1 }}
           />
+
+          <CenterGlow theme={theme} scale={deckScale} visible={!selectedCardId} />
 
           {/* Cards mapping - stays entirely mounted to morph dynamically */}
           {cardsData.map((card, index) => {
