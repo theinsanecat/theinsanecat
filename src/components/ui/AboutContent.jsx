@@ -700,7 +700,7 @@ const MathReflectionModal = ({ isOpen, onClose, theme }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300 z-0"
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-0"
           />
 
           {/* Modal Card Container (Landscape Layout) */}
