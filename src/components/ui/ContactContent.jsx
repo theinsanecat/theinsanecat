@@ -4,25 +4,14 @@ import meDarkImg from '../../assets/me.webp';
 import meLightImg from '../../assets/me_light.webp';
 import { ROTATING_EMBLEM_SRC } from '../../lib/artAssets';
 import { useImageReady } from '../../hooks/useImageReady';
+import { RESUME_URL } from './ResumeViewer';
 import { SakuraBranch } from './SakuraBranch';
 import MagicalButterflies from './MagicalButterflies';
 import BorderGlow from './BorderGlow';
 
-const EMAIL = 'soumya.dwivedi05@gmail.com';
-
 export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpenResume }) => {
   const isLight = theme === 'light';
   const [isHovered, setIsHovered] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      window.location.href = `mailto:${EMAIL}`;
-    }
-  };
   // Emblem fades in once decoded (normally already warmed up from Home)
   const emblemReady = useImageReady(ROTATING_EMBLEM_SRC);
   const [isMobile, setIsMobile] = useState(() =>
@@ -73,6 +62,18 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
       icon: (
         <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-1.298 1.458-2.051 2.507-1.263L12 11.302l9.493-7.108C22.541 3.406 24 4.159 24 5.457z"/>
+        </svg>
+      )
+    },
+    {
+      name: "Résumé",
+      url: RESUME_URL,
+      onClick: onOpenResume, // opens the in-page viewer; the href still works as a fallback / new-tab link
+      color: "hover:text-pink-400 hover:border-pink-500/40",
+      glowColor: "group-hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]",
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
         </svg>
       )
     }
@@ -278,6 +279,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick(); } : undefined}
                 className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-[#1e1832] bg-white/85 hover:bg-white border border-purple-200/90 shadow-sm rounded-full hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
               >
                 <span className="text-purple-600 group-hover:text-pink-600 transition-colors duration-300">
@@ -305,6 +307,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick(); } : undefined}
                   className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-white focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
                 >
                   <span className={`transition-colors duration-300 ${link.color}`}>
@@ -318,46 +321,8 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
             </div>
           </div>
         ))}
-
-        {/* Résumé: same pill shape as the social buttons */}
-        <button
-          type="button"
-          onClick={onOpenResume}
-          className={`px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide rounded-full flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap text-white transition-all duration-300 hover:-translate-y-1 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 ${
-            isLight
-              ? 'bg-gradient-to-r from-[#ff5e97] to-[#ec4899] shadow-md shadow-pink-500/25 focus-visible:ring-pink-400'
-              : 'bg-gradient-to-r from-purple-600 to-pink-600 shadow-md shadow-purple-900/40 focus-visible:ring-purple-400'
-          }`}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5 h-5" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-          </svg>
-          <span>Résumé</span>
-        </button>
       </motion.div>
 
-      {/* Direct details: email you can read & copy, location, résumé */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className={`mt-4 sm:mt-5 flex flex-col items-center gap-2.5 text-center z-30 ${isLight ? 'text-[#2e1065]' : 'text-purple-100/90'}`}
-      >
-        <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-semibold">
-          <a href={`mailto:${EMAIL}`} className={`underline-offset-4 hover:underline ${isLight ? 'text-pink-700' : 'text-pink-300'}`}>{EMAIL}</a>
-          <button
-            type="button"
-            onClick={copyEmail}
-            className={`px-2.5 py-0.5 rounded-full border text-[10px] sm:text-xs font-bold transition-colors duration-300 cursor-pointer ${
-              isLight ? 'border-purple-200 bg-white/80 hover:bg-white' : 'border-purple-400/30 bg-white/5 hover:bg-white/10'
-            }`}
-            aria-live="polite"
-          >
-            {copied ? 'Copied ✓' : 'Copy'}
-          </button>
-          <span className={`text-[11px] sm:text-xs font-medium ${isLight ? 'text-slate-600' : 'text-purple-200/75'}`}>· India · IST</span>
-        </div>
-      </motion.div>
       
     </div>
   );

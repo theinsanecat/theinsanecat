@@ -3,7 +3,7 @@ import { usePerformanceMode } from '../../context/PerformanceContext';
 import GlassSurface from './GlassSurface';
 import BorderGlow from './BorderGlow';
 
-export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, onOpenResume }) => {
+export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => {
   const { performanceMode, setPerformanceMode } = usePerformanceMode();
 
   const cyclePerformanceMode = () => {
@@ -143,23 +143,6 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, onOpe
               <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clipRule="evenodd" />
             </svg>
           )}
-        </button>
-
-        {/* Résumé button: visible on every screen size */}
-        <button
-          type="button"
-          onClick={onOpenResume}
-          className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-full backdrop-blur-md border text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold transition-all duration-700 ease-in-out cursor-pointer active:scale-95 flex items-center gap-1.5 whitespace-nowrap focus:outline-none focus-visible:ring-2 ${
-            isLight
-              ? 'bg-white/80 border-pink-200 text-[#1e1832] hover:bg-pink-50 shadow-sm focus-visible:ring-pink-400'
-              : 'bg-white/10 border-purple-500/30 text-white hover:bg-purple-500/20 shadow-md focus-visible:ring-purple-400'
-          }`}
-          title="View or download my résumé"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-          </svg>
-          Résumé
         </button>
 
         {/* Say Hello CTA Button - Hidden on mobile & tablet (< lg) */}
