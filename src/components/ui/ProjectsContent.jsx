@@ -12,7 +12,7 @@ import tailwindLogo from '../../assets/tech/tailwindcss.svg';
 import typescriptLogo from '../../assets/tech/typescript.svg';
 import viteLogo from '../../assets/tech/vitejs.svg';
 
-// Self-hosted devicon logos (MIT, devicon@2.17.0) — no external CDN requests
+// Self-hosted devicon logos (MIT, devicon@2.17.0): no external CDN requests
 const logoImgProps = { width: 20, height: 20, decoding: 'async', draggable: false };
 
 // ─── Interactive Project Details Modal Overlay ─────────────────────────────────
@@ -24,7 +24,7 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
     <AnimatePresence>
       {project && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto pointer-events-auto">
-          {/* Backdrop Overlay — no backdrop-blur on mobile (forces full-page GPU rasterization layer on WebKit) */}
+          {/* Backdrop Overlay: no backdrop-blur on mobile (forces full-page GPU rasterization layer on WebKit) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

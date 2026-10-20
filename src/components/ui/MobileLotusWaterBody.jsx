@@ -20,7 +20,7 @@ export const MobileLotusWaterBody = ({ theme }) => {
         viewBox="0 0 600 180"
         preserveAspectRatio="xMidYMax slice"
       >
-        {/* ================= 1. WATER BACKGROUND WAVES — GPU CSS ANIMATED ================= */}
+        {/* ================= 1. WATER BACKGROUND WAVES: GPU CSS ANIMATED ================= */}
         <g id="water-background-waves-mob">
           {/* Layer 1: Back Wave */}
           <path

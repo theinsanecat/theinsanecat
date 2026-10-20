@@ -110,7 +110,7 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
         Angular · React · TypeScript · Design Systems
       </motion.p>
 
-      {/* Interactive Call to Action buttons — Hidden on mobile & tablet (< lg), visible on desktop */}
+      {/* Interactive Call to Action buttons: Hidden on mobile & tablet (< lg), visible on desktop */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}

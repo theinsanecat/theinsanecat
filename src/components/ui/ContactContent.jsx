@@ -148,7 +148,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
         </div>
       </motion.div>
 
-      {/* Emblem & Circular Avatar Tile Wrapper — Enters together as a synchronized unit */}
+      {/* Emblem & Circular Avatar Tile Wrapper: Enters together as a synchronized unit */}
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -161,7 +161,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
           isLight ? 'opacity-100' : 'opacity-0'
         }`} />
 
-        {/* Slowly Rotating SVG Emblem Background — Pure CSS @keyframes spin running on GPU compositor thread (0 JS overhead) */}
+        {/* Slowly Rotating SVG Emblem Background: Pure CSS @keyframes spin running on GPU compositor thread (0 JS overhead) */}
         <div
           className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu emblem-spin"
           style={{
@@ -170,7 +170,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
             WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
           }}
         >
-          {/* Single Dynamic Emblem Image — 50% VRAM memory reduction */}
+          {/* Single Dynamic Emblem Image: 50% VRAM memory reduction */}
           <img
             src={ROTATING_EMBLEM_SRC}
             alt=""
@@ -186,7 +186,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
           />
         </div>
 
-        {/* Circular Avatar Tile — Centered at Emblem Center */}
+        {/* Circular Avatar Tile: Centered at Emblem Center */}
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -263,7 +263,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
 
       </motion.div>
 
-      {/* Social Links Row — Scaled for mobile screens (iPhone SE) */}
+      {/* Social Links Row: Scaled for mobile screens (iPhone SE) */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -319,7 +319,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
           </div>
         ))}
 
-        {/* Résumé — same pill shape as the social buttons */}
+        {/* Résumé: same pill shape as the social buttons */}
         <button
           type="button"
           onClick={onOpenResume}
@@ -355,7 +355,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
           >
             {copied ? 'Copied ✓' : 'Copy'}
           </button>
-          <span className={`text-[11px] sm:text-xs font-medium ${isLight ? 'text-slate-600' : 'text-purple-200/75'}`}>· Bengaluru, India · IST</span>
+          <span className={`text-[11px] sm:text-xs font-medium ${isLight ? 'text-slate-600' : 'text-purple-200/75'}`}>· India · IST</span>
         </div>
       </motion.div>
       

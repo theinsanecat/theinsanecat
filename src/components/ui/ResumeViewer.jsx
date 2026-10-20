@@ -100,7 +100,7 @@ export const ResumeViewer = ({ isOpen, onClose, theme }) => {
             <div className="relative flex-1 min-h-0">
               <iframe
                 src={`${RESUME_URL}#view=FitH`}
-                title="Soumya Dwivedi — Résumé (PDF)"
+                title="Soumya Dwivedi, résumé (PDF)"
                 className="hidden sm:block absolute inset-0 w-full h-full bg-white"
               />
               <div className={`sm:hidden flex flex-col items-center justify-center h-full gap-4 p-6 text-center ${isLight ? 'text-slate-700' : 'text-purple-100/85'}`}>

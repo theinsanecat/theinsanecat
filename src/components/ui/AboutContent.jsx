@@ -43,19 +43,19 @@ const cardsData = [
   {
     id: 1,
     heading: "Infosys Limited",
-    title: "Technology Analyst",
+    title: "Senior Software Developer",
     category: "ENTERPRISE FRONTEND",
     backTitle: "01/05",
     date: "Jan 2025 - Present",
     image: ABOUT_IMAGES.infosys,
     description: "Jan 2025 - Present",
     highlights: [
-      "Build and maintain high-stakes banking applications",
-      "Own messy production problems end to end",
-      "Work across teams on systems that scale without getting harder to maintain",
+      "ICICI Bank Forex platform: dynamic rendering patterns for a high-availability banking portal",
+      "Lead cross-functional triage of complex production bugs, cutting time to recovery",
+      "Ship enterprise FX trading features with product and distributed teams, within strict financial compliance",
     ],
     longDescription:
-      "I moved to Bangalore. For someone who had spent most of her life close to home, it was one of the most courageous and nerve-wracking decisions I had ever made, yes, EVER MADE. Not every brave decision feels brave while you're living it. Sometimes it just feels scary, but I am glad I did it, because I learned so much about myself and the people who love me. Somewhere along this journey, I also stopped thinking that good engineering meant making everything perfect, there's much more to it. Today, I care just as much about the people, the problem, and what happens beyond the code. At Infosys, I work on high-stakes banking applications, take ownership of messy production problems, work across teams, and build systems that can grow without becoming harder to live with. I’m still the girl who loves solving problems but I’ve also learned that the best solutions come from curiosity, consistency, empathy, and the courage to keep moving.",
+      "I moved to Bangalore. For someone who had spent most of her life close to home, it was one of the most courageous and nerve-wracking decisions I had ever made, yes, EVER MADE. Not every brave decision feels brave while you're living it. Sometimes it just feels scary, but I am glad I did it, because I learned so much about myself and the people who love me. Somewhere along this journey, I also stopped thinking that good engineering meant making everything perfect, there's much more to it. Today, I care just as much about the people, the problem, and what happens beyond the code. At Infosys, I work on high-stakes banking applications like ICICI Bank's Forex platform, take ownership of messy production problems, work across teams, and build systems that can grow without becoming harder to live with. I’m still the girl who loves solving problems but I’ve also learned that the best solutions come from curiosity, consistency, empathy, and the courage to keep moving.",
     skills: [
       "Production",
       "Bank Application",
@@ -71,19 +71,19 @@ const cardsData = [
   {
     id: 2,
     heading: "Jio Platforms Limited",
-    title: "Software Developer & Team Lead",
+    title: "Software Developer & Frontend Team Lead",
     category: "FRONTEND DEVELOPER",
     backTitle: "02/05",
     date: "Oct 2020 - Dec 2024",
     image: ABOUT_IMAGES.jio,
     description: "Oct 2020 - Dec 2024",
     highlights: [
-      "Grew from developer to team lead over four years",
-      "Built products from scratch and reusable systems for other teams",
-      "The person teammates came to when they were stuck",
+      "Built and published JET Designs, a shared Angular & React UI library that sped up feature delivery by 30%",
+      "Built core admin platforms from scratch: JioWorks, JioCampaigns, JioVMS",
+      "Sub-second render times with Guards, HTTP interceptors, resolvers and RxJS leak prevention",
     ],
     longDescription:
-      "Jio was where I grew into the developer I am today. It wasn't just my first job; it was my college placement, my first company, and the place where my professional journey truly began. That makes this chapter especially dear to my heart. Over four years I went from writing code to leading projects, building products from scratch, creating reusable systems, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
+      "Jio was where I grew into the developer I am today. It wasn't just my first job; it was my college placement, my first company, and the place where my professional journey truly began. That makes this chapter especially dear to my heart. Over four years I went from writing code to leading projects, building products from scratch, creating reusable systems like JET Designs, our UI library, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
     skills: [
       "Team Lead",
       "Web Development",
@@ -134,7 +134,7 @@ const cardsData = [
     image: ABOUT_IMAGES.mumbai,
     description: "2016 - 2020",
     highlights: [
-      "B.E. in Electronics & Telecommunication",
+      "B.E. in Electronics & Telecommunication, CGPA 8.6/10",
       "Organised workshops for juniors and headed my first tech-fest event",
       "Summer Internship Student Coordinator",
     ],
@@ -261,7 +261,7 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
   const themeLayers = useContext(ThemeLayersContext);
   return (
     <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu ${
-      // On mobile: parent motion.div handles opacity — don't apply own opacity classes
+      // On mobile: parent motion.div handles opacity: don't apply own opacity classes
       isMobile ? '' : `transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`
       }`}>
       {/* Background Gradient Face - Light Mode */}
@@ -607,7 +607,7 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMo
         }`}
     />
 
-    {/* Smooth Floating Container — GPU CSS Accelerated */}
+    {/* Smooth Floating Container: GPU CSS Accelerated */}
     <div
       className={`w-full h-full relative preserve-3d transform-gpu ${isCenterUnturned ? 'animate-card-float' : ''}`}
     >

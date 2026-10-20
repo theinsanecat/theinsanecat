@@ -309,7 +309,7 @@ const LotusGraphic = ({ stage, theme }) => {
   );
 };
 
-// Legacy single-SVG lotus (used by MobileLotusWaterBody) — unchanged behaviour.
+// Legacy single-SVG lotus (used by MobileLotusWaterBody): unchanged behaviour.
 export const LotusElement = ({ x, y, scale = 1, stage = "blooming", swayDuration = 6, swayDelay = 0, theme }) => (
   <motion.g
     animate={{
@@ -367,7 +367,7 @@ const PIVOT_Y = -7;
  * Now every wave and every lotus is its own small SVG in its own compositor layer, animated with CSS transforms:
  * each is drawn once, then only moved by the GPU. Positions reproduce the old on-screen placement exactly,
  * including the old Framer behaviour where the sway's x/y keyframes (x±2, y-2..y+3) were applied ON TOP of the
- * inner translate(x, y) — i.e. lotuses sit at (2x, 2y) in lake units. Lotuses that fall completely outside the
+ * inner translate(x, y): i.e. lotuses sit at (2x, 2y) in lake units. Lotuses that fall completely outside the
  * lake on the current screen are simply not rendered (they were invisible anyway).
  */
 const useLakeGeometry = (ref) => {
@@ -448,7 +448,7 @@ export const LotusWaterBody = ({ theme }) => {
       <LotusDefinitions theme={theme} />
 
       <div ref={lakeRef} className="absolute inset-0" style={{ '--s': geo ? geo.s : 1 }}>
-        {/* 1. Water waves — each its own layer, drawn once and slid by the compositor */}
+        {/* 1. Water waves: each its own layer, drawn once and slid by the compositor */}
         {WAVES.map((w) => (
           <svg
             key={w.cls}
@@ -462,7 +462,7 @@ export const LotusWaterBody = ({ theme }) => {
           </svg>
         ))}
 
-        {/* 2. Lotuses — back row first, then front rows (same paint order as before) */}
+        {/* 2. Lotuses: back row first, then front rows (same paint order as before) */}
         {geo && lotuses.map((l) => <LotusLayer key={`${l.x}-${l.y}`} lotus={l} geo={geo} theme={theme} front={l.front} />)}
       </div>
     </motion.div>

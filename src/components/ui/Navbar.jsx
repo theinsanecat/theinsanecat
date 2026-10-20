@@ -145,7 +145,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, onOpe
           )}
         </button>
 
-        {/* Résumé button — visible on every screen size */}
+        {/* Résumé button: visible on every screen size */}
         <button
           type="button"
           onClick={onOpenResume}

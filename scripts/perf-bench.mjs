@@ -8,7 +8,7 @@
  *
  * Options (env vars):
  *   BENCH_URL   default http://localhost:4173/theinsanecat/
- *   BENCH_MODE  full | balanced | lite        (default balanced — what integrated-GPU laptops get)
+ *   BENCH_MODE  full | balanced | lite        (default balanced: what integrated-GPU laptops get)
  *   THROTTLE    CPU slowdown factor           (default 4)
  *   CHROME_PATH path to a Chrome/Chromium binary (default: your installed Google Chrome)
  */
