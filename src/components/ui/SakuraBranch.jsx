@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { usePerformanceMode } from '../../context/PerformanceContext';
+import { SAKURA_BRANCH_SRC } from '../../lib/artAssets';
+import { useImageReady } from '../../hooks/useImageReady';
 
 // Falling Sakura Petal Component originating from Right branch
 const SakuraPetal = ({ id, delay, theme }) => {
@@ -30,41 +32,37 @@ const SakuraPetal = ({ id, delay, theme }) => {
 
   const { xStart, xEnd, yEnd, duration, scale, swayRange } = randomConfig;
 
+  // Compositor-only CSS animation (was a Framer Motion JS keyframe loop per petal).
+  // Same 4 evenly spaced keyframes, linear, same random wind path per petal via CSS variables.
   return (
-    <motion.div
-      initial={{ x: xStart, y: -20, opacity: 0, rotate: 0 }}
-      animate={{
-        x: [
-          xStart,
-          xStart - swayRange,
-          xStart - swayRange / 2,
-          xEnd
-        ],
-        y: [0, yEnd * 0.4, yEnd * 0.7, yEnd],
-        opacity: [0, 1.0, 1.0, 0],
-        rotate: [0, 120, 240, 360],
-      }}
-      transition={{
-        duration: duration,
-        repeat: Infinity,
-        delay: delay,
-        ease: "linear",
-      }}
-      className="absolute top-0 right-10 pointer-events-none z-5 select-none"
+    <div
+      className="absolute top-0 right-10 pointer-events-none z-5 select-none sakura-petal"
       style={{
         width: `${16 * scale}px`,
         height: `${24 * scale}px`,
+        '--x0': `${xStart}px`,
+        '--x1': `${xStart - swayRange}px`,
+        '--x2': `${xStart - swayRange / 2}px`,
+        '--x3': `${xEnd}px`,
+        '--y1': `${yEnd * 0.4}px`,
+        '--y2': `${yEnd * 0.7}px`,
+        '--y3': `${yEnd}px`,
+        animationDuration: `${duration}s`,
+        animationDelay: `${delay}s`,
       }}
     >
-      <svg viewBox="0 0 24 24" className={`w-full h-full ${isLight ? 'text-pink-400 drop-shadow(0 0 6px rgba(244,114,182,0.6))' : 'text-pink-300 drop-shadow(0 0 5px rgba(244,63,94,0.45))'}`} fill="currentColor">
+      <svg viewBox="0 0 24 24" className={`w-full h-full ${isLight ? 'text-pink-400' : 'text-pink-300'}`} fill="currentColor">
         <path d="M12,2C11,5 6,10 6,14C6,18 9,21 12,21C15,21 18,18 18,14C18,10 13,5 12,2Z" />
       </svg>
-    </motion.div>
+    </div>
   );
 };
 
 export const SakuraBranch = ({ theme }) => {
+  const { isLite, isBalanced } = usePerformanceMode();
   const isLight = theme === 'light';
+  // Branch fades in only once decoded (normally already warmed up from Home), never pops in half-drawn
+  const branchReady = useImageReady(SAKURA_BRANCH_SRC);
 
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
@@ -75,8 +73,8 @@ export const SakuraBranch = ({ theme }) => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // On mobile: 5 petals instead of 12 — eliminates 7 concurrent animation threads on mobile GPU
-  const petalCount = isMobile ? 5 : 12;
+  // Lite: 0 ambient petals; Mobile: 4; Balanced: 6; Cinematic: 10
+  const petalCount = isLite ? 0 : isMobile ? 4 : isBalanced ? 6 : 10;
   const petals = Array.from({ length: petalCount }, (_, i) => ({
     id: i,
     delay: i * (isMobile ? 2.4 : 1.2)
@@ -88,11 +86,15 @@ export const SakuraBranch = ({ theme }) => {
         className="absolute top-0 right-0 w-[240px] md:w-[390px] origin-top-right opacity-100 animate-branch-sway"
       >
         <img
-          src={`${import.meta.env.BASE_URL}sakura-branch.svg`}
+          src={SAKURA_BRANCH_SRC}
           alt="Right Sakura Branch"
-          className={`w-full h-auto opacity-100 transition-all duration-500 ${isLight
-              ? 'filter brightness-[1.1] contrast-[1.05] saturate-[1.25] drop-shadow(0 0 20px rgba(244,114,182,0.4))'
-              : 'filter brightness-[0.88] contrast-[1.5] saturate-[1.15] drop-shadow(0 0 25px rgba(244,63,94,0.5)) drop-shadow(0 0 10px rgba(15,23,42,0.8))'
+          width="780"
+          height="780"
+          decoding="async"
+          style={{ opacity: branchReady ? 1 : 0 }}
+          className={`w-full h-auto transition-all duration-500 ${isLight
+              ? 'brightness-[1.1] contrast-[1.05] saturate-[1.25]'
+              : 'brightness-[0.88] contrast-[1.5] saturate-[1.15]'
             }`}
         />
       </div>

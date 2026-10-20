@@ -1,0 +1,26 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npx vite preview --port 4180 --strictPort",
+      "startServerReadyPattern": "Local",
+      "url": ["http://localhost:4180/theinsanecat/"],
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "desktop",
+        "chromeFlags": "--no-sandbox"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.85 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 300 }],
+        "total-byte-weight": ["error", { "maxNumericValue": 1100000 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

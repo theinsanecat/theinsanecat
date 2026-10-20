@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import meDarkImg from '../../assets/me.PNG';
-import meLightImg from '../../assets/me_light.PNG';
+import meDarkImg from '../../assets/me.webp';
+import meLightImg from '../../assets/me_light.webp';
 import GlassSurface from './GlassSurface';
 import BorderGlow from './BorderGlow';
 
@@ -151,6 +151,7 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
             height="auto"
             borderRadius={9999}
             backgroundOpacity={0.08}
+            theme={theme}
             className="sm:w-auto hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
           >
             <button

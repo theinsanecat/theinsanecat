@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { useTransform, motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from './hooks/useMouseParallax';
 import { SkyLayer } from './components/environment/SkyLayer';
@@ -9,52 +10,46 @@ import { MobileMidgroundTrees } from './components/environment/MobileMidgroundTr
 import { MobileForegroundTrees } from './components/environment/MobileForegroundTrees';
 import { Navbar } from './components/ui/Navbar';
 import { HeroContent } from './components/ui/HeroContent';
-import { AboutContent } from './components/ui/AboutContent';
-import { ContactContent } from './components/ui/ContactContent';
-import { ExperienceContent, UFOCatSpaceship, GlobalSVGDefs } from './components/ui/ExperienceContent';
-import { ProjectsContent } from './components/ui/ProjectsContent';
 import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
-import { LotusWaterBody } from './components/ui/LotusWaterBody';
-import { MobileLotusWaterBody } from './components/ui/MobileLotusWaterBody';
-import rotatingEmblem from './assets/rotating-emblem.svg';
+import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship';
+import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
+import { warmImage, runWhenIdle } from './lib/assetWarmup';
+import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
 
-// ================= GLOBAL FLOATING GUIDE CONTAINER WITH SPACE DRIFT =================
-const getRandomBorderCoords = (w, h) => {
-  const edge = Math.floor(Math.random() * 4);
-  let x = 0;
-  let y = 0;
-  
-  // Guard values for extremely small screen dimensions
-  const safeW = Math.max(w, 320);
-  const safeH = Math.max(h, 480);
-  
-  switch (edge) {
-    case 0: // Top Border (below navbar)
-      x = Math.floor(Math.random() * Math.max(safeW - 150, 50)) + 20;
-      y = Math.floor(Math.random() * 60) + 90; // Y: 90px to 150px
-      break;
-    case 1: // Bottom Border (above experience pedestals, out of center cards)
-      x = Math.floor(Math.random() * Math.max(safeW - 150, 50)) + 20;
-      y = safeH - 180 - Math.floor(Math.random() * 60); // Y: safeH-240px to safeH-180px
-      break;
-    case 2: // Left Border
-      x = Math.floor(Math.random() * 60) + 20; // X: 20px to 80px
-      y = Math.floor(Math.random() * Math.max(safeH - 280, 50)) + 120; // Y: 120px to safeH-160px
-      break;
-    case 3: // Right Border
-    default:
-      x = safeW - 130 - Math.floor(Math.random() * 60); // X: safeW-190px to safeW-130px
-      y = Math.floor(Math.random() * Math.max(safeH - 280, 50)) + 120; // Y: 120px to safeH-160px
-      break;
-  }
-  
-  // Final bounds sanity check to ensure the 110px UFO & speech bubble remain inside viewport
-  x = Math.max(20, Math.min(x, w - 140));
-  y = Math.max(80, Math.min(y, h - 140));
-  
-  return { x, y };
+// ================= ROUTE-LEVEL CODE SPLITTING =================
+// Each page ships in its own chunk. They are all fetched in parallel right after Home's first paint,
+// then each page is "warm-rendered" once off-screen (see WarmupHost), so the FIRST visit to a page is
+// as fast as a repeat visit and its content animates in together with the landscape transition.
+const loadAbout = () => import('./components/ui/AboutContent');
+const loadProjects = () => import('./components/ui/ProjectsContent');
+const loadContact = () => import('./components/ui/ContactContent');
+const loadLotus = () => import('./components/ui/LotusWaterBody');
+const loadMobileLotus = () => import('./components/ui/MobileLotusWaterBody');
+
+const AboutContent = lazy(() => loadAbout().then((m) => ({ default: m.AboutContent })));
+const ProjectsContent = lazy(() => loadProjects().then((m) => ({ default: m.ProjectsContent })));
+const ContactContent = lazy(() => loadContact().then((m) => ({ default: m.ContactContent })));
+const LotusWaterBody = lazy(() => loadLotus().then((m) => ({ default: m.LotusWaterBody })));
+const ROUTE_LOADERS = { about: loadAbout, projects: loadProjects, contact: loadContact };
+
+// Renders its children once (invisibly), waits two frames so React commits + the browser computes
+// style/layout for them, then reports done. Pays the one-time "first mount" cost (JS compilation,
+// lazy-component init, style resolution) while the user is still on Home.
+const WarmupHost = ({ onDone, children }) => {
+  useEffect(() => {
+    let r2;
+    const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(onDone); });
+    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+  }, [onDone]);
+  return children;
 };
 
+const MobileLotusWaterBody = lazy(() => loadMobileLotus().then((m) => ({ default: m.MobileLotusWaterBody })));
+
+
+const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
+
+// ================= GLOBAL FLOATING GUIDE CONTAINER =================
 const FloatingUFOContainer = ({
   theme,
   isHovered,
@@ -127,54 +122,61 @@ function App() {
     return window.innerWidth < 768;
   });
 
-  const VALID_SECTIONS = ['home', 'about', 'projects', 'contact', 'experience'];
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // State to track active section ('home', 'about', 'projects', 'experience', or 'contact')
-  const [activeSection, setActiveSection] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const isSmall = window.innerWidth < 1024;
-      const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
-
-      if (isSmall) {
-        if (rawHash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-        return 'home'; // Block sub-routes on mobile & tablet
-      }
-
-      if (rawHash) {
-        if (VALID_SECTIONS.includes(rawHash)) {
-          return rawHash;
-        } else {
-          // Edge case: unknown/invalid route entered -> redirect to home & clear URL hash
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-          return 'home';
-        }
-      }
-    }
+  // Sync activeSection with react-router-dom path
+  const getSectionFromPath = (path) => {
+    const cleanPath = path.replace(/^\//, '').toLowerCase();
+    if (!cleanPath || cleanPath === 'home') return 'home';
+    if (cleanPath === 'about') return 'about';
+    if (cleanPath === 'projects') return 'projects';
+    if (cleanPath === 'contact' || cleanPath === 'say-hello') return 'contact';
     return 'home';
-  });
+  };
 
-  // Preload heavy SVG emblem upfront so navigating to Contact page is instant
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const img = new Image();
-      img.src = rotatingEmblem;
-    }
+  const activeSection = getSectionFromPath(location.pathname);
+
+  // ---------- First-visit warm-up ----------
+  // 1. ~300 ms after first paint: fetch every page chunk IN PARALLEL (tiny files, no idle waiting).
+  // 2. Then, in idle slots: decode the heavy artwork and warm-render each page once, off-screen.
+  const [warmPage, setWarmPage] = useState(null);
+  const warmDoneRef = useRef(null);
+  const visitedRef = useRef(new Set());
+  useEffect(() => { visitedRef.current.add(activeSection); }, [activeSection]);
+
+  const warmRender = useCallback((name) => new Promise((resolve) => {
+    if (visitedRef.current.has(name) || window.innerWidth < 1024) { resolve(); return; }
+    warmDoneRef.current = resolve;
+    setWarmPage(name);
+  }), []);
+
+  const finishWarm = useCallback(() => {
+    setWarmPage(null);
+    const resolve = warmDoneRef.current;
+    warmDoneRef.current = null;
+    if (resolve) requestAnimationFrame(() => resolve());
   }, []);
 
-  // Cleanup any unknown/invalid URL pathname (e.g. /theinsanecat/sfk -> /theinsanecat/)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const pathname = window.location.pathname;
-      const isBase = pathname === '/' || pathname === '/theinsanecat' || pathname === '/theinsanecat/';
-      if (!isBase) {
-        const basePath = pathname.startsWith('/theinsanecat') ? '/theinsanecat/' : '/';
-        window.history.replaceState(null, '', basePath + window.location.search);
-        setActiveSection('home');
-      }
-    }
-  }, []);
+    const isMobile = window.innerWidth < 768;
+    let cancelIdle = () => {};
+    const t = setTimeout(() => {
+      Promise.all([loadContact(), loadAbout(), loadProjects(), isMobile ? loadMobileLotus() : loadLotus()])
+        .catch(() => {})
+        .then(() => {
+          cancelIdle = runWhenIdle([
+            () => warmImage(ROTATING_EMBLEM_SRC),
+            () => warmImage(SAKURA_BRANCH_SRC),
+            () => warmRender('contact'),
+            ...Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src)),
+            () => warmRender('about'),
+            () => warmRender('projects'),
+          ], 0);
+        });
+    }, 300);
+    return () => { clearTimeout(t); cancelIdle(); };
+  }, [warmRender]);
 
   // Block route navigation on mobile & tablet viewport (< 1024px)
   useEffect(() => {
@@ -182,94 +184,41 @@ function App() {
       const isSmall = window.innerWidth < 1024;
       setIsSmallViewport(isSmall);
       setIsMobileViewport(window.innerWidth < 768);
-      if (isSmall && activeSection !== 'home') {
-        setActiveSection('home');
-        if (window.location.hash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
+      if (isSmall && location.pathname !== '/') {
+        navigate('/', { replace: true });
       }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [activeSection]);
+  }, [location.pathname, navigate]);
 
   useEffect(() => {
-    if (isSmallViewport && activeSection !== 'home') {
-      setActiveSection('home');
-      if (window.location.hash) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
+    if (isSmallViewport && location.pathname !== '/') {
+      navigate('/', { replace: true });
     }
-  }, [isSmallViewport, activeSection]);
+  }, [isSmallViewport, location.pathname, navigate]);
 
-  // Manual section navigation handler (pushes state to browser history stack)
+  // Section navigation handler using react-router-dom navigate
   const handleSectionChange = useCallback((newSection) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      // Redirect to home and clear hash if route change is attempted on mobile/tablet
-      setActiveSection('home');
-      if (window.location.hash) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
+    if (isSmallViewport) {
+      navigate('/');
       return;
     }
+    const path = newSection === 'home' ? '/' : `/${newSection}`;
+    const loader = ROUTE_LOADERS[newSection];
+    // Make sure the page's code is there BEFORE switching, so the page content and the landscape
+    // transition start in the same frame (instead of the landscape moving and the content popping in later).
+    if (!loader) navigate(path);
+    else loader().then(() => navigate(path), () => navigate(path));
+  }, [isSmallViewport, navigate]);
 
-    const targetSection = VALID_SECTIONS.includes(newSection) ? newSection : 'home';
-
-    setActiveSection((prevSection) => {
-      if (prevSection === targetSection) return prevSection;
-      if (typeof window !== 'undefined') {
-        const targetUrl = targetSection === 'home'
-          ? window.location.pathname + window.location.search
-          : `#${targetSection}`;
-        window.history.pushState({ section: targetSection }, '', targetUrl);
-      }
-      return targetSection;
-    });
-  }, []);
-
-  // Sync state with native browser Back & Forward button traversal and hash changes across all devices
-  useEffect(() => {
-    const handlePopState = () => {
-      if (typeof window === 'undefined') return;
-      const isSmall = window.innerWidth < 1024;
-      const rawHash = window.location.hash ? window.location.hash.replace('#', '') : '';
-
-      if (isSmall) {
-        setActiveSection('home');
-        if (rawHash) {
-          window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        }
-        return;
-      }
-
-      if (!rawHash || rawHash === 'home') {
-        setActiveSection('home');
-      } else if (VALID_SECTIONS.includes(rawHash)) {
-        setActiveSection(rawHash);
-      } else {
-        // Edge case: invalid/unknown route entered on desktop -> redirect to home & clear invalid hash from URL
-        setActiveSection('home');
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    window.addEventListener('hashchange', handlePopState);
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-      window.removeEventListener('hashchange', handlePopState);
-    };
-  }, []);
-
-  const isAboutPage = activeSection === 'about';
-  const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'experience' || activeSection === 'projects';
+  const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'projects';
 
   // State for the global floating guide spaceship cat
   const [isSpaceshipSpawned, setIsSpaceshipSpawned] = useState(false);
   const [dialogueText, setDialogueText] = useState('');
   const [isDialogueVisible, setIsDialogueVisible] = useState(false);
   const [isUFOHovered, setIsUFOHovered] = useState(false);
-  const [flightMode, setFlightMode] = useState('orbit'); // Default: Border Patrol (Orbit)
   const [hoverCount, setHoverCount] = useState(0);
 
   const getPageDisplayName = (section) => {
@@ -317,34 +266,12 @@ function App() {
     setIsDialogueVisible(false);
   };
 
-  // 1. Get the spring-smoothed mouse positions
+  // Spring-smoothed mouse positions (spotlight + constellation reveal)
   const { mouseX, mouseY, mouseXpx, mouseYpx } = useMouseParallax();
 
-  // 2. Create parallax transforms (desktop exact original multipliers vs mobile subtle shifts)
-  const maxForeX = isMobileViewport ? 12 : 68;
-  const maxForeY = isMobileViewport ? 8 : 35;
-  const maxMidX = isMobileViewport ? 8 : 40;
-  const maxMidY = isMobileViewport ? 5 : 22;
-  const maxMountX = isMobileViewport ? 5 : 24;
-  const maxMountY = isMobileViewport ? 3 : 14;
-
-  const skyX = useTransform(mouseX, [-1, 1], isMobileViewport ? [-6, 6] : [-12, 12]);
-  const skyY = useTransform(mouseY, [-1, 1], isMobileViewport ? [-4, 4] : [-8, 8]);
-
-  const mountX = useTransform(mouseX, [-1, 1], [-maxMountX, maxMountX]);
-  const mountY = useTransform(mouseY, [-1, 1], [-maxMountY, maxMountY]);
-
-  const midX = useTransform(mouseX, [-1, 1], [-maxMidX, maxMidX]);
-  const midY = useTransform(mouseY, [-1, 1], [-maxMidY, maxMidY]);
-
-  const foreX = useTransform(mouseX, [-1, 1], [-maxForeX, maxForeX]);
-  const foreY = useTransform(mouseY, [-1, 1], [-maxForeY, maxForeY]);
-
-  const houseFarX = useTransform(mouseX, [-1, 1], [-16, 16]);
-  const houseFarY = useTransform(mouseY, [-1, 1], [-9, 9]);
-
-  const houseNearX = useTransform(mouseX, [-1, 1], [-36, 36]);
-  const houseNearY = useTransform(mouseY, [-1, 1], [-20, 20]);
+  // Mouse parallax on the landscape layers was removed (design decision, perf/optimization Phase 5).
+  // The layers keep their original over-scale, so the composition at rest is unchanged.
+  // The mouse still drives the pink spotlight and the constellation reveal.
 
   // 3. Map the spring-smoothed mouse coordinates to the 1920x1080 SVG coordinate space
   const svgMouseX = useTransform(mouseX, [-1, 1], [0, 1920]);
@@ -354,7 +281,7 @@ function App() {
   const constellationOpacity = useTransform(mouseY, [-1, -0.1, 0.4], [0.95, 0.5, 0]);
 
   return (
-    <main className={`relative w-screen h-screen overflow-hidden transition-colors duration-700 ${theme === 'light' ? 'bg-[#faf5f0]' : 'bg-[#07010e]'}`}>
+    <main className={`relative w-screen h-screen overflow-hidden theme-transition ${theme === 'light' ? 'bg-[#faf5f0]' : 'bg-[#07010e]'}`}>
       <GlobalSVGDefs />
       {/* 0. Header Navigation Overlay with Theme Switch */}
       <Navbar 
@@ -367,8 +294,6 @@ function App() {
       {/* 1. Deepest Cosmic / Day Sky Layer */}
       <SkyLayer 
         style={{ 
-          x: skyX, 
-          y: skyY,
           scale: 1.04
         }} 
         isAboutPage={showRecededLandscape}
@@ -386,30 +311,28 @@ function App() {
       >
         <MountainLayer 
           style={{ 
-            x: mountX, 
-            y: mountY,
             scale: 1.08
           }} 
           theme={theme}
         />
       </motion.div>
 
-      {/* 3. Middle Layer Forest */}
+      {/* 3. Middle Layer Forest
+          Kept mounted (not unmounted via AnimatePresence) so returning to Home reuses the already-rasterized
+          layer instead of rebuilding + redrawing both full-screen forest SVGs in one frame (the About -> Home stall). */}
       <motion.div
-        animate={{ 
-          opacity: showRecededLandscape ? 0 : 1,
-          y: showRecededLandscape ? 350 : 0
-        }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        initial={false}
+        animate={showRecededLandscape ? { opacity: 0, y: 350 } : { opacity: 1, y: 0 }}
+        transition={FOREST_TRANSITION}
+        aria-hidden={showRecededLandscape}
         className="absolute inset-0 w-full h-full z-10 pointer-events-none"
+        style={{ willChange: 'transform, opacity' }}
       >
         {isMobileViewport ? (
-          <MobileMidgroundTrees style={{ x: midX, y: midY, scale: 1.18 }} theme={theme} />
+          <MobileMidgroundTrees style={{ scale: 1.18 }} theme={theme} />
         ) : (
           <MidgroundTrees 
             style={{ 
-              x: midX, 
-              y: midY,
               scale: 1.14
             }} 
             theme={theme}
@@ -417,22 +340,20 @@ function App() {
         )}
       </motion.div>
       
-      {/* 4. Foreground Forest Floor */}
+      {/* 4. Foreground Forest Floor (kept mounted, same reason as above) */}
       <motion.div
-        animate={{ 
-          opacity: showRecededLandscape ? 0 : 1,
-          y: showRecededLandscape ? 450 : 0
-        }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        initial={false}
+        animate={showRecededLandscape ? { opacity: 0, y: 450 } : { opacity: 1, y: 0 }}
+        transition={FOREST_TRANSITION}
+        aria-hidden={showRecededLandscape}
         className="absolute inset-0 w-full h-full z-20 pointer-events-none"
+        style={{ willChange: 'transform, opacity' }}
       >
         {isMobileViewport ? (
-          <MobileForegroundTrees style={{ x: foreX, y: foreY, scale: 1.20 }} theme={theme} />
+          <MobileForegroundTrees style={{ scale: 1.20 }} theme={theme} />
         ) : (
           <ForegroundTrees 
             style={{ 
-              x: foreX, 
-              y: foreY,
               scale: 1.18
             }} 
             theme={theme}
@@ -440,25 +361,15 @@ function App() {
         )}
       </motion.div>
 
-      {/* 5. Interactive Pink Spotlight (Active in Dark mode) */}
-      <motion.div 
-        className="fixed pointer-events-none rounded-full -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] z-8 mix-blend-screen transition-opacity duration-500"
-        style={{
-          x: mouseXpx,
-          y: mouseYpx,
-          opacity: theme === 'light' ? 0 : 0.9,
-          background: 'radial-gradient(circle, rgba(255, 117, 143, 0.18) 0%, rgba(138, 60, 93, 0.06) 50%, rgba(0, 0, 0, 0) 70%)',
-        }}
-      />
+      {/* 5. Interactive Pink Spotlight (Performance-aware) */}
+      <InteractiveSpotlight mouseXpx={mouseXpx} mouseYpx={mouseYpx} theme={theme} />
 
       {/* Serene Lotus Lake (Pops UP on Contact section, slides DOWN on return to Home) */}
       <AnimatePresence>
         {activeSection === 'contact' && (
-          isMobileViewport ? (
-            <MobileLotusWaterBody key="lotus-lake-mob" theme={theme} />
-          ) : (
-            <LotusWaterBody key="lotus-lake" theme={theme} />
-          )
+          <Suspense key={isMobileViewport ? 'lotus-lake-mob' : 'lotus-lake'} fallback={null}>
+            {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} />}
+          </Suspense>
         )}
       </AnimatePresence>
 
@@ -466,76 +377,96 @@ function App() {
       <div className="relative z-30 w-full h-full flex items-center justify-center pointer-events-none">
         <div className="w-full h-full flex items-center justify-center relative">
           <AnimatePresence mode="popLayout">
-            {activeSection === 'home' ? (
-              <motion.div
-                key="home"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
-              </motion.div>
-            ) : activeSection === 'about' ? (
-              <motion.div
-                key="about"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <AboutContent theme={theme} />
-              </motion.div>
-            ) : activeSection === 'projects' ? (
-              <motion.div
-                key="projects"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <ProjectsContent theme={theme} />
-              </motion.div>
-            ) : activeSection === 'contact' ? (
-              <motion.div
-                key="contact"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
-              >
-                <ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} />
-              </motion.div>
-            ) : activeSection === 'experience' ? (
-              <motion.div
-                key="experience"
-                initial={{ opacity: 0, y: 12, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.98 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ willChange: 'opacity, transform' }}
-                className="absolute w-full flex items-center justify-center pointer-events-auto"
-              >
-                <ExperienceContent setActiveSection={handleSectionChange} />
-              </motion.div>
-            ) : null}
+            <Routes location={location} key={activeSection}>
+              <Route
+                path="/"
+                element={
+                  <motion.div
+                    key="home"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/about"
+                element={
+                  <motion.div
+                    key="about"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <Suspense fallback={null}><AboutContent theme={theme} /></Suspense>
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/projects"
+                element={
+                  <motion.div
+                    key="projects"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <Suspense fallback={null}><ProjectsContent theme={theme} /></Suspense>
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/contact"
+                element={
+                  <motion.div
+                    key="contact"
+                    initial={{ opacity: 0, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.99 }}
+                    transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'opacity, transform' }}
+                    className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
+                  >
+                    <Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} /></Suspense>
+                  </motion.div>
+                }
+              />
+              <Route path="/say-hello" element={<Navigate to="/contact" replace />} />
+              <Route path="/experience" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Off-screen, invisible one-time warm render of a page (see WarmupHost) */}
+      {warmPage && (
+        <div aria-hidden="true" className="fixed inset-0 pointer-events-none" style={{ visibility: 'hidden', zIndex: -1, contain: 'strict' }}>
+          <Suspense fallback={null}>
+            <WarmupHost onDone={finishWarm}>
+              {warmPage === 'about' && <AboutContent theme={theme} />}
+              {warmPage === 'projects' && <ProjectsContent theme={theme} />}
+              {warmPage === 'contact' && <ContactContent setActiveSection={() => {}} theme={theme} onAvatarTrigger={() => {}} />}
+            </WarmupHost>
+          </Suspense>
+        </div>
+      )}
 
       {/* 7. Global Floating Guide Spaceship Cat */}
       {isSpaceshipSpawned && activeSection !== 'experience' && (
         <FloatingUFOContainer
           activeSection={activeSection}
-          flightMode={flightMode}
           isHovered={isUFOHovered}
           theme={theme}
           isDialogueVisible={isDialogueVisible}
@@ -545,40 +476,6 @@ function App() {
         />
       )}
 
-      {/* UFO Flight Controller Widget (Commented out as requested - can be un-commented to enable mode switcher UI)
-      {isSpaceshipSpawned && activeSection !== 'experience' && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-6 right-6 z-40 p-2 glass-surface rounded-lg pointer-events-auto"
-        >
-          <div className="flex items-center space-x-3 select-none">
-            <span className="text-[7.5px] font-black tracking-widest text-cyan-400 uppercase font-mono border-r border-cyan-500/15 pr-2.5">
-              FLIGHT CORE
-            </span>
-            <div className="flex items-center space-x-1">
-              {[
-                { id: 'glide', label: 'Border Drift' },
-                { id: 'orbit', label: 'Border Patrol' },
-                { id: 'stationary', label: 'Stationary' }
-              ].map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => setFlightMode(m.id)}
-                  className={`px-2 py-0.5 text-[7px] font-mono font-black uppercase rounded tracking-wider border transition-all duration-200 ${
-                    flightMode === m.id
-                      ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/60 shadow-[0_0_8px_rgba(34,211,238,0.2)]'
-                      : 'text-purple-300/60 border-transparent hover:text-purple-200 hover:bg-purple-950/20'
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      )}
-      */}
     </main>
   );
 }

@@ -3,6 +3,17 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogoLoop } from './LogoLoop';
 import { FloatingBubbles } from './FloatingBubbles';
+import angularLogo from '../../assets/tech/angular.svg';
+import css3Logo from '../../assets/tech/css3.svg';
+import html5Logo from '../../assets/tech/html5.svg';
+import javascriptLogo from '../../assets/tech/javascript.svg';
+import reactLogo from '../../assets/tech/react.svg';
+import tailwindLogo from '../../assets/tech/tailwindcss.svg';
+import typescriptLogo from '../../assets/tech/typescript.svg';
+import viteLogo from '../../assets/tech/vitejs.svg';
+
+// Self-hosted devicon logos (MIT, devicon@2.17.0) — no external CDN requests
+const logoImgProps = { width: 20, height: 20, decoding: 'async', draggable: false };
 
 // ─── Interactive Project Details Modal Overlay ─────────────────────────────────
 const ProjectDetailsModal = ({ project, onClose, theme }) => {
@@ -28,9 +39,9 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.88, y: 15 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative max-w-lg sm:max-w-xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 shadow-2xl ${isLight
-              ? 'bg-white/95 border-pink-300 text-slate-900 shadow-pink-500/20'
-              : 'bg-[#0f0921]/95 border-purple-500/50 text-purple-100 shadow-purple-500/30'
+            className={`relative max-w-lg sm:max-w-xl w-full rounded-3xl p-5 sm:p-6 z-10 overflow-hidden border-2 ${isLight
+              ? 'bg-white/95 border-pink-300 text-slate-900'
+              : 'bg-[#0f0921]/95 border-purple-500/50 text-purple-100'
               }`}
           >
             {/* Background Glow Orbs */}
@@ -403,7 +414,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg"
+          {...logoImgProps} src={reactLogo}
           alt="React"
           className="w-5 h-5 shrink-0 object-contain"
         />
@@ -416,7 +427,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg"
+          {...logoImgProps} src={javascriptLogo}
           alt="JavaScript"
           className="w-5 h-5 shrink-0 object-contain rounded-sm"
         />
@@ -429,7 +440,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg"
+          {...logoImgProps} src={typescriptLogo}
           alt="TypeScript"
           className="w-5 h-5 shrink-0 object-contain rounded-sm"
         />
@@ -442,7 +453,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angular/angular-original.svg"
+          {...logoImgProps} src={angularLogo}
           alt="Angular"
           className="w-5 h-5 shrink-0 object-contain"
         />
@@ -455,7 +466,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg"
+          {...logoImgProps} src={html5Logo}
           alt="HTML5"
           className="w-5 h-5 shrink-0 object-contain"
         />
@@ -468,7 +479,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg"
+          {...logoImgProps} src={css3Logo}
           alt="CSS3"
           className="w-5 h-5 shrink-0 object-contain"
         />
@@ -481,7 +492,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg"
+          {...logoImgProps} src={tailwindLogo}
           alt="TailwindCSS"
           className="w-5 h-5 shrink-0 object-contain"
         />
@@ -494,7 +505,7 @@ const getTechLogos = (isLight) => [
     node: (
       <div className="flex items-center gap-2 shrink-0">
         <img
-          src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg"
+          {...logoImgProps} src={viteLogo}
           alt="Vite"
           className="w-5 h-5 shrink-0 object-contain"
         />

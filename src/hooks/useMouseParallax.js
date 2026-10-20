@@ -1,12 +1,21 @@
 import { useMotionValue, useSpring } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePerformanceMode } from '../context/PerformanceContext';
 
 /**
  * Custom hook to track:
  * 1. Normalized mouse coordinates (range [-1, 1]) for parallax effects.
  * 2. Raw mouse pixel coordinates (clientX/Y) with spring physics for follow-spotlight effects.
+ *
+ * Performance Features:
+ * - RAF throttling to limit mouse processing to screen refresh rate.
+ * - Pauses event listener when tab is inactive (`document.hidden`).
+ * - Completely disables tracking in 'lite' performance mode.
  */
-export const useMouseParallax = () => {
+export const useMouseParallax = (options = {}) => {
+  const { isLite } = usePerformanceMode();
+  const isDisabled = options.disabled || isLite;
+
   // 1. Normalized values
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
@@ -29,27 +38,48 @@ export const useMouseParallax = () => {
   const mouseXpx = useSpring(rawXpx, spotlightConfig);
   const mouseYpx = useSpring(rawYpx, spotlightConfig);
 
+  const rafIdRef = useRef(null);
+
   useEffect(() => {
+    if (isDisabled || typeof window === 'undefined') return;
+
+    let pendingX = 0;
+    let pendingY = 0;
+    let pendingClientX = initialX;
+    let pendingClientY = initialY;
+
     const handleMouseMove = (e) => {
+      if (document.hidden) return;
+
       const { clientX, clientY } = e;
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      // Normalize coordinates to a range of [-1, 1] relative to center of viewport
-      const x = (clientX / windowWidth) * 2 - 1;
-      const y = (clientY / windowHeight) * 2 - 1;
+      pendingX = (clientX / windowWidth) * 2 - 1;
+      pendingY = (clientY / windowHeight) * 2 - 1;
+      pendingClientX = clientX;
+      pendingClientY = clientY;
 
-      rawX.set(x);
-      rawY.set(y);
-
-      // Track actual pixel positions
-      rawXpx.set(clientX);
-      rawYpx.set(clientY);
+      if (!rafIdRef.current) {
+        rafIdRef.current = requestAnimationFrame(() => {
+          rawX.set(pendingX);
+          rawY.set(pendingY);
+          rawXpx.set(pendingClientX);
+          rawYpx.set(pendingClientY);
+          rafIdRef.current = null;
+        });
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [rawX, rawY, rawXpx, rawYpx]);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+    };
+  }, [isDisabled, rawX, rawY, rawXpx, rawYpx, initialX, initialY]);
 
   return { mouseX, mouseY, mouseXpx, mouseYpx };
 };

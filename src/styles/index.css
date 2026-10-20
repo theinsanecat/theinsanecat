@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
+/* Fonts: subset (Latin + used symbols) WOFF2 builds of the originals kept in /design-source/fonts.
+   Questrial + Mileast are preloaded from main.jsx. */
 @font-face {
-  font-family: 'Maghfirea';
-  src: url('../assets/fonts/Maghfirea.otf') format('opentype'),
-    url('../assets/fonts/Maghfirea.ttf') format('truetype');
+  font-family: 'Mileast';
+  src: url('../assets/fonts/mileast.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -11,15 +12,7 @@
 
 @font-face {
   font-family: 'Mileast';
-  src: url('../assets/fonts/Mileast.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Mileast';
-  src: url('../assets/fonts/Mileast Italic.otf') format('opentype');
+  src: url('../assets/fonts/mileast-italic.woff2') format('woff2');
   font-weight: normal;
   font-style: italic;
   font-display: swap;
@@ -27,8 +20,7 @@
 
 @font-face {
   font-family: 'Avengenz';
-  src: url('../assets/fonts/Avengenz.otf') format('opentype'),
-    url('../assets/fonts/Avengenz.ttf') format('truetype');
+  src: url('../assets/fonts/avengenz.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -36,7 +28,7 @@
 
 @font-face {
   font-family: 'Questrial';
-  src: url('../assets/fonts/Questrial-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/questrial.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -144,24 +136,27 @@
   position: absolute;
   width: 65%; height: 55%;
   left: -10%; top: 10%;
-  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.22) 0%, transparent 70%);
-  filter: blur(70px);
+  /* pre-softened gradient == the old gradient + blur(32px) (max channel diff 8/255, invisible), no filter */
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.205) 0%, rgba(139, 92, 246, 0.1399) 25%, rgba(139, 92, 246, 0.075) 45%, rgba(139, 92, 246, 0.0251) 62%, rgba(139, 92, 246, 0.0051) 74%, transparent 84%);
+  will-change: transform;
   animation: aurora-float-1 9s ease-in-out infinite alternate;
 }
 .aurora-blob-2 {
   position: absolute;
   width: 60%; height: 65%;
   right: -10%; top: 25%;
-  background: radial-gradient(ellipse, rgba(236, 72, 153, 0.16) 0%, transparent 70%);
-  filter: blur(80px);
+  /* pre-softened gradient == the old gradient + blur(36px) (max channel diff 8/255, invisible), no filter */
+  background: radial-gradient(ellipse, rgba(236, 72, 153, 0.1491) 0%, rgba(236, 72, 153, 0.1018) 25%, rgba(236, 72, 153, 0.0546) 45%, rgba(236, 72, 153, 0.0182) 62%, rgba(236, 72, 153, 0.0037) 74%, transparent 84%);
+  will-change: transform;
   animation: aurora-float-2 12s ease-in-out infinite alternate;
 }
 .aurora-blob-3 {
   position: absolute;
   width: 55%; height: 45%;
   left: 22%; bottom: 0%;
-  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.14) 0%, transparent 70%);
-  filter: blur(65px);
+  /* pre-softened gradient == the old gradient + blur(30px) (max channel diff 8/255, invisible), no filter */
+  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.1305) 0%, rgba(168, 85, 247, 0.089) 25%, rgba(168, 85, 247, 0.0477) 45%, rgba(168, 85, 247, 0.016) 62%, rgba(168, 85, 247, 0.0032) 74%, transparent 84%);
+  will-change: transform;
   animation: aurora-float-1 15s ease-in-out infinite alternate-reverse;
 }
 
@@ -217,9 +212,9 @@
   animation: bubble-float-fast-frames 14s ease-in-out infinite;
 }
 
-/* Smooth SVG & element theme morphing transitions across all components */
-svg path, svg rect, svg polygon, svg circle, svg ellipse, svg line, svg stop {
-  transition: fill 0.7s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), stop-color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+/* Smooth SVG & element theme morphing transitions across main landscape layers */
+.theme-transition, .theme-transition path, .theme-transition rect, .theme-transition polygon, .theme-transition circle, .theme-transition stop {
+  transition: fill 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), stop-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* GPU-Accelerated Marquee Animations (0 JS Overhead) */
@@ -450,4 +445,118 @@ svg path, svg rect, svg polygon, svg circle, svg ellipse, svg line, svg stop {
 .animate-card-float {
   animation: cardFloat 3.2s ease-in-out infinite;
   will-change: transform;
+}
+/* ─── Contact lake: compositor-only animations (each wave / lotus is its own layer) ───
+   --s = lake scale (CSS px per lake unit), so offsets match the old in-SVG user-unit translations. */
+@keyframes lakeWave1 {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * -30px), 0, 0); }
+  50% { transform: translate3d(calc(var(--s, 1) * 30px), calc(var(--s, 1) * -4px), 0); }
+}
+@keyframes lakeWave2 {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * 25px), 0, 0); }
+  50% { transform: translate3d(calc(var(--s, 1) * -25px), calc(var(--s, 1) * 3px), 0); }
+}
+@keyframes lakeWave3 {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * -20px), 0, 0); }
+  50% { transform: translate3d(calc(var(--s, 1) * 20px), calc(var(--s, 1) * -3px), 0); }
+}
+.lake-wave-1 { animation: lakeWave1 14s ease-in-out infinite; will-change: transform; }
+.lake-wave-2 { animation: lakeWave2 10s ease-in-out infinite; will-change: transform; }
+.lake-wave-3 { animation: lakeWave3 7.5s ease-in-out infinite; will-change: transform; }
+
+@keyframes lotusSway {
+  0%, 100% { transform: translate3d(calc(var(--s, 1) * -2px), calc(var(--s, 1) * -2px), 0) rotate(-1.2deg); }
+  50% { transform: translate3d(calc(var(--s, 1) * 2px), calc(var(--s, 1) * 3px), 0) rotate(1.5deg); }
+}
+.lotus-sway {
+  animation-name: lotusSway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+
+/* ─── Contact butterflies: flight paths as compositor-only CSS keyframes (were 4 Framer Motion JS loops).
+   Same keyframes, evenly spaced, ease-in-out per segment, exactly like the Framer config. ─── */
+@keyframes butterflyFlight1 {
+  0.0% { transform: translate3d(0vw, 12vh, 0) rotate(12deg); }
+  20.0% { transform: translate3d(16vw, 32vh, 0) rotate(-15deg); }
+  40.0% { transform: translate3d(2vw, 52vh, 0) rotate(20deg); }
+  60.0% { transform: translate3d(22vw, 28vh, 0) rotate(-10deg); }
+  80.0% { transform: translate3d(8vw, 42vh, 0) rotate(15deg); }
+  100.0% { transform: translate3d(0vw, 12vh, 0) rotate(12deg); }
+}
+@keyframes butterflyFlight2 {
+  0.0% { transform: translate3d(18vw, 20vh, 0) rotate(-18deg); }
+  20.0% { transform: translate3d(1vw, 40vh, 0) rotate(12deg); }
+  40.0% { transform: translate3d(25vw, 64vh, 0) rotate(-22deg); }
+  60.0% { transform: translate3d(5vw, 78vh, 0) rotate(15deg); }
+  80.0% { transform: translate3d(20vw, 36vh, 0) rotate(-8deg); }
+  100.0% { transform: translate3d(18vw, 20vh, 0) rotate(-18deg); }
+}
+@keyframes butterflyFlight3 {
+  0.0% { transform: translate3d(-0.5vw, 42vh, 0) rotate(-10deg); }
+  20.0% { transform: translate3d(12vw, 65vh, 0) rotate(18deg); }
+  40.0% { transform: translate3d(1vw, 82vh, 0) rotate(-12deg); }
+  60.0% { transform: translate3d(20vw, 54vh, 0) rotate(16deg); }
+  80.0% { transform: translate3d(6vw, 34vh, 0) rotate(-22deg); }
+  100.0% { transform: translate3d(-0.5vw, 42vh, 0) rotate(-10deg); }
+}
+@keyframes butterflyFlight4 {
+  0.0% { transform: translate3d(75vw, 15vh, 0) rotate(10deg); }
+  20.0% { transform: translate3d(92vw, 32vh, 0) rotate(-14deg); }
+  40.0% { transform: translate3d(78vw, 54vh, 0) rotate(18deg); }
+  60.0% { transform: translate3d(95vw, 26vh, 0) rotate(-12deg); }
+  80.0% { transform: translate3d(84vw, 42vh, 0) rotate(14deg); }
+  100.0% { transform: translate3d(75vw, 15vh, 0) rotate(10deg); }
+}
+.butterfly-flight {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+
+/* ─── Sakura petals: compositor-only fall (were 10 Framer Motion JS loops) ─── */
+@keyframes sakuraPetalFall {
+  0% { transform: translate3d(var(--x0), 0, 0) rotate(0deg); opacity: 0; }
+  33.333% { transform: translate3d(var(--x1), var(--y1), 0) rotate(120deg); opacity: 1; }
+  66.667% { transform: translate3d(var(--x2), var(--y2), 0) rotate(240deg); opacity: 1; }
+  100% { transform: translate3d(var(--x3), var(--y3), 0) rotate(360deg); opacity: 0; }
+}
+.sakura-petal {
+  animation-name: sakuraPetalFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+/* Contact emblem rotation (was an inline style) */
+.emblem-spin { animation: spin 70s linear infinite; }
+
+/* ─── Performance tiers (html[data-perf] is set by PerformanceContext) ───────────────────────────────
+   Every element stays on screen in every tier; lower tiers only stop *continuous* ambient motion,
+   which on machines without GPU acceleration forces the CPU to repaint those areas every frame. */
+html[data-perf="balanced"] .lotus-sway.lotus-front { animation: none; }
+
+html[data-perf="lite"] .lotus-sway,
+html[data-perf="lite"] .emblem-spin,
+html[data-perf="lite"] .animate-branch-sway,
+html[data-perf="lite"] .aurora-blob-1,
+html[data-perf="lite"] .aurora-blob-2,
+html[data-perf="lite"] .aurora-blob-3,
+html[data-perf="lite"] .animate-card-float,
+html[data-perf="lite"] .animate-pulse,
+html[data-perf="lite"] .animate-ping {
+  animation: none; /* small, but in software compositing their damage merges with other moving areas */
+}
+/* keep the resting pose of animations whose first keyframe isn't "no transform" */
+html[data-perf="lite"] .animate-branch-sway { transform: rotate(-5deg) translate(8%, -8%); }
+html[data-perf="lite"] .aurora-blob-2 { transform: scale(1.08); }
+html[data-perf="lite"] .lotus-sway,
+html[data-perf="lite"] .emblem-spin,
+html[data-perf="lite"] .animate-branch-sway,
+html[data-perf="lite"] [class^="aurora-blob-"] {
+  will-change: auto; /* nothing moves: let the browser flatten these into fewer layers */
 }

@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import meDarkImg from '../../assets/me.PNG';
-import meLightImg from '../../assets/me_light.PNG';
-import rotatingEmblem from '../../assets/rotating-emblem.svg';
+import meDarkImg from '../../assets/me.webp';
+import meLightImg from '../../assets/me_light.webp';
+import { ROTATING_EMBLEM_SRC } from '../../lib/artAssets';
+import { useImageReady } from '../../hooks/useImageReady';
 import { SakuraBranch } from './SakuraBranch';
-import { LotusWaterBody } from './LotusWaterBody';
 import MagicalButterflies from './MagicalButterflies';
 import BorderGlow from './BorderGlow';
 
 export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => {
   const isLight = theme === 'light';
   const [isHovered, setIsHovered] = useState(false);
+  // Emblem fades in once decoded (normally already warmed up from Home)
+  const emblemReady = useImageReady(ROTATING_EMBLEM_SRC);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -149,28 +151,25 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
 
         {/* Slowly Rotating SVG Emblem Background — Pure CSS @keyframes spin running on GPU compositor thread (0 JS overhead) */}
         <div
-          className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu"
+          className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu emblem-spin"
           style={{
-            animation: 'spin 70s linear infinite',
             willChange: 'transform',
             maskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
             WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
           }}
         >
-          {/* Light Mode Emblem */}
+          {/* Single Dynamic Emblem Image — 50% VRAM memory reduction */}
           <img
-            src={rotatingEmblem}
+            src={ROTATING_EMBLEM_SRC}
             alt=""
-            className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-opacity duration-700 ease-in-out transform-gpu filter sepia(100%) hue-rotate(225deg) saturate(380%) brightness(1.18) opacity(0.9) drop-shadow(0 0 20px rgba(192,132,252,0.5)) ${
-              isLight ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-          {/* Dark Mode Emblem */}
-          <img
-            src={rotatingEmblem}
-            alt=""
-            className={`absolute inset-0 w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none opacity-90 select-none transition-opacity duration-700 ease-in-out transform-gpu ${
-              isLight ? 'opacity-0' : 'opacity-90'
+            width="760"
+            height="760"
+            decoding="async"
+            style={{ opacity: emblemReady ? undefined : 0 }}
+            className={`w-[500px] h-[500px] sm:w-[660px] sm:h-[660px] md:w-[760px] md:h-[760px] max-w-none select-none transition-all duration-700 ease-in-out transform-gpu ${
+              isLight 
+                ? 'opacity-90' 
+                : 'opacity-90'
             }`}
           />
         </div>

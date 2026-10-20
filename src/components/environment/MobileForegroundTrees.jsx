@@ -6,7 +6,7 @@ export const MobileForegroundTrees = ({ style, theme }) => {
   return (
     <motion.div
       className="absolute inset-0 w-full h-full z-20 pointer-events-none"
-      style={style}
+      style={{ ...style, willChange: 'transform' }}
     >
       <svg viewBox="0 0 600 1080" className="w-full h-full object-cover" preserveAspectRatio="xMidYMax slice">
         <defs>
@@ -14,12 +14,12 @@ export const MobileForegroundTrees = ({ style, theme }) => {
             <motion.stop
               offset="0%"
               animate={{ stopColor: isLight ? "#457a55" : "#110520" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
             <motion.stop
               offset="100%"
               animate={{ stopColor: isLight ? "#335e40" : "#05010a" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
           </linearGradient>
 

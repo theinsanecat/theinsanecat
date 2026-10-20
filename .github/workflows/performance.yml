@@ -1,0 +1,33 @@
+name: Performance checks
+
+# Runs on every push to the main branches / perf branches and on pull requests.
+# Fails the check if the production build breaks a performance budget or Lighthouse assertion.
+on:
+  push:
+    branches: [main, dev, 'perf/**']
+  pull_request:
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Performance budgets (bundle + asset sizes)
+        run: npm run check:budgets
+
+      - name: Lighthouse CI (desktop, 3 runs)
+        run: npx lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
