@@ -8,9 +8,21 @@ import { SakuraBranch } from './SakuraBranch';
 import MagicalButterflies from './MagicalButterflies';
 import BorderGlow from './BorderGlow';
 
-export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => {
+const EMAIL = 'soumya.dwivedi05@gmail.com';
+
+export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpenResume }) => {
   const isLight = theme === 'light';
   const [isHovered, setIsHovered] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${EMAIL}`;
+    }
+  };
   // Emblem fades in once decoded (normally already warmed up from Home)
   const emblemReady = useImageReady(ROTATING_EMBLEM_SRC);
   const [isMobile, setIsMobile] = useState(() =>
@@ -98,7 +110,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
       >
         <div className="relative">
           {/* Light Mode Back Button */}
-          <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} inert={!isLight}>
             <button
               onClick={() => setActiveSection('home')}
               className="px-2.5 xs:px-3 sm:px-4 py-0.5 xs:py-1 sm:py-1.5 text-[8.5px] xs:text-[9.5px] sm:text-xs font-bold text-[#1e1832] bg-white/90 hover:bg-white border border-purple-200/90 shadow-sm rounded-full active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-1.5"
@@ -111,7 +123,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
           </div>
 
           {/* Dark Mode Back Button */}
-          <div className={`absolute top-0 left-0 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <div className={`absolute top-0 left-0 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} inert={isLight}>
             <BorderGlow
               borderRadius={9999}
               glowColor="270 85 70"
@@ -261,7 +273,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
         {socialLinks.map((link) => (
           <div key={link.name} className="relative transform-gpu">
             {/* Light Mode Social Button */}
-            <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} inert={!isLight}>
               <a
                 href={link.url}
                 target="_blank"
@@ -278,7 +290,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
             </div>
 
             {/* Dark Mode Social Button with Animated Border Glow */}
-            <div className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} inert={isLight}>
               <BorderGlow
                 borderRadius={9999}
                 glowColor="270 85 70"
@@ -306,6 +318,45 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
             </div>
           </div>
         ))}
+
+        {/* Résumé — same pill shape as the social buttons */}
+        <button
+          type="button"
+          onClick={onOpenResume}
+          className={`px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide rounded-full flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap text-white transition-all duration-300 hover:-translate-y-1 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 ${
+            isLight
+              ? 'bg-gradient-to-r from-[#ff5e97] to-[#ec4899] shadow-md shadow-pink-500/25 focus-visible:ring-pink-400'
+              : 'bg-gradient-to-r from-purple-600 to-pink-600 shadow-md shadow-purple-900/40 focus-visible:ring-purple-400'
+          }`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5 h-5" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          <span>Résumé</span>
+        </button>
+      </motion.div>
+
+      {/* Direct details: email you can read & copy, location, résumé */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        className={`mt-4 sm:mt-5 flex flex-col items-center gap-2.5 text-center z-30 ${isLight ? 'text-[#2e1065]' : 'text-purple-100/90'}`}
+      >
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-semibold">
+          <a href={`mailto:${EMAIL}`} className={`underline-offset-4 hover:underline ${isLight ? 'text-pink-700' : 'text-pink-300'}`}>{EMAIL}</a>
+          <button
+            type="button"
+            onClick={copyEmail}
+            className={`px-2.5 py-0.5 rounded-full border text-[10px] sm:text-xs font-bold transition-colors duration-300 cursor-pointer ${
+              isLight ? 'border-purple-200 bg-white/80 hover:bg-white' : 'border-purple-400/30 bg-white/5 hover:bg-white/10'
+            }`}
+            aria-live="polite"
+          >
+            {copied ? 'Copied ✓' : 'Copy'}
+          </button>
+          <span className={`text-[11px] sm:text-xs font-medium ${isLight ? 'text-slate-600' : 'text-purple-200/75'}`}>· Bengaluru, India · IST</span>
+        </div>
       </motion.div>
       
     </div>

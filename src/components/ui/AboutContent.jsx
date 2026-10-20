@@ -49,6 +49,11 @@ const cardsData = [
     date: "Jan 2025 - Present",
     image: ABOUT_IMAGES.infosys,
     description: "Jan 2025 - Present",
+    highlights: [
+      "Build and maintain high-stakes banking applications",
+      "Own messy production problems end to end",
+      "Work across teams on systems that scale without getting harder to maintain",
+    ],
     longDescription:
       "I moved to Bangalore. For someone who had spent most of her life close to home, it was one of the most courageous and nerve-wracking decisions I had ever made, yes, EVER MADE. Not every brave decision feels brave while you're living it. Sometimes it just feels scary, but I am glad I did it, because I learned so much about myself and the people who love me. Somewhere along this journey, I also stopped thinking that good engineering meant making everything perfect, there's much more to it. Today, I care just as much about the people, the problem, and what happens beyond the code. At Infosys, I work on high-stakes banking applications, take ownership of messy production problems, work across teams, and build systems that can grow without becoming harder to live with. I’m still the girl who loves solving problems but I’ve also learned that the best solutions come from curiosity, consistency, empathy, and the courage to keep moving.",
     skills: [
@@ -72,6 +77,11 @@ const cardsData = [
     date: "Oct 2020 - Dec 2024",
     image: ABOUT_IMAGES.jio,
     description: "Oct 2020 - Dec 2024",
+    highlights: [
+      "Grew from developer to team lead over four years",
+      "Built products from scratch and reusable systems for other teams",
+      "The person teammates came to when they were stuck",
+    ],
     longDescription:
       "Jio was where I grew into the developer I am today. It wasn't just my first job; it was my college placement, my first company, and the place where my professional journey truly began. That makes this chapter especially dear to my heart. Over four years I went from writing code to leading projects, building products from scratch, creating reusable systems, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
     skills: [
@@ -95,6 +105,11 @@ const cardsData = [
     date: "2022 - 2024",
     image: ABOUT_IMAGES.bits,
     description: "2022 - 2024",
+    highlights: [
+      "M.Tech in Data Science & Engineering, while working full time",
+      "Machine learning, deep learning, statistics and the maths behind AI",
+      "Dissertation: real-time licence plate recognition (98% detection)",
+    ],
     longDescription:
       "Apparently, having a full-time career wasn't enough to satisfy my curiosity. While working, I went back to being a student and pursued my Master's in Data Science & Engineering at BITS Pilani. I dove into machine learning, deep learning, statistics, AI and the mathematics behind intelligent systems not because I needed another line on my résumé, but because I genuinely wanted to understand more. I've always enjoyed learning for the simple joy of understanding something I didn't understand before. Balancing a full-time career, academics, and everything in between demanded discipline, consistency, and the ability to keep showing up. It was one of the most demanding chapters of my life but also the one I'm incredibly proud of. Curiosity, I've learned, doesn't really care how busy you are.",
     skills: [
@@ -118,6 +133,11 @@ const cardsData = [
     date: "2016 - 2020",
     image: ABOUT_IMAGES.mumbai,
     description: "2016 - 2020",
+    highlights: [
+      "B.E. in Electronics & Telecommunication",
+      "Organised workshops for juniors and headed my first tech-fest event",
+      "Summer Internship Student Coordinator",
+    ],
     longDescription:
       "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I'm thankful they did. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning about circuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make my own path and I did. College also gave me the space to discover more about myself beyond academics. I explored different interests, organised workshops alongside my professors for juniors, headed my very first event at our tech-fest, became an active member of the Social Wing, took on the role of Summer Internship Student Coordinator, and proudly became part of the college dance crew. Looking back, I think I simply tried to make the most of the opportunities and interests that came my way and discovered a little more about myself too.",
     skills: [
@@ -139,6 +159,10 @@ const cardsData = [
     date: "2014 - 2016",
     image: ABOUT_IMAGES.dav,
     description: "2014 - 2016",
+    highlights: [
+      "HSC 92% · SSC 93%, consistently at the top of the class",
+      "Medals in sports, debate, SpellBee and Olympiads",
+    ],
     longDescription:
       "I was the studious kid. The one who usually came first or second, loved Mathematics and Science, had a soft spot for English Literature and Computer Science, and somehow managed to have a good rapport with her teachers. But studying was never the only thing I wanted to do. I played Handball, Throwball and Kho-Kho, ran Marathons, was a Choir Member, danced, debated, sketched, painted, wrote small plays/stories, competed in SpellBee and Olympiads, and even brought home medals in all of the above. Looking back, I think school revealed something that has stayed with me ever since: I have always desired to create, explore and pour myself into things, whether that thing was a mathematical problem, a dance floor, or eventually, a piece of code.",
     skills: [
@@ -895,7 +919,7 @@ export const AboutContent = ({ theme }) => {
           }`}>About Me</span>
         <h2 className={`text-2xl sm:text-3xl md:text-4xl font-black mt-0.5 mb-0.5 tracking-tight transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
           }`}>My Journey</h2>
-        <p className={`text-[10px] sm:text-xs font-questrial transition-colors duration-700 ${isLight ? 'text-purple-900/80' : 'text-purple-200/60'
+        <p className={`text-[10px] sm:text-xs font-questrial transition-colors duration-700 ${isLight ? 'text-purple-900/80' : 'text-purple-200/80'
           }`}>Rotate the deck and click a card to explore my journey.</p>
       </div>
 
@@ -992,6 +1016,12 @@ export const AboutContent = ({ theme }) => {
                   mass: isMobile ? 0.6 : 0.8,
                 }}
                 onClick={() => handleCardClick(card, index)}
+                role="button"
+                tabIndex={isAnySelected ? -1 : 0}
+                aria-label={`${card.heading}, ${card.title}. Open details`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(card, index); }
+                }}
                 className="absolute w-[300px] h-[450px] transform-gpu"
                 style={{
                   top: '50%',
@@ -1051,6 +1081,18 @@ export const AboutContent = ({ theme }) => {
                     {selectedCard.title}
                   </h3>
                 </div>
+
+                {/* Highlights first: what a recruiter scans for, then the story */}
+                {selectedCard.highlights?.length > 0 && (
+                  <ul className={`w-full shrink-0 mt-1 mb-1.5 space-y-0.5 text-[9px] xs:text-[10px] sm:text-[13px] font-semibold leading-snug transition-colors duration-700 ${isLight ? 'text-[#2e1065]' : 'text-white/90'}`}>
+                    {selectedCard.highlights.map((h) => (
+                      <li key={h} className="flex gap-1.5">
+                        <span aria-hidden="true" className={isLight ? 'text-pink-500' : 'text-pink-400'}>▸</span>
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
                 {/* Long Description Body */}
                 <div className={`w-full my-1 leading-snug text-[9px] xs:text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[85px] xs:max-h-[105px] sm:max-h-[160px] overflow-y-auto pr-1 custom-scrollbar' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'

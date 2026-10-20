@@ -15,6 +15,7 @@ const BUDGETS = {
   cssGzip: 25 * KB,
   imageBytes: 200 * KB, // any single image (webp/avif/png/jpg/svg) that ships
   fontBytes: 20 * KB, // any single font file (should be subset woff2)
+  pdfBytes: 1024 * KB, // the résumé
   totalBytes: 1.6 * 1024 * KB, // whole dist folder, uncompressed
 };
 
@@ -57,6 +58,7 @@ for (const f of files) {
   } else if (ext === '.css') check(`${rel} (gzip)`, gz(buf), BUDGETS.cssGzip);
   else if (['.webp', '.avif', '.png', '.jpg', '.jpeg', '.svg', '.gif'].includes(ext)) check(rel, buf.length, BUDGETS.imageBytes);
   else if (['.woff2', '.woff', '.ttf', '.otf'].includes(ext)) check(rel, buf.length, BUDGETS.fontBytes);
+  else if (ext === '.pdf') check(rel, buf.length, BUDGETS.pdfBytes);
 }
 check('dist total', total, BUDGETS.totalBytes);
 

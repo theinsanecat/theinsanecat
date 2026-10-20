@@ -84,7 +84,7 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`text-4xl md:text-7xl font-extrabold tracking-tight mb-12 leading-tight pointer-events-auto transition-colors duration-500 ${
+        className={`text-4xl md:text-7xl font-extrabold tracking-tight mb-4 leading-tight pointer-events-auto transition-colors duration-500 ${
           isLight ? 'text-[#1e1832]' : 'text-white'
         }`}
       >
@@ -94,9 +94,21 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
             ? 'bg-gradient-to-r from-[#ff5592] via-[#ec4899] to-[#8b5cf6]'
             : 'bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400'
         }`}>
-          Frontend Web Developer
+          Senior Frontend Engineer
         </span>
       </motion.h1>
+
+      {/* Specialisms subline */}
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className={`mb-10 text-sm md:text-lg font-semibold tracking-wide pointer-events-auto transition-colors duration-500 ${
+          isLight ? 'text-[#4c1d95]' : 'text-purple-100/85'
+        }`}
+      >
+        Angular · React · TypeScript · Design Systems
+      </motion.p>
 
       {/* Interactive Call to Action buttons — Hidden on mobile & tablet (< lg), visible on desktop */}
       <motion.div

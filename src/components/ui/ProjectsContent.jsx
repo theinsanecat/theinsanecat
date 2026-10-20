@@ -297,7 +297,7 @@ const ProjectCardPreview = ({ projectId, isLight }) => {
         <div className={`flex items-center justify-between text-[7.5px] font-mono border-b pb-1 ${isLight ? 'border-amber-300 text-amber-950' : 'border-amber-500/30 text-amber-300'
           }`}>
           <span className={`font-bold uppercase tracking-wider ${isLight ? 'text-amber-900' : 'text-amber-400'}`}>RTSP STREAM CAM #01</span>
-          <span className={`font-bold ${isLight ? 'text-emerald-800' : 'text-emerald-400'}`}>93.3% ACCURACY</span>
+          <span className={`font-bold ${isLight ? 'text-emerald-800' : 'text-emerald-400'}`}>98% DETECTION</span>
         </div>
 
         <div className={`my-auto p-1.5 rounded border relative flex items-center justify-between ${isLight ? 'bg-white/90 border-amber-400 shadow-sm' : 'bg-emerald-500/15 border-emerald-400/80'
@@ -329,6 +329,9 @@ const projectsData = [
     id: 1,
     title: "Automation of Irrigation and Security of Farm by using IoT and Machine Learning",
     subtitle: "B.E. Final Year Capstone Project (RAIT)",
+    // Card face uses the short versions (no truncation); the details modal shows the full title
+    shortTitle: "Smart Irrigation & Farm Security",
+    shortSubtitle: "B.E. Capstone (RAIT)",
     description: "An IoT and Machine Learning system engineered to modernize agricultural practices, automate smart sensor-driven crop irrigation, and enforce field intrusion security.",
     fullDetails: {
       purpose: "Modernizing agricultural practices, eliminating manual labor for farmers, and securing agricultural fields through automated sensor telemetry and Machine Learning models.",
@@ -348,6 +351,9 @@ const projectsData = [
     id: 2,
     title: "Smart Mirror & Daily Assistant",
     subtitle: "60-Hour Intensive IoT Workshop (RAIT)",
+    // Card face uses the short versions (no truncation); the details modal shows the full title
+    shortTitle: "Smart Mirror & Daily Assistant",
+    shortSubtitle: "IoT Workshop (RAIT)",
     description: "A Raspberry Pi-powered two-way glass mirror displaying real-time weather forecasts via OpenWeatherMap API, news, schedules, self-esteem compliments, and PIR motion power saving.",
     fullDetails: {
       recognition: "Recognized as a potential campus-wide upgrade to college mirrors by Principal Sir at RAIT.",
@@ -389,6 +395,9 @@ const projectsData = [
     id: 4,
     title: "Real-Time Automatic License Plate Recognition System for Indian Vehicles",
     subtitle: "Dissertation Project (BITS Pilani)",
+    // Card face uses the short versions (no truncation); the details modal shows the full title
+    shortTitle: "Licence Plate Recognition (ALPR)",
+    shortSubtitle: "Dissertation (BITS Pilani)",
     description: "A custom real-time Automatic License Plate Recognition (ALPR) system optimized for Indian road complexities, non-standard scripts/fonts, YOLOv8 Nano detection, and custom OCR pipeline.",
     fullDetails: {
       institution: "BITS Pilani (M.Tech / M.S. Dissertation)",
@@ -663,7 +672,7 @@ export const ProjectsContent = ({ theme }) => {
                     <div className="flex items-center justify-between gap-1 mb-2">
                       <span className={`text-[8.5px] sm:text-[9px] font-black tracking-wider uppercase truncate transition-colors duration-500 ease-in-out ${isLight ? currentProject.lightSubtitle : 'text-cyan-400'
                         }`}>
-                        {currentProject.subtitle}
+                        {currentProject.shortSubtitle || currentProject.subtitle}
                       </span>
                       <span className={`text-[7.5px] sm:text-[8px] font-mono font-bold px-1.5 sm:px-2 py-0.5 rounded border whitespace-nowrap shrink-0 transition-all duration-500 ease-in-out ${isLight ? currentProject.lightMetrics : 'border-white/10 bg-white/[0.06] text-white/80'
                         }`}>
@@ -674,7 +683,7 @@ export const ProjectsContent = ({ theme }) => {
                     {/* 3. Title */}
                     <h3 className={`text-xs sm:text-sm md:text-base font-black mb-1.5 leading-snug line-clamp-1 tracking-tight transition-colors duration-500 ease-in-out ${isLight ? 'text-[#1e1832]' : 'text-white'
                       }`}>
-                      {currentProject.title}
+                      {currentProject.shortTitle || currentProject.title}
                     </h3>
 
                     {/* 4. Description */}
@@ -779,7 +788,7 @@ export const ProjectsContent = ({ theme }) => {
                       <div className="flex items-center justify-between gap-1 mb-2">
                         <span className={`text-[8.5px] sm:text-[9px] font-black tracking-wider uppercase truncate transition-colors duration-500 ease-in-out ${isLight ? project.lightSubtitle : 'text-cyan-400'
                           }`}>
-                          {project.subtitle}
+                          {project.shortSubtitle || project.subtitle}
                         </span>
                         <span className={`text-[7.5px] sm:text-[8px] font-mono font-bold px-1.5 sm:px-2 py-0.5 rounded border whitespace-nowrap shrink-0 transition-all duration-500 ease-in-out ${isLight ? project.lightMetrics : 'border-white/10 bg-white/[0.06] text-white/80'
                           }`}>
@@ -790,7 +799,7 @@ export const ProjectsContent = ({ theme }) => {
                       {/* 3. Title */}
                       <h3 className={`text-xs sm:text-sm md:text-base font-black group-hover:text-pink-500 transition-colors duration-500 ease-in-out mb-1.5 leading-snug line-clamp-1 tracking-tight ${isLight ? 'text-[#1e1832]' : 'text-white'
                         }`}>
-                        {project.title}
+                        {project.shortTitle || project.title}
                       </h3>
 
                       {/* 4. Description */}

@@ -13,6 +13,7 @@ import { HeroContent } from './components/ui/HeroContent';
 import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
 import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship';
 import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
+import { ResumeViewer } from './components/ui/ResumeViewer';
 import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
 
@@ -46,6 +47,16 @@ const WarmupHost = ({ onDone, children }) => {
 
 const MobileLotusWaterBody = lazy(() => loadMobileLotus().then((m) => ({ default: m.MobileLotusWaterBody })));
 
+
+// …/#/resume opens the résumé viewer on top of Home (handy link to share on LinkedIn)
+const ResumeDeepLink = ({ onOpen }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    onOpen();
+    navigate('/', { replace: true });
+  }, [onOpen, navigate]);
+  return null;
+};
 
 const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
 
@@ -136,6 +147,11 @@ function App() {
   };
 
   const activeSection = getSectionFromPath(location.pathname);
+
+  // Résumé viewer (navbar + contact buttons, and shareable deep link: …/#/resume)
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const openResume = useCallback(() => setIsResumeOpen(true), []);
+  const closeResume = useCallback(() => setIsResumeOpen(false), []);
 
   // ---------- First-visit warm-up ----------
   // 1. ~300 ms after first paint: fetch every page chunk IN PARALLEL (tiny files, no idle waiting).
@@ -289,7 +305,9 @@ function App() {
         setActiveSection={handleSectionChange} 
         theme={theme} 
         setTheme={setTheme} 
+        onOpenResume={openResume}
       />
+      <ResumeViewer isOpen={isResumeOpen} onClose={closeResume} theme={theme} />
 
       {/* 1. Deepest Cosmic / Day Sky Layer */}
       <SkyLayer 
@@ -438,11 +456,12 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
                   >
-                    <Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} /></Suspense>
+                    <Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} onOpenResume={openResume} /></Suspense>
                   </motion.div>
                 }
               />
               <Route path="/say-hello" element={<Navigate to="/contact" replace />} />
+              <Route path="/resume" element={<ResumeDeepLink onOpen={openResume} />} />
               <Route path="/experience" element={<Navigate to="/" replace />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
