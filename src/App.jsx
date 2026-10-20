@@ -13,7 +13,9 @@ import { HeroContent } from './components/ui/HeroContent';
 import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
 import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship';
 import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
+import { ResumeViewer } from './components/ui/ResumeViewer';
 import { warmImage, runWhenIdle } from './lib/assetWarmup';
+import { usePageFit } from './lib/pageFit';
 import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES } from './lib/artAssets';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
@@ -46,6 +48,37 @@ const WarmupHost = ({ onDone, children }) => {
 
 const MobileLotusWaterBody = lazy(() => loadMobileLotus().then((m) => ({ default: m.MobileLotusWaterBody })));
 
+
+// …/#/resume opens the résumé viewer on top of Home (handy link to share on LinkedIn)
+const ResumeDeepLink = ({ onOpen }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    onOpen();
+    navigate('/', { replace: true });
+  }, [onOpen, navigate]);
+  return null;
+};
+
+// Short laptop-width screens: lay the page out at the design height, then scale it to fit.
+// At normal heights (s === 1) this renders the children untouched.
+const FitBox = ({ fit, children }) => {
+  if (fit.s === 1) return children;
+  return (
+    <div
+      className="relative shrink-0 flex items-center justify-center"
+      style={{
+        width: `${fit.w}px`,
+        height: `${fit.h}px`,
+        transform: `scale(${fit.s})`,
+        transformOrigin: '50% 50%',
+        '--page-w': `${fit.w}px`,
+        '--page-h': `${fit.h}px`,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
 
@@ -111,18 +144,13 @@ function App() {
     localStorage.setItem('portfolio_theme', newTheme);
   };
 
-  // Detect mobile & tablet viewport (< 1024px)
-  const [isSmallViewport, setIsSmallViewport] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.innerWidth < 1024;
-  });
-
   const [isMobileViewport, setIsMobileViewport] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.innerWidth < 768;
   });
 
   const location = useLocation();
+  const pageFit = usePageFit();
   const navigate = useNavigate();
 
   // Sync activeSection with react-router-dom path
@@ -136,6 +164,11 @@ function App() {
   };
 
   const activeSection = getSectionFromPath(location.pathname);
+
+  // Résumé viewer (Contact page button, and shareable deep link: …/resume)
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const openResume = useCallback(() => setIsResumeOpen(true), []);
+  const closeResume = useCallback(() => setIsResumeOpen(false), []);
 
   // ---------- First-visit warm-up ----------
   // 1. ~300 ms after first paint: fetch every page chunk IN PARALLEL (tiny files, no idle waiting).
@@ -178,39 +211,23 @@ function App() {
     return () => { clearTimeout(t); cancelIdle(); };
   }, [warmRender]);
 
-  // Block route navigation on mobile & tablet viewport (< 1024px)
+  // Track phone-sized viewport (< 768px)
   useEffect(() => {
-    const handleResize = () => {
-      const isSmall = window.innerWidth < 1024;
-      setIsSmallViewport(isSmall);
-      setIsMobileViewport(window.innerWidth < 768);
-      if (isSmall && location.pathname !== '/') {
-        navigate('/', { replace: true });
-      }
-    };
+    const handleResize = () => setIsMobileViewport(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [location.pathname, navigate]);
+  }, []);
 
-  useEffect(() => {
-    if (isSmallViewport && location.pathname !== '/') {
-      navigate('/', { replace: true });
-    }
-  }, [isSmallViewport, location.pathname, navigate]);
 
   // Section navigation handler using react-router-dom navigate
   const handleSectionChange = useCallback((newSection) => {
-    if (isSmallViewport) {
-      navigate('/');
-      return;
-    }
     const path = newSection === 'home' ? '/' : `/${newSection}`;
     const loader = ROUTE_LOADERS[newSection];
     // Make sure the page's code is there BEFORE switching, so the page content and the landscape
     // transition start in the same frame (instead of the landscape moving and the content popping in later).
     if (!loader) navigate(path);
     else loader().then(() => navigate(path), () => navigate(path));
-  }, [isSmallViewport, navigate]);
+  }, [navigate]);
 
   const showRecededLandscape = activeSection === 'about' || activeSection === 'contact' || activeSection === 'projects';
 
@@ -288,8 +305,8 @@ function App() {
         activeSection={activeSection} 
         setActiveSection={handleSectionChange} 
         theme={theme} 
-        setTheme={setTheme} 
-      />
+        setTheme={setTheme} fitScale={pageFit.s} />
+      <ResumeViewer isOpen={isResumeOpen} onClose={closeResume} theme={theme} />
 
       {/* 1. Deepest Cosmic / Day Sky Layer */}
       <SkyLayer 
@@ -368,7 +385,7 @@ function App() {
       <AnimatePresence>
         {activeSection === 'contact' && (
           <Suspense key={isMobileViewport ? 'lotus-lake-mob' : 'lotus-lake'} fallback={null}>
-            {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} />}
+            {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} fitScale={pageFit.s} />}
           </Suspense>
         )}
       </AnimatePresence>
@@ -390,7 +407,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} />
+                    <FitBox fit={pageFit}><HeroContent setActiveSection={handleSectionChange} onAvatarTrigger={handleAvatarTrigger} theme={theme} /></FitBox>
                   </motion.div>
                 }
               />
@@ -406,7 +423,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <Suspense fallback={null}><AboutContent theme={theme} /></Suspense>
+                    <FitBox fit={pageFit}><Suspense fallback={null}><AboutContent theme={theme} /></Suspense></FitBox>
                   </motion.div>
                 }
               />
@@ -422,7 +439,7 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full flex items-center justify-center pointer-events-auto"
                   >
-                    <Suspense fallback={null}><ProjectsContent theme={theme} /></Suspense>
+                    <FitBox fit={pageFit}><Suspense fallback={null}><ProjectsContent theme={theme} /></Suspense></FitBox>
                   </motion.div>
                 }
               />
@@ -438,11 +455,12 @@ function App() {
                     style={{ willChange: 'opacity, transform' }}
                     className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
                   >
-                    <Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} /></Suspense>
+                    <FitBox fit={pageFit}><Suspense fallback={null}><ContactContent setActiveSection={handleSectionChange} theme={theme} onAvatarTrigger={handleAvatarTrigger} onOpenResume={openResume} /></Suspense></FitBox>
                   </motion.div>
                 }
               />
               <Route path="/say-hello" element={<Navigate to="/contact" replace />} />
+              <Route path="/resume" element={<ResumeDeepLink onOpen={openResume} />} />
               <Route path="/experience" element={<Navigate to="/" replace />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

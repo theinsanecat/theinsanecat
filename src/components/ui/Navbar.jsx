@@ -3,7 +3,7 @@ import { usePerformanceMode } from '../../context/PerformanceContext';
 import GlassSurface from './GlassSurface';
 import BorderGlow from './BorderGlow';
 
-export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => {
+export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitScale = 1 }) => {
   const { performanceMode, setPerformanceMode } = usePerformanceMode();
 
   const cyclePerformanceMode = () => {
@@ -32,24 +32,32 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      // short laptop-width screens: scaled together with the page content (see lib/pageFit)
+      style={fitScale < 1 ? { scale: fitScale, originX: 0, originY: 0, width: `${100 / fitScale}vw` } : undefined}
       className="fixed top-0 left-0 w-full z-50 px-2 sm:px-6 md:px-16 py-3 sm:py-5 flex items-center justify-between pointer-events-auto"
     >
-      {/* Logo: Glowing typography with responsive scaling */}
-      <button 
-        onClick={() => setActiveSection('home')} 
-        className="group flex items-center gap-1 sm:gap-2 cursor-pointer focus:outline-none shrink-0 z-10"
+      {/* Logo: name on top, the commit-message joke underneath */}
+      <button
+        onClick={() => setActiveSection('home')}
+        aria-label="Soumya Dwivedi, home"
+        className="group flex flex-col items-start leading-none cursor-pointer focus:outline-none shrink-0 z-10"
       >
+        <span className={`text-[7px] xs:text-[8px] sm:text-[9px] lg:text-[10px] font-black tracking-[0.25em] uppercase mb-0.5 sm:mb-1 transition-colors duration-700 ease-in-out whitespace-nowrap ${
+          isLight ? 'text-pink-600' : 'text-purple-300'
+        }`}>
+          Soumya Dwivedi
+        </span>
         <span className={`text-[9px] xs:text-[10px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-700 ease-in-out whitespace-nowrap ${
-          isLight 
-            ? 'text-[#1e1832] group-hover:text-pink-600' 
+          isLight
+            ? 'text-[#1e1832] group-hover:text-pink-600'
             : 'text-white group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
         }`}>
           git commit -m &quot;I tried&quot;
         </span>
       </button>
 
-      {/* Nav Links: Glassmorphism pill wrapper - Hidden on mobile & tablet (< lg), visible on desktop */}
-      <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-10">
+      {/* Nav Links: glass pill. Hidden below lg; sits in the row on 1024-1279px so it never meets the right controls, centred from xl */}
+      <div className="hidden lg:block xl:absolute xl:left-1/2 xl:top-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2 pointer-events-auto z-10">
         {isLight ? (
           <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-md border border-white/80 bg-white/75 shadow-md shadow-pink-900/5 text-slate-800 transition-all duration-500">
             {navLinks.map((link) => {
@@ -114,9 +122,10 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
               ? 'bg-white/80 border-pink-200 text-slate-800 hover:bg-pink-50 shadow-sm'
               : 'bg-white/10 border-purple-500/30 text-purple-200 hover:bg-purple-500/20 shadow-md'
           }`}
-          title={`Performance Mode: ${perfLabels[performanceMode].label} (Click to cycle)`}
+          title={`Animation quality: ${perfLabels[performanceMode].label}. Picked automatically for your device; click to change.`}
+          aria-label={`Animation quality: ${perfLabels[performanceMode].label}. Click to change.`}
         >
-          <span className="opacity-50 font-normal text-[8px] sm:text-[9px] mr-0.5">Mode:</span>
+          <span className="opacity-50 font-normal text-[8px] sm:text-[9px] mr-0.5">Quality:</span>
           <span className="font-bold inline-block text-center min-w-[58px] sm:min-w-[70px] transition-all duration-700 ease-in-out">{perfLabels[performanceMode].tag}</span>
         </button>
 
@@ -177,20 +186,32 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         </div>
       </div>
 
-      {/* Mobile & Tablet Laptop Recommendation Prompt */}
-      <div className="absolute top-[calc(100%+4px)] sm:top-[calc(100%+6px)] left-1/2 -translate-x-1/2 pointer-events-auto z-40 lg:hidden w-max max-w-[92vw]">
-        <div className={`text-[9.5px] xs:text-[10.5px] sm:text-xs font-bold tracking-tight transition-colors duration-500 flex items-center justify-center gap-1.5 opacity-95 ${
-          isLight ? 'text-pink-600' : 'text-purple-300'
+      {/* Mobile & tablet navigation (< lg): bottom tab bar, thumb-reachable */}
+      <div
+        className="lg:hidden fixed left-1/2 -translate-x-1/2 z-50 pointer-events-auto"
+        style={{ bottom: 'calc(10px + env(safe-area-inset-bottom, 0px))' }}
+      >
+        <div className={`flex items-center gap-0.5 p-1 rounded-full border shadow-lg transition-colors duration-700 ${
+          isLight ? 'bg-white/90 border-pink-200 shadow-pink-900/10' : 'bg-[#1b1235]/90 border-purple-500/30 shadow-black/40'
         }`}>
-          <span className="relative flex h-1.5 w-1.5 shrink-0 opacity-90">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-              isLight ? 'bg-pink-400' : 'bg-purple-400'
-            }`}></span>
-            <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-              isLight ? 'bg-pink-500' : 'bg-purple-500'
-            }`}></span>
-          </span>
-          <span>Best experienced on a laptop or desktop</span>
+          {[...navLinks, { id: 'contact', name: 'Say Hello' }].map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => setActiveSection(link.id)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`px-3 xs:px-3.5 py-1.5 rounded-full text-[11px] xs:text-xs font-semibold whitespace-nowrap transition-colors duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 ${
+                  isActive
+                    ? (isLight ? 'bg-pink-600 text-white focus-visible:ring-pink-300' : 'bg-purple-600 text-white focus-visible:ring-purple-300')
+                    : (isLight ? 'text-slate-700 hover:text-pink-600 focus-visible:ring-pink-300' : 'text-purple-100/80 hover:text-white focus-visible:ring-purple-300')
+                }`}
+              >
+                {link.name}
+              </button>
+            );
+          })}
         </div>
       </div>
     </motion.nav>

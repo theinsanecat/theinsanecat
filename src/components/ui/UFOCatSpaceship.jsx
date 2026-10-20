@@ -52,7 +52,7 @@ export const UFOCatSpaceship = ({ isHovered, isActive, className = '', style = {
           {/* ================= LAYER 2: SPACESHIP BASE ================= */}
           <ellipse cx="100" cy="140" rx="36" ry="12" fill="#f8fafc" stroke="#94a3b8" strokeWidth="2" />
           <ellipse cx="100" cy="146" rx="24" ry="8" fill="url(#node-glow)" stroke="#ca8a04" strokeWidth="1.2" />
-          {/* Saucer — NO black border */}
+          {/* Saucer: NO black border */}
           <path 
             d="M 25,124 C 25,108 55,98 100,98 C 145,98 175,108 175,124 C 175,142 145,150 100,150 C 55,150 25,142 25,124 Z" 
             fill="url(#saucer-body)"

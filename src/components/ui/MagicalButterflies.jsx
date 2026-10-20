@@ -86,7 +86,7 @@ export const MagicalButterflies = ({ theme }) => {
       transition={{ duration: 0.5, ease: 'easeInOut' }}
       className={`fixed inset-0 w-full h-full pointer-events-none z-20 overflow-hidden select-none ${isLite ? 'hidden' : 'block'}`}
     >
-      {/* ================= BUTTERFLY 1: Purple Butterfly (Upper Left) — always shown ================= */}
+      {/* ================= BUTTERFLY 1: Purple Butterfly (Upper Left): always shown ================= */}
       <div
         className="absolute w-7 h-7 z-25 transform-gpu butterfly-flight"
         style={{ left: 0, top: 0, animationName: 'butterflyFlight1', animationDuration: `${isMobile ? 26 : 18}s`, animationDelay: '0s' }}
@@ -94,7 +94,7 @@ export const MagicalButterflies = ({ theme }) => {
         <MonochromeButterfly colorTheme="purple" size={28} flapDuration={0.27} flapDelay={0.04} theme={theme} isMobile={isMobile} />
       </div>
 
-      {/* ================= BUTTERFLY 2: Pink Butterfly (Mid Left) — always shown ================= */}
+      {/* ================= BUTTERFLY 2: Pink Butterfly (Mid Left): always shown ================= */}
       <div
         className="absolute w-7 h-7 z-25 transform-gpu butterfly-flight"
         style={{ left: 0, top: 0, animationName: 'butterflyFlight2', animationDuration: `${isMobile ? 24 : 17}s`, animationDelay: '1.5s' }}

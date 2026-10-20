@@ -15,7 +15,7 @@ export function warmImage(src) {
   const entry = { img, ready: false, promise: null };
   entry.promise = new Promise((resolve) => {
     img.onload = () => {
-      // decode() can reject for huge images or when the doc is hidden — still usable, just not pre-decoded
+      // decode() can reject for huge images or when the doc is hidden: still usable, just not pre-decoded
       (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(() => {
         entry.ready = true;
         resolve(img);

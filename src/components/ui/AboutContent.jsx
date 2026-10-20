@@ -43,7 +43,7 @@ const cardsData = [
   {
     id: 1,
     heading: "Infosys Limited",
-    title: "Technology Analyst",
+    title: "Senior Software Developer",
     category: "ENTERPRISE FRONTEND",
     backTitle: "01/05",
     date: "Jan 2025 - Present",
@@ -66,7 +66,7 @@ const cardsData = [
   {
     id: 2,
     heading: "Jio Platforms Limited",
-    title: "Software Developer & Team Lead",
+    title: "Software Developer & Frontend Team Lead",
     category: "FRONTEND DEVELOPER",
     backTitle: "02/05",
     date: "Oct 2020 - Dec 2024",
@@ -237,7 +237,7 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
   const themeLayers = useContext(ThemeLayersContext);
   return (
     <div className={`absolute inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-between shadow-2xl backface-hidden transform-gpu ${
-      // On mobile: parent motion.div handles opacity — don't apply own opacity classes
+      // On mobile: parent motion.div handles opacity: don't apply own opacity classes
       isMobile ? '' : `transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`
       }`}>
       {/* Background Gradient Face - Light Mode */}
@@ -583,7 +583,7 @@ const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMo
         }`}
     />
 
-    {/* Smooth Floating Container — GPU CSS Accelerated */}
+    {/* Smooth Floating Container: GPU CSS Accelerated */}
     <div
       className={`w-full h-full relative preserve-3d transform-gpu ${isCenterUnturned ? 'animate-card-float' : ''}`}
     >
@@ -782,6 +782,9 @@ export const AboutContent = ({ theme }) => {
   );
   const isLocked = useRef(false);
 
+  // Scale of the focused (centre) card at this screen size, mirrors baseScale below
+  const deckScale = isSmallScreen ? 0.72 : (isMobile ? 0.82 : (isTablet ? 0.85 : 1));
+
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
   const total = cardsData.length;
 
@@ -862,7 +865,7 @@ export const AboutContent = ({ theme }) => {
 
   return (
     <ThemeLayersContext.Provider value={themeLayers}>
-    <div className="relative w-screen h-screen max-h-screen flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-4 sm:pb-6">
+    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100vh)] max-h-[var(--page-h,100vh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 lg:pb-6">
 
       {/* Aurora Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -895,7 +898,7 @@ export const AboutContent = ({ theme }) => {
           }`}>About Me</span>
         <h2 className={`text-2xl sm:text-3xl md:text-4xl font-black mt-0.5 mb-0.5 tracking-tight transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
           }`}>My Journey</h2>
-        <p className={`text-[10px] sm:text-xs font-questrial transition-colors duration-700 ${isLight ? 'text-purple-900/80' : 'text-purple-200/60'
+        <p className={`text-[10px] sm:text-xs font-questrial transition-colors duration-700 ${isLight ? 'text-purple-900/80' : 'text-purple-200/80'
           }`}>Rotate the deck and click a card to explore my journey.</p>
       </div>
 
@@ -937,17 +940,12 @@ export const AboutContent = ({ theme }) => {
             let opacity = arc.opacity;
             let zIndex = arc.zIndex;
 
-            if (isAnySelected) {
+            if (isAnySelected && isMobile) {
+              // Phones: the deck simply fades out where it is (no shrinking card); the story takes its place
+              opacity = 0;
+            } else if (isAnySelected) {
               if (isSelected) {
-                if (isMobile) {
-                  // Mobile screens: card centered higher at top, details text BELOW card with clean 20px vertical gap
-                  targetX = 0;
-                  targetY = isSmallScreen ? -140 : -150;
-                  rotateZ = 0;
-                  scale = isSmallScreen ? 0.36 : 0.40;
-                  opacity = 1;
-                  zIndex = 50;
-                } else {
+                {
                   // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
                   targetX = isTablet ? -135 : -200;
                   targetY = 0;
@@ -985,13 +983,21 @@ export const AboutContent = ({ theme }) => {
                   opacity: opacity,
                   zIndex: zIndex,
                 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: isMobile ? 85 : 110,
-                  damping: isMobile ? 18 : 16,
-                  mass: isMobile ? 0.6 : 0.8,
-                }}
+                transition={isMobile && isAnySelected
+                  ? { duration: 0.25, ease: 'easeOut' }
+                  : {
+                    type: 'spring',
+                    stiffness: isMobile ? 85 : 110,
+                    damping: isMobile ? 18 : 16,
+                    mass: isMobile ? 0.6 : 0.8,
+                  }}
                 onClick={() => handleCardClick(card, index)}
+                role="button"
+                tabIndex={isAnySelected ? -1 : 0}
+                aria-label={`${card.heading}, ${card.title}. Open details`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(card, index); }
+                }}
                 className="absolute w-[300px] h-[450px] transform-gpu"
                 style={{
                   top: '50%',
@@ -1021,19 +1027,19 @@ export const AboutContent = ({ theme }) => {
             {selectedCard && (
               <motion.div
                 key={`details-${selectedCard.id}`}
-                initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: isMobile ? '15px' : '-50%' }}
-                animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: isMobile ? '0px' : '-50%' }}
-                exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: isMobile ? '10px' : '-50%' }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
+                initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: '-50%' }}
+                animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: '-50%' }}
+                exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: '-50%' }}
+                transition={{ duration: isMobile ? 0.3 : 0.45, ease: "easeOut", delay: isMobile ? 0.12 : 0 }}
                 className={`absolute flex flex-col text-left px-3 sm:px-4 z-30 pointer-events-auto items-start ${isMobile ? 'justify-start' : 'justify-between py-1'
                   }`}
                 style={{
                   left: '50%',
-                  top: isMobile ? (isSmallScreen ? 'calc(50% - 95px)' : 'calc(50% - 110px)') : '50%',
+                  top: '50%',
                   marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
                   width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
                   height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
-                  maxHeight: isMobile ? (isSmallScreen ? '310px' : '350px') : 'none',
+                  maxHeight: isMobile ? (isSmallScreen ? '420px' : '480px') : 'none',
                 }}
               >
                 {/* Header Info */}
@@ -1050,10 +1056,16 @@ export const AboutContent = ({ theme }) => {
                     }`}>
                     {selectedCard.title}
                   </h3>
+                  {isMobile && (
+                    <span className={`mt-0.5 text-[9px] xs:text-[10px] font-mono font-bold tracking-wider ${isLight ? 'text-purple-900/70' : 'text-purple-200/70'}`}>
+                      {selectedCard.date}
+                    </span>
+                  )}
                 </div>
 
+
                 {/* Long Description Body */}
-                <div className={`w-full my-1 leading-snug text-[9px] xs:text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[85px] xs:max-h-[105px] sm:max-h-[160px] overflow-y-auto pr-1 custom-scrollbar' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
+                <div className={`w-full my-1 font-medium transition-colors duration-700 ${isMobile ? 'min-h-0 shrink overflow-y-auto pr-1 custom-scrollbar text-[11px] xs:text-xs leading-relaxed' : 'leading-snug text-[9px] xs:text-[10px] sm:text-xs flex-1 overflow-y-auto pr-2 custom-scrollbar'
                   } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
                   <p>{selectedCard.longDescription}</p>
                 </div>
@@ -1090,7 +1102,7 @@ export const AboutContent = ({ theme }) => {
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                       </svg>
-                      Close Expanded Card
+                      {isMobile ? 'Back to cards' : 'Close Expanded Card'}
                     </button>
                   ) : (
                     <BorderGlow
@@ -1110,7 +1122,7 @@ export const AboutContent = ({ theme }) => {
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                         </svg>
-                        Close Expanded Card
+                        {isMobile ? 'Back to cards' : 'Close Expanded Card'}
                       </button>
                     </BorderGlow>
                   )}
@@ -1159,7 +1171,8 @@ export const AboutContent = ({ theme }) => {
           <div
             className="absolute left-1/2 -translate-x-1/2 text-center z-20 transition-all duration-700 pointer-events-none whitespace-nowrap"
             style={{
-              top: 'calc(50% + 244px)',
+              // sits just under the focused card; the card is 450px tall before its screen-size scale
+              top: deckScale === 1 ? 'calc(50% + 244px)' : `calc(50% + ${Math.round(225 * deckScale + 18)}px)`,
               opacity: selectedCardId ? 0 : 1,
               transform: selectedCardId ? 'translateY(8px)' : 'none',
             }}

@@ -4,11 +4,12 @@ import meDarkImg from '../../assets/me.webp';
 import meLightImg from '../../assets/me_light.webp';
 import { ROTATING_EMBLEM_SRC } from '../../lib/artAssets';
 import { useImageReady } from '../../hooks/useImageReady';
+import { RESUME_URL } from './ResumeViewer';
 import { SakuraBranch } from './SakuraBranch';
 import MagicalButterflies from './MagicalButterflies';
 import BorderGlow from './BorderGlow';
 
-export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => {
+export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpenResume }) => {
   const isLight = theme === 'light';
   const [isHovered, setIsHovered] = useState(false);
   // Emblem fades in once decoded (normally already warmed up from Home)
@@ -63,6 +64,18 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
           <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-1.298 1.458-2.051 2.507-1.263L12 11.302l9.493-7.108C22.541 3.406 24 4.159 24 5.457z"/>
         </svg>
       )
+    },
+    {
+      name: "Résumé",
+      url: RESUME_URL,
+      onClick: onOpenResume, // opens the in-page viewer; the href still works as a fallback / new-tab link
+      color: "hover:text-pink-400 hover:border-pink-500/40",
+      glowColor: "group-hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]",
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+        </svg>
+      )
     }
   ];
 
@@ -98,7 +111,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
       >
         <div className="relative">
           {/* Light Mode Back Button */}
-          <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} inert={!isLight}>
             <button
               onClick={() => setActiveSection('home')}
               className="px-2.5 xs:px-3 sm:px-4 py-0.5 xs:py-1 sm:py-1.5 text-[8.5px] xs:text-[9.5px] sm:text-xs font-bold text-[#1e1832] bg-white/90 hover:bg-white border border-purple-200/90 shadow-sm rounded-full active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-1.5"
@@ -111,7 +124,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
           </div>
 
           {/* Dark Mode Back Button */}
-          <div className={`absolute top-0 left-0 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <div className={`absolute top-0 left-0 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} inert={isLight}>
             <BorderGlow
               borderRadius={9999}
               glowColor="270 85 70"
@@ -136,7 +149,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
         </div>
       </motion.div>
 
-      {/* Emblem & Circular Avatar Tile Wrapper — Enters together as a synchronized unit */}
+      {/* Emblem & Circular Avatar Tile Wrapper: Enters together as a synchronized unit */}
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -149,7 +162,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
           isLight ? 'opacity-100' : 'opacity-0'
         }`} />
 
-        {/* Slowly Rotating SVG Emblem Background — Pure CSS @keyframes spin running on GPU compositor thread (0 JS overhead) */}
+        {/* Slowly Rotating SVG Emblem Background: Pure CSS @keyframes spin running on GPU compositor thread (0 JS overhead) */}
         <div
           className="absolute z-0 pointer-events-none flex items-center justify-center overflow-visible transform-gpu emblem-spin"
           style={{
@@ -158,7 +171,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
             WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 16%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 56%)',
           }}
         >
-          {/* Single Dynamic Emblem Image — 50% VRAM memory reduction */}
+          {/* Single Dynamic Emblem Image: 50% VRAM memory reduction */}
           <img
             src={ROTATING_EMBLEM_SRC}
             alt=""
@@ -174,7 +187,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
           />
         </div>
 
-        {/* Circular Avatar Tile — Centered at Emblem Center */}
+        {/* Circular Avatar Tile: Centered at Emblem Center */}
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -251,7 +264,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
 
       </motion.div>
 
-      {/* Social Links Row — Scaled for mobile screens (iPhone SE) */}
+      {/* Social Links Row: Scaled for mobile screens (iPhone SE) */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -261,11 +274,12 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
         {socialLinks.map((link) => (
           <div key={link.name} className="relative transform-gpu">
             {/* Light Mode Social Button */}
-            <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <div className={`transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} inert={!isLight}>
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick(); } : undefined}
                 className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-[#1e1832] bg-white/85 hover:bg-white border border-purple-200/90 shadow-sm rounded-full hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
               >
                 <span className="text-purple-600 group-hover:text-pink-600 transition-colors duration-300">
@@ -278,7 +292,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
             </div>
 
             {/* Dark Mode Social Button with Animated Border Glow */}
-            <div className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} inert={isLight}>
               <BorderGlow
                 borderRadius={9999}
                 glowColor="270 85 70"
@@ -293,6 +307,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick(); } : undefined}
                   className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-white focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
                 >
                   <span className={`transition-colors duration-300 ${link.color}`}>
@@ -307,6 +322,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger }) => 
           </div>
         ))}
       </motion.div>
+
       
     </div>
   );
