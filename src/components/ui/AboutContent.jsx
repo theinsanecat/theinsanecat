@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { ABOUT_IMAGES, ABOUT_CARD_IMAGES } from '../../lib/artAssets';
-import { IS_TOUCH_DEVICE } from '../../context/PerformanceContext';
+import { usePerformanceMode } from '../../context/PerformanceContext';
+import { isCompactScreen } from '../../lib/compactScreen';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import BorderGlow from './BorderGlow';
@@ -18,7 +19,7 @@ const useThemeLayers = (theme) => {
   useEffect(() => {
     if (theme === visualTheme) return undefined;
     // Phones swap straight away: mounting both artwork sets at once is too much for iPhone Safari
-    if (window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024) {
+    if (isCompactScreen()) {
       const r = requestAnimationFrame(() => setVisualTheme(theme));
       return () => cancelAnimationFrame(r);
     }
@@ -241,9 +242,10 @@ const CardFrame = ({ gid, theme }) => {
 const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
   const isLight = theme === 'light';
   const themeLayers = useContext(ThemeLayersContext);
+  const { modeLocked: compactScreen } = usePerformanceMode();
   // Phones & tablets: the same artwork as a pre-rendered picture (scripts/render-about-cards.mjs).
   // Five live SVG cards with shadow/glow filters were too heavy to animate on a phone.
-  if (isMobile || IS_TOUCH_DEVICE) {
+  if (isMobile || compactScreen) {
     return (
       <div className={`absolute inset-0 w-full h-full overflow-hidden backface-hidden ${
         isMobile ? '' : `transition-opacity duration-300 ${isSelected ? 'opacity-0 pointer-events-none' : 'opacity-100'}`

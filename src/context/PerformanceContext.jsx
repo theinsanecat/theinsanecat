@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { COMPACT_MAX_WIDTH, isCompactScreen } from '../lib/compactScreen';
 
 const PerformanceContext = createContext({
   performanceMode: 'full', // 'full' (Cinematic) | 'balanced' | 'lite'
@@ -11,10 +12,8 @@ const PerformanceContext = createContext({
 
 const MODES = ['full', 'balanced', 'lite'];
 
-// Phones and tablets (touch screen, under laptop width) always get the basic Lite version, with no switch.
-// Read once at load: a phone doesn't become a laptop by rotating.
-export const IS_TOUCH_DEVICE =
-  typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024;
+// Phone & tablet sized screens always get the basic Lite version, with no Quality switch. Checked live,
+// so a narrow window or the browser's device toolbar switches too, and widening it again restores the mode.
 
 /*
  * One-time hardware probe.
@@ -93,13 +92,23 @@ const readStoredMode = () => {
 };
 
 export const PerformanceProvider = ({ children }) => {
-  const [performanceMode, setPerformanceModeState] = useState(() =>
-    typeof window === 'undefined' ? 'full' : IS_TOUCH_DEVICE ? 'lite' : readStoredMode() || getDetection().mode
+  // The laptop/desktop mode (stored choice or detected); phone-sized screens override it with Lite
+  const [chosenMode, setPerformanceModeState] = useState(() =>
+    typeof window === 'undefined' ? 'full' : readStoredMode() || getDetection().mode
   );
+  const [compact, setCompact] = useState(isCompactScreen);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${COMPACT_MAX_WIDTH}px)`);
+    const onChange = () => setCompact(mq.matches);
+    onChange();
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  const performanceMode = compact ? 'lite' : chosenMode;
   const [detectedGpu] = useState(() => (typeof window === 'undefined' ? '' : getDetection().renderer));
 
   const setPerformanceMode = useCallback((mode) => {
-    if (!MODES.includes(mode) || IS_TOUCH_DEVICE) return;
+    if (!MODES.includes(mode) || isCompactScreen()) return;
     setPerformanceModeState(mode);
     try {
       localStorage.setItem('portfolio_perf_mode', mode);
@@ -161,9 +170,9 @@ export const PerformanceProvider = ({ children }) => {
     isFull: performanceMode === 'full',
     isBalanced: performanceMode === 'balanced',
     isLite: performanceMode === 'lite',
-    modeLocked: IS_TOUCH_DEVICE,
+    modeLocked: compact,
     detectedGpu,
-  }), [performanceMode, setPerformanceMode, detectedGpu]);
+  }), [performanceMode, compact, setPerformanceMode, detectedGpu]);
 
   return <PerformanceContext.Provider value={value}>{children}</PerformanceContext.Provider>;
 };
