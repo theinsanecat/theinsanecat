@@ -18,7 +18,7 @@ import { RotateNotice } from './components/ui/RotateNotice';
 import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { usePageFit } from './lib/pageFit';
 import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES, ABOUT_CARD_IMAGES } from './lib/artAssets';
-import { IS_TOUCH_DEVICE } from './context/PerformanceContext';
+import { isCompactScreen } from './lib/compactScreen';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
 // Each page ships in its own chunk. They are all fetched in parallel right after Home's first paint,
@@ -89,9 +89,6 @@ const aboutCardWarmOrder = () => {
   return [...keys.filter((k) => k.startsWith(first)), ...keys.filter((k) => !k.startsWith(first))].map((k) => ABOUT_CARD_IMAGES[k]);
 };
 
-// Touch phone or small tablet (coarse pointer, under laptop width)
-const IS_TOUCH_PHONE = () =>
-  typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024;
 
 const FOREST_TRANSITION = { duration: 0.45, ease: [0.16, 1, 0.3, 1] };
 
@@ -155,7 +152,7 @@ function App() {
   const setTheme = (newTheme) => {
     // Phones: switch instantly. Cross-fading every layer of both themes at once needs more graphics
     // memory than iPhone Safari gives a tab, and it blanks the screen (gray, then black) mid-fade.
-    if (IS_TOUCH_PHONE()) {
+    if (isCompactScreen()) {
       const root = document.documentElement;
       root.dataset.themeSwitch = 'instant';
       requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(() => { delete root.dataset.themeSwitch; }, 50)));
@@ -170,6 +167,8 @@ function App() {
   });
 
   const location = useLocation();
+  // Keep the pre-CSS background in index.html in step with the theme
+  useEffect(() => { document.documentElement.classList.toggle('theme-light', theme === 'light'); }, [theme]);
   const pageFit = usePageFit();
   const navigate = useNavigate();
 
@@ -223,7 +222,7 @@ function App() {
             () => warmImage(SAKURA_BRANCH_SRC),
             () => warmRender('contact'),
             // Phones & tablets draw the About card backs from pictures: current theme first, then the other
-            ...(IS_TOUCH_DEVICE ? aboutCardWarmOrder().map((src) => () => warmImage(src)) : []),
+            ...(isCompactScreen() ? aboutCardWarmOrder().map((src) => () => warmImage(src)) : []),
             // Building photos are on the card fronts, which phones never show
             ...(isMobile ? [] : Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src))),
             () => warmRender('about'),

@@ -42,7 +42,9 @@ function spaFallback() {
       const script = `<script>(function(){var l=location,p=l.pathname,r=${JSON.stringify(siteRoot)};` +
         `var b=p.indexOf(r+'preview/')===0?r+'preview/':r;if(p.indexOf(b)!==0)return;` +
         `l.replace(b+'?p='+encodeURIComponent(p.slice(b.length))+l.hash);})();</script>`
-      const html = String(index.source).replace('<head>', '<head>\n    ' + script)
+      // Background first, so the brief moment before the redirect is the site's colour, not white
+      const bg = `<style>html,body{background:#07010e}</style><script>try{if(localStorage.getItem('portfolio_theme')==='light')document.documentElement.style.background='#faf5f0'}catch(e){}</script>`
+      const html = String(index.source).replace('<head>', '<head>\n    ' + bg + '\n    ' + script)
       this.emitFile({ type: 'asset', fileName: '404.html', source: html })
     },
   }

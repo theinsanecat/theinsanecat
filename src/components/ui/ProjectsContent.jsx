@@ -25,13 +25,14 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
     <AnimatePresence>
       {project && (
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto pointer-events-auto">
-          {/* Backdrop Overlay: no backdrop-blur on mobile (forces full-page GPU rasterization layer on WebKit) */}
+          {/* Backdrop Overlay: no backdrop-blur on mobile (forces full-page GPU rasterization layer on WebKit).
+              Faded by Framer only: a CSS opacity transition here replayed the fade and flashed dark on close */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-black/60 sm:backdrop-blur-xs transition-opacity duration-300 z-0"
+            className="fixed inset-0 bg-black/60 sm:backdrop-blur-xs z-0"
           />
 
           {/* Modal Card Container (Expanded Card View) */}

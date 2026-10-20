@@ -24,6 +24,10 @@
     <meta name="twitter:image" content="https://theinsanecat.github.io/theinsanecat/og-image.jpg" />
 
     <title>Soumya Dwivedi | Senior Frontend Engineer</title>
+
+    <!-- Paint the site's background before any CSS or JS loads, so opening a page never flashes white -->
+    <style>html, body { background: #07010e; } html.theme-light, html.theme-light body { background: #faf5f0; }</style>
+    <script>try { if (localStorage.getItem('portfolio_theme') === 'light') document.documentElement.className += ' theme-light'; } catch (e) {}</script>
   </head>
   <body>
     <div id="root"></div>
