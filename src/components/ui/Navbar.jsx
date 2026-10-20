@@ -48,8 +48,8 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme }) => 
         </span>
       </button>
 
-      {/* Nav Links: Glassmorphism pill wrapper - Hidden on mobile & tablet (< lg), visible on desktop */}
-      <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-auto z-10">
+      {/* Nav Links: glass pill. Hidden below lg; sits in the row on 1024-1279px so it never meets the right controls, centred from xl */}
+      <div className="hidden lg:block xl:absolute xl:left-1/2 xl:top-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2 pointer-events-auto z-10">
         {isLight ? (
           <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-md border border-white/80 bg-white/75 shadow-md shadow-pink-900/5 text-slate-800 transition-all duration-500">
             {navLinks.map((link) => {
