@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Single place to change the résumé file: drop the PDF at public/resume/<RESUME_FILE>
+// Single place to change the résumé file: drop the PDF at public/files/<RESUME_FILE>
 export const RESUME_FILE = 'Soumya-Dwivedi-Resume.pdf';
-export const RESUME_URL = `${import.meta.env.BASE_URL}resume/${RESUME_FILE}`;
+export const RESUME_URL = `${import.meta.env.BASE_URL}files/${RESUME_FILE}`;
 
 const DownloadIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-4 h-4" aria-hidden="true">

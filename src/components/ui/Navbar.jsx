@@ -36,14 +36,20 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
       style={fitScale < 1 ? { scale: fitScale, originX: 0, originY: 0, width: `${100 / fitScale}vw` } : undefined}
       className="fixed top-0 left-0 w-full z-50 px-2 sm:px-6 md:px-16 py-3 sm:py-5 flex items-center justify-between pointer-events-auto"
     >
-      {/* Logo: Glowing typography with responsive scaling */}
-      <button 
-        onClick={() => setActiveSection('home')} 
-        className="group flex items-center gap-1 sm:gap-2 cursor-pointer focus:outline-none shrink-0 z-10"
+      {/* Logo: name on top, the commit-message joke underneath */}
+      <button
+        onClick={() => setActiveSection('home')}
+        aria-label="Soumya Dwivedi, home"
+        className="group flex flex-col items-start leading-none cursor-pointer focus:outline-none shrink-0 z-10"
       >
+        <span className={`text-[7px] xs:text-[8px] sm:text-[9px] lg:text-[10px] font-black tracking-[0.25em] uppercase mb-0.5 sm:mb-1 transition-colors duration-700 ease-in-out whitespace-nowrap ${
+          isLight ? 'text-pink-600' : 'text-purple-300'
+        }`}>
+          Soumya Dwivedi
+        </span>
         <span className={`text-[9px] xs:text-[10px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-700 ease-in-out whitespace-nowrap ${
-          isLight 
-            ? 'text-[#1e1832] group-hover:text-pink-600' 
+          isLight
+            ? 'text-[#1e1832] group-hover:text-pink-600'
             : 'text-white group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
         }`}>
           git commit -m &quot;I tried&quot;
@@ -198,7 +204,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
                 aria-current={isActive ? 'page' : undefined}
                 className={`px-3 xs:px-3.5 py-1.5 rounded-full text-[11px] xs:text-xs font-semibold whitespace-nowrap transition-colors duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 ${
                   isActive
-                    ? (isLight ? 'bg-pink-500 text-white focus-visible:ring-pink-300' : 'bg-purple-600 text-white focus-visible:ring-purple-300')
+                    ? (isLight ? 'bg-pink-600 text-white focus-visible:ring-pink-300' : 'bg-purple-600 text-white focus-visible:ring-purple-300')
                     : (isLight ? 'text-slate-700 hover:text-pink-600 focus-visible:ring-pink-300' : 'text-purple-100/80 hover:text-white focus-visible:ring-purple-300')
                 }`}
               >

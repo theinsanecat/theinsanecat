@@ -114,9 +114,20 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
                 </div>
               )}
 
+              {/* Case-study sections (frontend work) */}
+              {project.sections?.map((sec, i) => {
+                const tone = SECTION_TONES[i % SECTION_TONES.length];
+                return (
+                  <div key={sec.label} className={`p-3 rounded-xl border ${isLight ? tone.light : tone.dark}`}>
+                    <h4 className={`font-black text-[10px] uppercase tracking-wider mb-1 ${tone.heading}`}>{sec.label}</h4>
+                    <p className="text-xs">{sec.text}</p>
+                  </div>
+                );
+              })}
+
               {/* Tech Badges */}
               <div className="pt-1">
-                <h4 className="font-black text-[9.5px] uppercase tracking-wider text-slate-400 mb-1.5">Tech Stack & Frameworks</h4>
+                <h4 className="font-black text-[9.5px] uppercase tracking-wider text-slate-400 mb-1.5">{project.techLabel || 'Tech Stack & Frameworks'}</h4>
                 <div className="flex flex-wrap gap-1.5">
                   {project.tech.map((t) => (
                     <span key={t} className={`text-[8.5px] font-mono font-bold px-2 py-0.5 rounded border ${isLight ? 'border-pink-300 bg-pink-50 text-pink-800' : 'border-cyan-500/30 bg-cyan-950/40 text-cyan-300'
@@ -155,7 +166,7 @@ const ProjectDetailsModal = ({ project, onClose, theme }) => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-md shadow-pink-500/20 active:scale-95 transition-all duration-300 cursor-pointer"
                   >
-                    <span>Play Online</span>
+                    <span>{project.fullDetails.liveLabel || 'Play Online'}</span>
                     <span>↗</span>
                   </a>
                 )}
@@ -322,8 +333,177 @@ const ProjectCardPreview = ({ projectId, isLight }) => {
     );
   }
 
+  if (projectId === 101) {
+    // JET Designs component library (Jio Platforms)
+    return (
+      <div className={`w-full h-full relative p-2.5 flex flex-col justify-between overflow-hidden transition-colors duration-500 ${isLight
+        ? 'bg-gradient-to-br from-violet-100 via-fuchsia-50 to-violet-200 text-violet-950 border border-violet-300'
+        : 'bg-gradient-to-br from-violet-950/80 via-fuchsia-950/50 to-slate-950/80 text-violet-200 border-none'
+        }`}>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-b pb-1 ${isLight ? 'border-violet-300' : 'border-violet-500/30'}`}>
+          <span className={`font-bold uppercase tracking-wider ${isLight ? 'text-violet-900' : 'text-violet-300'}`}>JET DESIGNS</span>
+          <span className={`font-bold ${isLight ? 'text-fuchsia-800' : 'text-fuchsia-300'}`}>UI LIBRARY</span>
+        </div>
+        <div className="my-auto flex items-center justify-center gap-2">
+          <span className={`text-[8px] font-black px-2 py-0.5 rounded-full ${isLight ? 'bg-violet-600 text-white' : 'bg-violet-600 text-white'}`}>Button</span>
+          <span className={`flex items-center gap-1 text-[7.5px] font-mono font-bold ${isLight ? 'text-violet-950' : 'text-violet-100'}`}>
+            <span className={`w-2.5 h-2.5 rounded-sm border flex items-center justify-center text-[6px] ${isLight ? 'border-violet-600 bg-violet-600 text-white' : 'border-violet-400 bg-violet-500 text-white'}`}>✓</span>
+            Check
+          </span>
+          <span className={`text-[7.5px] font-mono px-1.5 py-0.5 rounded border ${isLight ? 'bg-white/90 border-violet-300 text-violet-900' : 'bg-white/5 border-violet-400/40 text-violet-200'}`}>Select ▾</span>
+        </div>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-t pt-1 ${isLight ? 'border-violet-300 text-violet-950' : 'border-violet-500/20 text-violet-200/90'}`}>
+          <span className="flex items-center gap-1">
+            THEMES
+            <span className="w-2 h-2 rounded-full bg-violet-500" />
+            <span className="w-2 h-2 rounded-full bg-fuchsia-500" />
+            <span className="w-2 h-2 rounded-full bg-sky-500" />
+          </span>
+          <span className={`font-bold ${isLight ? 'text-fuchsia-800' : 'text-fuchsia-300'}`}>30% FASTER</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (projectId === 102) {
+    // Forex banking platform (Infosys, client anonymised)
+    return (
+      <div className={`w-full h-full relative p-2.5 flex flex-col justify-between overflow-hidden transition-colors duration-500 ${isLight
+        ? 'bg-gradient-to-br from-indigo-100 via-blue-50 to-indigo-200 text-indigo-950 border border-indigo-300'
+        : 'bg-gradient-to-br from-indigo-950/80 via-slate-900/70 to-blue-950/80 text-indigo-200 border-none'
+        }`}>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-b pb-1 ${isLight ? 'border-indigo-300' : 'border-indigo-500/30'}`}>
+          <span className={`font-bold uppercase tracking-wider ${isLight ? 'text-indigo-900' : 'text-indigo-300'}`}>FX PORTAL</span>
+          <span className={`font-bold ${isLight ? 'text-emerald-800' : 'text-emerald-400'}`}>● LIVE</span>
+        </div>
+        <div className="my-auto grid grid-cols-3 gap-1">
+          {['LAYOUT', 'MODULE', 'MODULE'].map((t, i) => (
+            <span key={i} className={`text-[6.5px] font-mono font-bold text-center py-1.5 rounded border ${isLight ? 'bg-white/90 border-indigo-300 text-indigo-900' : 'bg-indigo-500/15 border-indigo-400/40 text-indigo-200'} ${i === 0 ? 'row-span-2 flex items-center justify-center' : ''}`}>{t}</span>
+          ))}
+          <span className={`col-span-2 text-[6.5px] font-mono font-bold text-center py-1 rounded border border-dashed ${isLight ? 'border-indigo-400 text-indigo-800' : 'border-indigo-400/50 text-indigo-300'}`}>RENDERED AT RUNTIME</span>
+        </div>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-t pt-1 ${isLight ? 'border-indigo-300 text-indigo-950' : 'border-indigo-500/20 text-indigo-200/90'}`}>
+          <span>DYNAMIC RENDERING</span>
+          <span className={`font-bold ${isLight ? 'text-indigo-800' : 'text-indigo-300'}`}>HIGH AVAILABILITY</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (projectId === 103) {
+    // This portfolio's performance work
+    return (
+      <div className={`w-full h-full relative p-2.5 flex flex-col justify-between overflow-hidden transition-colors duration-500 ${isLight
+        ? 'bg-gradient-to-br from-rose-100 via-pink-50 to-rose-200 text-rose-950 border border-rose-300'
+        : 'bg-gradient-to-br from-rose-950/80 via-purple-950/60 to-slate-950/80 text-rose-200 border-none'
+        }`}>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-b pb-1 ${isLight ? 'border-rose-300' : 'border-rose-500/30'}`}>
+          <span className={`font-bold uppercase tracking-wider ${isLight ? 'text-rose-900' : 'text-rose-300'}`}>PERF BENCH</span>
+          <span className={`font-bold ${isLight ? 'text-rose-800' : 'text-rose-300'}`}>6× CPU · NO GPU</span>
+        </div>
+        <div className="my-auto flex flex-col gap-1">
+          {[['BEFORE', '4 fps', '9%', isLight ? 'bg-rose-300' : 'bg-rose-400/50'], ['AFTER', '42 fps', '100%', isLight ? 'bg-emerald-500' : 'bg-emerald-400']].map(([k, v, w, c]) => (
+            <div key={k} className="flex items-center gap-1.5 text-[7px] font-mono font-bold">
+              <span className="w-9 shrink-0">{k}</span>
+              <span className={`h-1.5 rounded-full ${c}`} style={{ width: w, maxWidth: '62%' }} />
+              <span className="shrink-0">{v}</span>
+            </div>
+          ))}
+        </div>
+        <div className={`flex items-center justify-between text-[7.5px] font-mono border-t pt-1 ${isLight ? 'border-rose-300 text-rose-950' : 'border-rose-500/20 text-rose-200/90'}`}>
+          <span>4.2 MB → 1.4 MB</span>
+          <span className={`font-bold ${isLight ? 'text-emerald-800' : 'text-emerald-400'}`}>0 CDN CALLS</span>
+        </div>
+      </div>
+    );
+  }
+
   return null;
 };
+
+// Colours for the case-study sections in the details modal
+const SECTION_TONES = [
+  { light: 'bg-pink-50/80 border-pink-200', dark: 'bg-pink-950/20 border-pink-500/20', heading: 'text-pink-400' },
+  { light: 'bg-cyan-50/80 border-cyan-200', dark: 'bg-cyan-950/20 border-cyan-500/20', heading: 'text-cyan-500' },
+  { light: 'bg-emerald-50/80 border-emerald-200', dark: 'bg-emerald-950/20 border-emerald-500/20', heading: 'text-emerald-500' },
+  { light: 'bg-indigo-50/80 border-indigo-200', dark: 'bg-indigo-950/20 border-indigo-500/20', heading: 'text-indigo-400' },
+];
+
+// Frontend work: case studies from my day job, plus this site's performance story
+const workData = [
+  {
+    id: 101,
+    title: "JET Designs: Jio's Enterprise UI Library",
+    subtitle: "Frontend Team Lead, Jio Platforms",
+    shortTitle: "JET Designs UI Library",
+    shortSubtitle: "Jio Platforms",
+    description: "A unified UI library I built and published at Jio. It is used across Jio's enterprise applications, including JioWorks, JioCampaigns, JioFace and JioMiddleware.",
+    sections: [
+      { label: "The Goal", text: "Give Jio's enterprise products one shared, consistent set of UI building blocks, so teams could build screens faster instead of each rebuilding the same inputs, dropdowns and headers." },
+      { label: "What I Built", text: "The initial setup took three months: input boxes, checkboxes, radios, buttons, dropdowns, multi-selects, search, headers, icons and custom scrollbars. The components are plain HTML, CSS and JavaScript, and developers copy ready-made code straight from the library's website." },
+      { label: "Design Decisions", text: "Three themes, primary, secondary and tertiary, are built into every component through shared mixins, so every product stays visually consistent." },
+      { label: "Adoption & Impact", text: "Hosted internally at Jio and consumed by its enterprise applications, including JioWorks, JioCampaigns, JioFace and JioMiddleware. Feature delivery became 30% faster. jioworks.io is built with it." },
+    ],
+    fullDetails: { liveUrl: "https://www.jioworks.io", liveLabel: "See JioWorks" },
+    tech: ["HTML", "CSS", "JavaScript", "Mixins & Themes", "Angular", "React"],
+    glow: "from-violet-500 to-fuchsia-600",
+    metrics: "30% Faster",
+    lightBg: "bg-gradient-to-b from-[#ddd6fe] via-[#ede9fe] to-[#ddd6fe] border border-violet-400 shadow-md shadow-violet-900/10 group-hover:border-violet-500 group-hover:shadow-violet-400/20",
+    lightPreviewBg: "bg-white/80 border border-violet-300",
+    lightSubtitle: "text-violet-800",
+    lightBadge: "bg-white/90 border border-violet-300 text-violet-950 font-black",
+    lightMetrics: "bg-white border border-violet-300 text-violet-950 font-black",
+    lightAccent: "border-violet-300"
+  },
+  {
+    id: 102,
+    title: "Forex Platform for a Leading Indian Bank",
+    subtitle: "Senior Software Developer, Infosys",
+    shortTitle: "Enterprise Forex Banking",
+    shortSubtitle: "Infosys",
+    description: "Frontend work on a high-availability forex banking portal: dynamic rendering, ownership of production issues, and FX trading features shipped within strict financial compliance.",
+    sections: [
+      { label: "The Challenge", text: "A high-availability banking portal with hard-coded layout dependencies, intermittent production bugs that were hard to pin down, and strict financial web compliance on every release." },
+      { label: "What I Did", text: "Architected dynamic rendering patterns across the portal, decoupling the hard-coded layout dependencies and making it far more modular." },
+      { label: "Ownership", text: "I lead cross-functional triage of complex, intermittent production bugs, reducing time to recovery and improving availability for enterprise clients." },
+      { label: "Delivery", text: "I ship enterprise FX trading features with product managers and distributed engineering teams, while keeping to strict financial compliance." },
+    ],
+    techLabel: "Focus Areas",
+    tech: ["Dynamic Rendering", "Modular Layouts", "Production Triage", "FX Trading", "Compliance"],
+    glow: "from-indigo-500 to-blue-600",
+    metrics: "High Availability",
+    lightBg: "bg-gradient-to-b from-[#c7d2fe] via-[#e0e7ff] to-[#c7d2fe] border border-indigo-400 shadow-md shadow-indigo-900/10 group-hover:border-indigo-500 group-hover:shadow-indigo-400/20",
+    lightPreviewBg: "bg-white/80 border border-indigo-300",
+    lightSubtitle: "text-indigo-800",
+    lightBadge: "bg-white/90 border border-indigo-300 text-indigo-950 font-black",
+    lightMetrics: "bg-white border border-indigo-300 text-indigo-950 font-black",
+    lightAccent: "border-indigo-300"
+  },
+  {
+    id: 103,
+    title: "Making This Portfolio Smooth on Low-End Laptops",
+    subtitle: "This Website",
+    shortTitle: "This Portfolio's Performance",
+    shortSubtitle: "This Website",
+    description: "This animated scene ran smoothly on a MacBook but stuttered on an office laptop with integrated graphics. I made it smooth without redesigning or removing a single element.",
+    sections: [
+      { label: "The Problem", text: "Images loaded late, the emblem glitched and the sakura branch popped in. With the mouse moving, the home page ran at 4 fps, because SVG masks, live filters and animations inside SVGs forced large repaints on every frame." },
+      { label: "What I Changed", text: "Re-encoded the heaviest artwork (a 2.2 MB SVG branch became a 51 KB WebP, pixel-checked against the original), decoded images in idle time, split the code per page and pre-rendered pages invisibly, and moved animation onto GPU layers instead of repainting SVG." },
+      { label: "Performance Tiers", text: "The site picks Cinematic, Balanced or Lite from what the device's graphics can really do, with a frame-rate safety net. Lite keeps every element on screen and only stops continuous background motion." },
+      { label: "Results", text: "Measured with the CPU slowed 6× and no GPU: Home with the mouse moving went from 4 to 42 fps, Contact from 3 to 44 fps. A full tour of the site went from 4.2 MB to 1.4 MB, with no external CDN requests left. Size budgets and a frame-rate bench guard it on every push." },
+    ],
+    fullDetails: { liveUrl: "https://github.com/theinsanecat/theinsanecat/blob/main/PERFORMANCE.md", liveLabel: "Full write-up" },
+    tech: ["React", "Framer Motion", "Vite", "Web Performance", "GPU Compositing", "Playwright"],
+    glow: "from-rose-500 to-pink-600",
+    metrics: "4 → 42 fps",
+    lightBg: "bg-gradient-to-b from-[#fecdd3] via-[#ffe4e6] to-[#fecdd3] border border-rose-400 shadow-md shadow-rose-900/10 group-hover:border-rose-500 group-hover:shadow-rose-400/20",
+    lightPreviewBg: "bg-white/80 border border-rose-300",
+    lightSubtitle: "text-rose-800",
+    lightBadge: "bg-white/90 border border-rose-300 text-rose-950 font-black",
+    lightMetrics: "bg-white border border-rose-300 text-rose-950 font-black",
+    lightAccent: "border-rose-300"
+  },
+];
 
 const projectsData = [
   {
@@ -530,6 +710,9 @@ export const ProjectsContent = ({ theme }) => {
   const [hoveredId, setHoveredId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
+  const [tab, setTab] = useState('work'); // 'work' = frontend case studies, 'side' = side projects
+  const list = tab === 'work' ? workData : projectsData;
+  const switchTab = (next) => { if (next !== tab) { setTab(next); setActiveMobileIndex(0); setDirection(1); } };
   const [direction, setDirection] = useState(1);
   // page height after any short-screen fit (see lib/pageFit)
   const [viewportHeight, setViewportHeight] = useState(() => getPageFit().h);
@@ -587,12 +770,12 @@ export const ProjectsContent = ({ theme }) => {
 
   const handleNext = () => {
     setDirection(1);
-    setActiveMobileIndex((prev) => (prev + 1) % projectsData.length);
+    setActiveMobileIndex((prev) => (prev + 1) % list.length);
   };
 
   const handlePrev = () => {
     setDirection(-1);
-    setActiveMobileIndex((prev) => (prev - 1 + projectsData.length) % projectsData.length);
+    setActiveMobileIndex((prev) => (prev - 1 + list.length) % list.length);
   };
 
   const handleDotClick = (idx) => {
@@ -600,7 +783,7 @@ export const ProjectsContent = ({ theme }) => {
     setActiveMobileIndex(idx);
   };
 
-  const currentProject = projectsData[activeMobileIndex];
+  const currentProject = list[activeMobileIndex] || list[0];
 
   return (
     <div className="w-[var(--page-w,100vw)] h-[var(--page-h,100vh)] max-h-[var(--page-h,100vh)] flex flex-col justify-between items-center select-none pointer-events-auto relative overflow-hidden py-2 sm:py-4 px-3 sm:px-6">
@@ -622,6 +805,32 @@ export const ProjectsContent = ({ theme }) => {
           }`}>
           A few ideas brought to life
         </p>
+
+        {/* Frontend work / side projects switch */}
+        <div
+          role="group"
+          aria-label="Show projects"
+          className={`inline-flex items-center gap-0.5 p-0.5 mt-2 sm:mt-3 rounded-full border pointer-events-auto transition-colors duration-500 ${isLight ? 'bg-white/80 border-pink-200 shadow-sm' : 'bg-white/5 border-purple-500/30'}`}
+        >
+          {[['work', 'Frontend Work'], ['side', 'Side Projects']].map(([id, label]) => {
+            const active = tab === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => switchTab(id)}
+                aria-pressed={active}
+                className={`px-3 sm:px-4 py-1 rounded-full text-[10px] sm:text-xs font-bold whitespace-nowrap transition-colors duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 ${
+                  active
+                    ? (isLight ? 'bg-pink-600 text-white focus-visible:ring-pink-300' : 'bg-purple-600 text-white focus-visible:ring-purple-300')
+                    : (isLight ? 'text-slate-700 hover:text-pink-600 focus-visible:ring-pink-300' : 'text-purple-100/80 hover:text-white focus-visible:ring-purple-300')
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* MOBILE VIEW: Single Prominent Card Carousel with Left/Right Arrows & Dots */}
@@ -740,7 +949,7 @@ export const ProjectsContent = ({ theme }) => {
 
           {/* Dot Indicators for Mobile */}
           <div className="flex items-center gap-2 mt-3 z-20">
-            {projectsData.map((p, idx) => (
+            {list.map((p, idx) => (
               <button
                 key={p.id}
                 onClick={() => handleDotClick(idx)}
@@ -756,8 +965,8 @@ export const ProjectsContent = ({ theme }) => {
       ) : (
         /* DESKTOP / TABLET VIEW: Responsive Grid */
         <div className="relative w-full max-w-6xl flex-1 flex flex-col justify-center items-center my-auto z-20 py-2 sm:py-3" style={getScaleStyle()}>
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 justify-center items-stretch">
-            {projectsData.map((project, index) => {
+          <div key={tab} className={`w-full grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5 justify-center items-stretch ${list.length === 3 ? 'lg:grid-cols-3 max-w-5xl' : 'lg:grid-cols-4'}`}>
+            {list.map((project, index) => {
               return (
                 <motion.div
                   key={project.id}
@@ -767,7 +976,7 @@ export const ProjectsContent = ({ theme }) => {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: index * 0.03, ease: [0.16, 1, 0.3, 1] }}
-                  className={`relative w-full rounded-xl sm:rounded-2xl p-[1px] overflow-hidden flex flex-col group cursor-pointer transition-transform duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] transform-gpu ${isLight
+                  className={`relative w-full rounded-xl sm:rounded-2xl p-[1px] overflow-hidden flex flex-col group cursor-pointer ${list.length % 2 === 1 && index === list.length - 1 ? 'sm:col-span-2 sm:justify-self-center sm:w-[calc(50%-0.5rem)] lg:col-span-1 lg:w-full' : ''} transition-transform duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] transform-gpu ${isLight
                     ? project.lightBg
                     : 'glass-surface glass-surface-hoverable border border-white/10 group-hover:border-pink-500/50 shadow-lg shadow-black/30'
                     }`}

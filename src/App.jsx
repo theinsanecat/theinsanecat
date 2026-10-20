@@ -165,7 +165,7 @@ function App() {
 
   const activeSection = getSectionFromPath(location.pathname);
 
-  // Résumé viewer (Contact page button, and shareable deep link: …/#/resume)
+  // Résumé viewer (Contact page button, and shareable deep link: …/resume)
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const openResume = useCallback(() => setIsResumeOpen(true), []);
   const closeResume = useCallback(() => setIsResumeOpen(false), []);

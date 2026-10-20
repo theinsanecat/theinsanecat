@@ -940,17 +940,12 @@ export const AboutContent = ({ theme }) => {
             let opacity = arc.opacity;
             let zIndex = arc.zIndex;
 
-            if (isAnySelected) {
+            if (isAnySelected && isMobile) {
+              // Phones: the deck simply fades out where it is (no shrinking card); the story takes its place
+              opacity = 0;
+            } else if (isAnySelected) {
               if (isSelected) {
-                if (isMobile) {
-                  // Mobile screens: card centered higher at top, details text BELOW card with clean 20px vertical gap
-                  targetX = 0;
-                  targetY = isSmallScreen ? -215 : -225; // keep the card clear of the details heading below it
-                  rotateZ = 0;
-                  scale = isSmallScreen ? 0.36 : 0.40;
-                  opacity = 1;
-                  zIndex = 50;
-                } else {
+                {
                   // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
                   targetX = isTablet ? -135 : -200;
                   targetY = 0;
@@ -988,12 +983,14 @@ export const AboutContent = ({ theme }) => {
                   opacity: opacity,
                   zIndex: zIndex,
                 }}
-                transition={{
-                  type: 'spring',
-                  stiffness: isMobile ? 85 : 110,
-                  damping: isMobile ? 18 : 16,
-                  mass: isMobile ? 0.6 : 0.8,
-                }}
+                transition={isMobile && isAnySelected
+                  ? { duration: 0.25, ease: 'easeOut' }
+                  : {
+                    type: 'spring',
+                    stiffness: isMobile ? 85 : 110,
+                    damping: isMobile ? 18 : 16,
+                    mass: isMobile ? 0.6 : 0.8,
+                  }}
                 onClick={() => handleCardClick(card, index)}
                 role="button"
                 tabIndex={isAnySelected ? -1 : 0}
@@ -1030,19 +1027,19 @@ export const AboutContent = ({ theme }) => {
             {selectedCard && (
               <motion.div
                 key={`details-${selectedCard.id}`}
-                initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: isMobile ? '15px' : '-50%' }}
-                animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: isMobile ? '0px' : '-50%' }}
-                exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: isMobile ? '10px' : '-50%' }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
+                initial={{ opacity: 0, x: isMobile ? '-50%' : '30px', y: '-50%' }}
+                animate={{ opacity: 1, x: isMobile ? '-50%' : '0px', y: '-50%' }}
+                exit={{ opacity: 0, x: isMobile ? '-50%' : '20px', y: '-50%' }}
+                transition={{ duration: isMobile ? 0.3 : 0.45, ease: "easeOut", delay: isMobile ? 0.12 : 0 }}
                 className={`absolute flex flex-col text-left px-3 sm:px-4 z-30 pointer-events-auto items-start ${isMobile ? 'justify-start' : 'justify-between py-1'
                   }`}
                 style={{
                   left: '50%',
-                  top: isMobile ? (isSmallScreen ? 'calc(50% - 95px)' : 'calc(50% - 110px)') : '50%',
+                  top: '50%',
                   marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
                   width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
                   height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
-                  maxHeight: isMobile ? (isSmallScreen ? '310px' : '350px') : 'none',
+                  maxHeight: isMobile ? (isSmallScreen ? '420px' : '480px') : 'none',
                 }}
               >
                 {/* Header Info */}
@@ -1059,11 +1056,16 @@ export const AboutContent = ({ theme }) => {
                     }`}>
                     {selectedCard.title}
                   </h3>
+                  {isMobile && (
+                    <span className={`mt-0.5 text-[9px] xs:text-[10px] font-mono font-bold tracking-wider ${isLight ? 'text-purple-900/70' : 'text-purple-200/70'}`}>
+                      {selectedCard.date}
+                    </span>
+                  )}
                 </div>
 
 
                 {/* Long Description Body */}
-                <div className={`w-full my-1 leading-snug text-[9px] xs:text-[10px] sm:text-xs font-medium transition-colors duration-700 ${isMobile ? 'max-h-[85px] xs:max-h-[105px] sm:max-h-[160px] overflow-y-auto pr-1 custom-scrollbar' : 'flex-1 overflow-y-auto pr-2 custom-scrollbar'
+                <div className={`w-full my-1 font-medium transition-colors duration-700 ${isMobile ? 'min-h-0 shrink overflow-y-auto pr-1 custom-scrollbar text-[11px] xs:text-xs leading-relaxed' : 'leading-snug text-[9px] xs:text-[10px] sm:text-xs flex-1 overflow-y-auto pr-2 custom-scrollbar'
                   } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
                   <p>{selectedCard.longDescription}</p>
                 </div>
@@ -1100,7 +1102,7 @@ export const AboutContent = ({ theme }) => {
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                       </svg>
-                      Close Expanded Card
+                      {isMobile ? 'Back to cards' : 'Close Expanded Card'}
                     </button>
                   ) : (
                     <BorderGlow
@@ -1120,7 +1122,7 @@ export const AboutContent = ({ theme }) => {
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                         </svg>
-                        Close Expanded Card
+                        {isMobile ? 'Back to cards' : 'Close Expanded Card'}
                       </button>
                     </BorderGlow>
                   )}
