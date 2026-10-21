@@ -160,8 +160,9 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
       >
         
         {/* Light Mode Soft Pink & Lavender Ambient Aura Backdrop */}
-        <div className={`w-[420px] h-[420px] sm:w-[540px] sm:h-[540px] rounded-full bg-gradient-to-r from-[#fbcfe8]/50 via-[#e9d5ff]/40 to-[#c084fc]/30 blur-3xl absolute z-0 pointer-events-none transition-opacity duration-700 ease-in-out ${
-          isLight ? 'opacity-100' : 'opacity-0'
+        <div className={`w-[420px] h-[420px] sm:w-[540px] sm:h-[540px] rounded-full bg-gradient-to-r from-[#fbcfe8]/50 via-[#e9d5ff]/40 to-[#c084fc]/30 blur-3xl absolute z-0 pointer-events-none transition-[opacity,visibility] duration-700 ease-in-out ${
+          // invisible (not just transparent) in dark mode: iPhone Safari drew the transparent blurred square as a dark box
+          isLight ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`} />
 
         {/* Slowly Rotating SVG Emblem Background: Pure CSS @keyframes spin running on GPU compositor thread (0 JS overhead) */}

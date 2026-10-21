@@ -592,37 +592,37 @@ const GlowLayers = ({ theme, active }) => (
   <>
     {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
     <div
-      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90' : 'opacity-0'
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-[opacity,visibility] duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90 visible' : 'opacity-0 invisible'
         }`}
     />
 
     {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
     <div
-      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-[opacity,visibility] duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90 visible' : 'opacity-0 invisible'
         }`}
     />
 
     {/* Radiant Glowing Aura Disk - Light Mode */}
     <div
-      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-85' : 'opacity-0'
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-[opacity,visibility] duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-85 visible' : 'opacity-0 invisible'
         }`}
     />
 
     {/* Radiant Glowing Aura Disk - Dark Mode */}
     <div
-      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-85' : 'opacity-0'
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-[opacity,visibility] duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-85 visible' : 'opacity-0 invisible'
         }`}
     />
 
     {/* Glowing Outer Card Frame Halo - Light Mode */}
     <div
-      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90' : 'opacity-0'
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-[opacity,visibility] duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90 visible' : 'opacity-0 invisible'
         }`}
     />
 
     {/* Glowing Outer Card Frame Halo - Dark Mode */}
     <div
-      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-[opacity,visibility] duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90 visible' : 'opacity-0 invisible'
         }`}
     />
   </>
