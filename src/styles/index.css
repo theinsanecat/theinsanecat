@@ -619,3 +619,10 @@ html[data-theme-switch="instant"] *::after {
 .lake-parked * {
   animation-play-state: paused !important;
 }
+
+/* Theme switch on laptops: one GPU cross-fade between snapshots of the old and new page */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: ease-in-out;
+}

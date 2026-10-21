@@ -19,7 +19,8 @@ const useThemeLayers = (theme) => {
   useEffect(() => {
     if (theme === visualTheme) return undefined;
     // Phones swap straight away: mounting both artwork sets at once is too much for iPhone Safari
-    if (isCompactScreen()) {
+    // (also while a theme switch is done as one snapshot cross-fade: no need to mount both sets)
+    if (isCompactScreen() || document.documentElement.dataset.themeSwitch === 'instant') {
       const r = requestAnimationFrame(() => setVisualTheme(theme));
       return () => cancelAnimationFrame(r);
     }
