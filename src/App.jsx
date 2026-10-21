@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import { flushSync } from 'react-dom';
 import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { useTransform, motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from './hooks/useMouseParallax';
@@ -151,15 +152,27 @@ function App() {
   });
 
   const setTheme = (newTheme) => {
-    // Phones: switch instantly. Cross-fading every layer of both themes at once needs more graphics
-    // memory than iPhone Safari gives a tab, and it blanks the screen (gray, then black) mid-fade.
-    if (isCompactScreen()) {
-      const root = document.documentElement;
-      root.dataset.themeSwitch = 'instant';
-      requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(() => { delete root.dataset.themeSwitch; }, 50)));
+    const root = document.documentElement;
+    const apply = () => {
+      root.dataset.themeSwitch = 'instant'; // no per-element colour transitions: the page switches in one go
+      flushSync(() => setThemeState(newTheme));
+    };
+    const done = () => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(() => { delete root.dataset.themeSwitch; }, 50)));
+    try { localStorage.setItem('portfolio_theme', newTheme); } catch { /* storage unavailable */ }
+
+    // Laptops/desktops: the browser snapshots the page, switches theme underneath in one frame, and
+    // cross-fades the two pictures on the GPU (View Transitions). Before, every element faded its own
+    // colours for 0.7 s, which ran at ~15 fps and looked grey mid-way.
+    // Phones/tablets and browsers without View Transitions: switch instantly (phones: cross-fading every
+    // layer needs more graphics memory than iPhone Safari gives a tab).
+    if (!isCompactScreen() && typeof document.startViewTransition === 'function'
+      && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const t = document.startViewTransition(apply);
+      t.finished.finally(done);
+      return;
     }
-    setThemeState(newTheme);
-    localStorage.setItem('portfolio_theme', newTheme);
+    apply();
+    done();
   };
 
   const [isMobileViewport, setIsMobileViewport] = useState(() => {
