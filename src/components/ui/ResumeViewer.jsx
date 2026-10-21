@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Single place to change the résumé file: drop the PDF at public/files/<RESUME_FILE>
 export const RESUME_FILE = 'Soumya-Dwivedi-Resume.pdf';
 export const RESUME_URL = `${import.meta.env.BASE_URL}files/${RESUME_FILE}`;
+// Page preview shown in the popup (rendered from the PDF; re-render it when the PDF changes).
+// An image works on every device; phone browsers can't show a PDF inside a page reliably.
+export const RESUME_PREVIEW_URL = `${import.meta.env.BASE_URL}files/Soumya-Dwivedi-Resume-preview.webp`;
 
 const DownloadIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-4 h-4" aria-hidden="true">
@@ -19,8 +22,7 @@ const ExternalIcon = () => (
 );
 
 /**
- * Full-screen résumé viewer: inline PDF preview (desktop) + download / open-in-new-tab actions.
- * Phones get the actions only, since inline PDF viewers are unreliable on mobile browsers.
+ * Résumé popup: page preview (scrolls inside the popup) with Download, on every device.
  */
 export const ResumeViewer = ({ isOpen, onClose, theme }) => {
   const isLight = theme === 'light';
@@ -67,12 +69,12 @@ export const ResumeViewer = ({ isOpen, onClose, theme }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative z-10 flex flex-col w-full max-w-4xl h-[min(92vh,1100px)] rounded-2xl sm:rounded-3xl overflow-hidden border-2 shadow-2xl ${
+            className={`relative z-10 flex flex-col w-full max-w-2xl max-h-[92dvh] rounded-2xl sm:rounded-3xl overflow-hidden border-2 shadow-2xl ${
               isLight ? 'bg-[#fcf8ff] border-purple-200' : 'bg-[#140b28] border-purple-500/30'
             }`}
           >
             {/* Header */}
-            <div className={`flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b ${isLight ? 'border-purple-200' : 'border-purple-500/20'}`}>
+            <div className={`shrink-0 flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b ${isLight ? 'border-purple-200' : 'border-purple-500/20'}`}>
               <div>
                 <p className={`text-[10px] font-black tracking-widest uppercase ${isLight ? 'text-pink-600' : 'text-pink-400'}`}>Résumé</p>
                 <h2 className={`text-lg sm:text-xl font-black leading-tight ${isLight ? 'text-[#1e1832]' : 'text-white'}`}>Soumya Dwivedi</h2>
@@ -96,24 +98,16 @@ export const ResumeViewer = ({ isOpen, onClose, theme }) => {
               </div>
             </div>
 
-            {/* Body: inline viewer on larger screens, actions-only on phones */}
-            <div className="relative flex-1 min-h-0">
-              <iframe
-                src={`${RESUME_URL}#view=FitH`}
-                title="Soumya Dwivedi, résumé (PDF)"
-                className="hidden sm:block absolute inset-0 w-full h-full bg-white"
+            {/* Body: the page preview, scrolling inside the popup */}
+            <div className="relative flex-1 min-h-0 overflow-y-auto overscroll-contain bg-white">
+              <img
+                src={RESUME_PREVIEW_URL}
+                alt="Soumya Dwivedi, résumé"
+                width="1530"
+                height="1980"
+                decoding="async"
+                className="block w-full h-auto select-none"
               />
-              <div className={`sm:hidden flex flex-col items-center justify-center h-full gap-4 p-6 text-center ${isLight ? 'text-slate-700' : 'text-purple-100/85'}`}>
-                <p className="text-sm">Open or download the PDF to view my résumé.</p>
-                <div className="flex gap-2">
-                  <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className={`${btn} ${secondary}`}>
-                    <ExternalIcon /> Open
-                  </a>
-                  <a href={RESUME_URL} download={RESUME_FILE} className={`${btn} ${primary}`}>
-                    <DownloadIcon /> Download
-                  </a>
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>

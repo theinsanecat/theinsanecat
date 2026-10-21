@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { ABOUT_IMAGES, ABOUT_CARD_IMAGES } from '../../lib/artAssets';
 import { usePerformanceMode } from '../../context/PerformanceContext';
-import { isCompactScreen } from '../../lib/compactScreen';
+import { isCompactScreen, isTouchUi } from '../../lib/compactScreen';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import BorderGlow from './BorderGlow';
@@ -58,6 +58,9 @@ const cardsData = [
     description: "Jan 2025 - Present",
     longDescription:
       "I moved to Bangalore. For someone who had spent most of her life close to home, it was one of the most courageous and nerve-wracking decisions I had ever made, yes, EVER MADE. Not every brave decision feels brave while you're living it. Sometimes it just feels scary, but I am glad I did it, because I learned so much about myself and the people who love me. Somewhere along this journey, I also stopped thinking that good engineering meant making everything perfect, there's much more to it. Today, I care just as much about the people, the problem, and what happens beyond the code. At Infosys, I work on high-stakes banking applications, take ownership of messy production problems, work across teams, and build systems that can grow without becoming harder to live with. I’m still the girl who loves solving problems but I’ve also learned that the best solutions come from curiosity, consistency, empathy, and the courage to keep moving.",
+    // Phones show this shorter version of the story; larger screens show longDescription in full
+    mobileSummary:
+      "I moved to Bangalore, one of the bravest and most nerve-wracking decisions I have ever made, and I'm glad I did. Along the way I learned that good engineering isn't about making everything perfect. At Infosys I work on high-stakes banking applications, take ownership of messy production problems and build systems that can grow without becoming harder to live with.",
     skills: [
       "Production",
       "Bank Application",
@@ -81,6 +84,9 @@ const cardsData = [
     description: "Oct 2020 - Dec 2024",
     longDescription:
       "Jio was where I grew into the developer I am today. It wasn't just my first job; it was my college placement, my first company, and the place where my professional journey truly began. That makes this chapter especially dear to my heart. Over four years I went from writing code to leading projects, building products from scratch, creating reusable systems, and eventually becoming someone others could come to when they were stuck. I met some incredibly talented people here, learned what ownership really felt like, and discovered that I didn't just enjoy building things, I deeply enjoyed making things easier for the people building alongside me. Leaving was bittersweet. I wasn't leaving because I had stopped loving the place; I was leaving because I had started to outgrow it.",
+    // Phones show this shorter version of the story; larger screens show longDescription in full
+    mobileSummary:
+      "Jio was my college placement, my first company and the place where I grew into the developer I am today. Over four years I went from writing code to leading projects, building products and reusable systems from scratch, and becoming someone others could come to when they were stuck. I left not because I stopped loving it, but because I had started to outgrow it.",
     skills: [
       "Team Lead",
       "Web Development",
@@ -104,6 +110,9 @@ const cardsData = [
     description: "2022 - 2024",
     longDescription:
       "Apparently, having a full-time career wasn't enough to satisfy my curiosity. While working, I went back to being a student and pursued my Master's in Data Science & Engineering at BITS Pilani. I dove into machine learning, deep learning, statistics, AI and the mathematics behind intelligent systems not because I needed another line on my résumé, but because I genuinely wanted to understand more. I've always enjoyed learning for the simple joy of understanding something I didn't understand before. Balancing a full-time career, academics, and everything in between demanded discipline, consistency, and the ability to keep showing up. It was one of the most demanding chapters of my life but also the one I'm incredibly proud of. Curiosity, I've learned, doesn't really care how busy you are.",
+    // Phones show this shorter version of the story; larger screens show longDescription in full
+    mobileSummary:
+      "A full-time career wasn't enough to satisfy my curiosity, so I went back to being a student and did my Master's in Data Science & Engineering at BITS Pilani. Balancing work and study took discipline, but I dove into machine learning, deep learning and the maths behind AI simply because I wanted to understand more.",
     skills: [
       "M.Tech Data Science",
       "7.5 CGPA",
@@ -127,6 +136,9 @@ const cardsData = [
     description: "2016 - 2020",
     longDescription:
       "Well honestly?! Engineering wasn't the path I had originally imagined for myself, but circumstances changed the plan and I'm thankful they did. I chose PCMCS, discovered Computer Science and fell in love with the feeling of turning logic into something real and expressing ideas beyond words. I eventually studied Electronics & Telecommunication, and somewhere between learning about circuits, signal processing, image processing, machine vision and mathematics, I realised I didn't need the 'perfect' branch to find something I loved. I could make my own path and I did. College also gave me the space to discover more about myself beyond academics. I explored different interests, organised workshops alongside my professors for juniors, headed my very first event at our tech-fest, became an active member of the Social Wing, took on the role of Summer Internship Student Coordinator, and proudly became part of the college dance crew. Looking back, I think I simply tried to make the most of the opportunities and interests that came my way and discovered a little more about myself too.",
+    // Phones show this shorter version of the story; larger screens show longDescription in full
+    mobileSummary:
+      "Engineering wasn't the path I had imagined, but I'm thankful it happened. I fell in love with turning logic into something real, studied Electronics & Telecommunication, and learned I didn't need the 'perfect' branch to make my own path. College also gave me workshops for juniors, my first tech-fest event, internship coordination and a place in the dance crew.",
     skills: [
       "8.6 CGPA",
       "10 grade point in subjects",
@@ -148,6 +160,9 @@ const cardsData = [
     description: "2014 - 2016",
     longDescription:
       "I was the studious kid. The one who usually came first or second, loved Mathematics and Science, had a soft spot for English Literature and Computer Science, and somehow managed to have a good rapport with her teachers. But studying was never the only thing I wanted to do. I played Handball, Throwball and Kho-Kho, ran Marathons, was a Choir Member, danced, debated, sketched, painted, wrote small plays/stories, competed in SpellBee and Olympiads, and even brought home medals in all of the above. Looking back, I think school revealed something that has stayed with me ever since: I have always desired to create, explore and pour myself into things, whether that thing was a mathematical problem, a dance floor, or eventually, a piece of code.",
+    // Phones show this shorter version of the story; larger screens show longDescription in full
+    mobileSummary:
+      "I was the studious kid who loved Maths and Science, but I also played Handball, Throwball and Kho-Kho, ran marathons, sang in the choir, danced, debated, painted and wrote small plays. School showed me something that has stayed with me: I love to create, explore and pour myself into things, whether it's a maths problem, a dance floor or a piece of code.",
     skills: [
       "95% PCM in HSC",
       "10 CGPA SSC",
@@ -666,7 +681,7 @@ const CoreMathematicsPill = ({ onOpen, isLight }) => {
         e.stopPropagation();
         onOpen();
       }}
-      className={`relative px-1.5 xs:px-2 sm:px-2.5 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold tracking-wide border border-pink-500 text-pink-500 bg-pink-500/10 shadow-[0_0_10px_rgba(236,72,153,0.7)] hover:shadow-[0_0_16px_rgba(236,72,153,0.9)] hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 overflow-visible select-none transition-all duration-300 animate-pill-float ${isLight ? 'bg-pink-100/90 text-pink-700 border-pink-400' : 'bg-pink-950/40 text-pink-300 border-pink-500'
+      className={`relative px-2.5 py-1 sm:py-0.5 rounded-full text-[11px] font-semibold tracking-wide border border-pink-500 text-pink-500 bg-pink-500/10 shadow-[0_0_10px_rgba(236,72,153,0.7)] hover:shadow-[0_0_16px_rgba(236,72,153,0.9)] hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-1 overflow-visible select-none transition-all duration-300 animate-pill-float ${isLight ? 'bg-pink-100/90 text-pink-700 border-pink-400' : 'bg-pink-950/40 text-pink-300 border-pink-500'
         }`}
     >
       <span>Core Mathematics</span>
@@ -799,16 +814,23 @@ export const AboutContent = ({ theme }) => {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
+  // Tablet layout: 768-1180px, and every touch tablet whatever its size (uniform tablet experience)
   const [isTablet, setIsTablet] = useState(() =>
-    typeof window !== 'undefined' ? (window.innerWidth >= 768 && window.innerWidth <= 1180) : false
+    typeof window !== 'undefined' ? (window.innerWidth >= 768 && (window.innerWidth <= 1180 || isTouchUi())) : false
+  );
+  const [vp, setVp] = useState(() =>
+    typeof window !== 'undefined' ? { w: window.innerWidth, h: window.innerHeight } : { w: 1024, h: 768 }
   );
   const [isSmallScreen, setIsSmallScreen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 640 : false
   );
   const isLocked = useRef(false);
 
+  // Tablets: grow the deck, the opened card and the story with the screen (1 = the original tablet size).
+  // Tall portrait tablets used to show a small deck in a mostly empty screen.
+  const tabletK = isTablet ? Math.min(1.5, Math.max(1, Math.min(vp.w / 740, vp.h / 1050) / 0.85)) : 1;
   // Scale of the focused (centre) card at this screen size, mirrors baseScale below
-  const deckScale = isSmallScreen ? 0.72 : (isMobile ? 0.82 : (isTablet ? 0.85 : 1));
+  const deckScale = isSmallScreen ? 0.72 : (isMobile ? 0.82 : (isTablet ? 0.85 * tabletK : 1));
 
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
   const total = cardsData.length;
@@ -817,7 +839,8 @@ export const AboutContent = ({ theme }) => {
     const checkResponsive = () => {
       const w = window.innerWidth;
       setIsMobile(w < 768);
-      setIsTablet(w >= 768 && w <= 1180);
+      setIsTablet(w >= 768 && (w <= 1180 || isTouchUi()));
+      setVp({ w, h: window.innerHeight });
       setIsSmallScreen(w < 640);
     };
     checkResponsive();
@@ -890,7 +913,7 @@ export const AboutContent = ({ theme }) => {
 
   return (
     <ThemeLayersContext.Provider value={themeLayers}>
-    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 lg:pb-6">
+    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 desk:pb-6">
 
       {/* Aurora Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -934,9 +957,10 @@ export const AboutContent = ({ theme }) => {
         <motion.div
           onPanEnd={handlePanEnd}
           className={`relative w-full flex flex-col items-center justify-center transition-all duration-700 ${selectedCardId
-            ? (isMobile ? 'h-[500px] xs:h-[540px] sm:h-[690px]' : (isTablet ? 'h-[440px]' : 'h-[480px]'))
-            : 'h-[360px] sm:h-[420px] md:h-[460px]'
+            ? (isMobile ? 'h-[500px] xs:h-[540px] sm:h-[690px]' : (isTablet ? '' : 'h-[480px]'))
+            : (isTablet ? '' : 'h-[360px] sm:h-[420px] md:h-[460px]')
             }`}
+          style={isTablet ? { height: `${Math.round((selectedCardId ? 440 : 460) * tabletK)}px` } : undefined}
         >
           {/* Circular Plate Disc */}
           <div
@@ -959,10 +983,10 @@ export const AboutContent = ({ theme }) => {
             const arc = getArc(index, activeIndex, total, isLight);
 
             // Proportional card scaling based on screen size
-            let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 : arc.scale));
+            let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 * tabletK : arc.scale));
 
             // Position targets
-            let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 : 1)));
+            let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 * tabletK : 1)));
             let targetY = arc.y;
             let rotateZ = arc.rotateZ;
             let scale = baseScale;
@@ -976,10 +1000,10 @@ export const AboutContent = ({ theme }) => {
               if (isSelected) {
                 {
                   // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
-                  targetX = isTablet ? -135 : -200;
+                  targetX = isTablet ? -135 * tabletK : -200;
                   targetY = 0;
                   rotateZ = 0;
-                  scale = isTablet ? 0.80 : 0.92;
+                  scale = isTablet ? 0.80 * tabletK : 0.92;
                   opacity = 1;
                   zIndex = 50;
                 }
@@ -1066,27 +1090,28 @@ export const AboutContent = ({ theme }) => {
                   left: '50%',
                   top: '50%',
                   marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
-                  width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
-                  height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
+                  // tablets: grows with the screen but never past the right edge
+                  width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? `${Math.round(Math.min(340 * tabletK, vp.w / 2 - 36))}px` : '440px'),
+                  height: isMobile ? 'auto' : (isTablet ? `${Math.round(360 * tabletK)}px` : '414px'),
                   maxHeight: isMobile ? (isSmallScreen ? '420px' : '480px') : 'none',
                 }}
               >
                 {/* Header Info */}
                 <div className="w-full shrink-0 flex flex-col items-start mb-0.5">
-                  <span className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
+                  <span className={`text-[10px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-700 ${isLight ? 'text-purple-600' : 'text-purple-400'
                     }`}>
                     {selectedCard.category} FOCUS
                   </span>
-                  <h2 className={`text-sm xs:text-base sm:text-2xl md:text-3xl font-black tracking-tight leading-tight my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
+                  <h2 className={`text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-tight my-0.5 transition-colors duration-700 ${isLight ? 'text-[#1e1832]' : 'text-white'
                     }`}>
                     {selectedCard.heading}
                   </h2>
-                  <h3 className={`text-[9px] xs:text-[10px] sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
+                  <h3 className={`text-xs sm:text-sm font-bold transition-colors duration-700 ${isLight ? 'text-pink-600' : 'text-purple-300'
                     }`}>
                     {selectedCard.title}
                   </h3>
                   {isMobile && (
-                    <span className={`mt-0.5 text-[9px] xs:text-[10px] font-mono font-bold tracking-wider ${isLight ? 'text-purple-900/70' : 'text-purple-200/70'}`}>
+                    <span className={`mt-1 text-[11px] font-mono font-bold tracking-wider ${isLight ? 'text-purple-900/70' : 'text-purple-200/70'}`}>
                       {selectedCard.date}
                     </span>
                   )}
@@ -1094,18 +1119,18 @@ export const AboutContent = ({ theme }) => {
 
 
                 {/* Long Description Body */}
-                <div className={`w-full my-1 font-medium transition-colors duration-700 ${isMobile ? 'min-h-0 shrink overflow-y-auto pr-1 custom-scrollbar text-[11px] xs:text-xs leading-relaxed' : 'leading-snug text-[9px] xs:text-[10px] sm:text-xs flex-1 overflow-y-auto pr-2 custom-scrollbar'
+                <div className={`w-full my-1 font-medium transition-colors duration-700 ${isMobile ? 'min-h-0 shrink overflow-y-auto pr-1 custom-scrollbar text-[13px] leading-relaxed' : `${isTablet && tabletK > 1.08 ? 'leading-relaxed text-[13px]' : 'leading-snug text-[9px] xs:text-[10px] sm:text-xs'} flex-1 overflow-y-auto pr-2 custom-scrollbar`
                   } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
-                  <p>{selectedCard.longDescription}</p>
+                  <p>{isMobile ? selectedCard.mobileSummary : selectedCard.longDescription}</p>
                 </div>
 
                 {/* Bottom Section: Skills & Close Button */}
                 <div className="w-full shrink-0 flex flex-col items-start pt-0.5">
-                  <h4 className={`text-[7.5px] xs:text-[8.5px] sm:text-xs font-bold uppercase tracking-wider mb-0.5 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
+                  <h4 className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 sm:mb-0.5 transition-colors duration-700 ${isLight ? 'text-slate-900' : 'text-white'
                     }`}>
                     Key Stacks & Disciplines
                   </h4>
-                  <div className="flex flex-wrap gap-1 mb-1.5 sm:mb-3">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-1 mb-2 sm:mb-3">
                     {selectedCard.skills.map((skill, idx) => (
                       skill === "Core Mathematics" ? (
                         <CoreMathematicsPill
@@ -1114,7 +1139,7 @@ export const AboutContent = ({ theme }) => {
                           onOpen={() => setIsMathModalOpen(true)}
                         />
                       ) : (
-                        <span key={`${skill}-${idx}`} className={`px-1.5 xs:px-2 py-0.5 rounded-full text-[7.5px] xs:text-[8.5px] sm:text-[11px] font-semibold transition-all duration-700 ${isLight
+                        <span key={`${skill}-${idx}`} className={`px-2.5 sm:px-2 py-1 sm:py-0.5 rounded-full text-[11px] font-semibold transition-all duration-700 ${isLight
                           ? 'bg-white/80 border border-purple-200 text-purple-900 shadow-sm'
                           : 'bg-white/5 border border-purple-500/20 text-purple-200'
                           }`}>
@@ -1126,9 +1151,9 @@ export const AboutContent = ({ theme }) => {
                   {isLight ? (
                     <button
                       onClick={() => setSelectedCardId(null)}
-                      className="self-start px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
+                      className="self-start px-4 sm:px-5 py-2 sm:py-1.5 text-xs font-bold text-white bg-gradient-to-r from-[#ff5e97] to-[#ec4899] hover:from-[#ff4887] hover:to-[#db2777] rounded-full shadow-md active:scale-95 transition-all duration-700 cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                       </svg>
                       {isMobile ? 'Back to cards' : 'Close Expanded Card'}
@@ -1146,9 +1171,9 @@ export const AboutContent = ({ theme }) => {
                     >
                       <button
                         onClick={() => setSelectedCardId(null)}
-                        className="px-2.5 xs:px-3 sm:px-5 py-0.5 xs:py-1 sm:py-1.5 text-[9px] xs:text-[10px] sm:text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
+                        className="px-4 sm:px-5 py-2 sm:py-1.5 text-xs font-bold text-white cursor-pointer focus:outline-none flex items-center gap-1 sm:gap-2"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                         </svg>
                         {isMobile ? 'Back to cards' : 'Close Expanded Card'}

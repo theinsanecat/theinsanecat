@@ -40,6 +40,14 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
 
   const isLight = theme === 'light';
 
+  // The tall phone/tablet sky (600x1080, top-aligned) on a LANDSCAPE screen is scaled to the width,
+  // which made the moon/sun big and put them over the page content (sideways tablets, smart displays).
+  // There they shrink and move up into the top corners: offsets are in sky units.
+  const landscapeSky = isSmallScreen && geom.W > geom.H;
+  const cornerY = landscapeSky ? (0.15 * geom.H * 600) / geom.W : 150; // ~15% down the screen
+  const moonShift = landscapeSky ? { x: 520 - 450, y: cornerY - 150, s: 0.6 } : { x: 0, y: 0, s: 1 };
+  const sunShift = landscapeSky ? { x: 80 - 120, y: cornerY - 150, s: 0.6 } : { x: 0, y: 0, s: 1 };
+
   return (
     <motion.div
       className="absolute inset-0 w-full h-full z-0 pointer-events-none"
@@ -131,9 +139,9 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
 
           {/* DEDICATED MOBILE SUN */}
           <motion.g
-            animate={{ opacity: isLight ? 1.0 : 0, scale: isLight ? 1.0 : 0.4 }}
+            animate={{ opacity: isLight ? 1.0 : 0, scale: (isLight ? 1.0 : 0.4) * sunShift.s, x: sunShift.x, y: sunShift.y }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{ originX: '120px', originY: '150px' }}
+            style={{ originX: '50%', originY: '50%' }}
           >
             <circle cx="120" cy="150" r="115" fill="url(#sunCoronaMobile)" />
             <circle cx="120" cy="150" r="44" fill="url(#sunGradMobile)" filter="url(#glowFilterMobile)" opacity="0.95" />
@@ -141,9 +149,9 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
 
           {/* DEDICATED MOBILE MOON */}
           <motion.g
-            animate={{ opacity: isLight ? 0 : 1.0, scale: isLight ? 0.4 : 1.0 }}
+            animate={{ opacity: isLight ? 0 : 1.0, scale: (isLight ? 0.4 : 1.0) * moonShift.s, x: moonShift.x, y: moonShift.y }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{ originX: '450px', originY: '150px' }}
+            style={{ originX: '50%', originY: '50%' }}
           >
             <circle cx="450" cy="150" r="110" fill="url(#lunarGlowMobile)" />
             <circle cx="450" cy="150" r="40" fill="url(#moonGradMobile)" filter="url(#glowFilterMobile)" opacity="0.95" />

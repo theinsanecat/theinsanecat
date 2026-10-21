@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogoLoop } from './LogoLoop';
 import { getPageFit } from '../../lib/pageFit';
+import { isTouchUi } from '../../lib/compactScreen';
 import { FloatingBubbles } from './FloatingBubbles';
 import angularLogo from '../../assets/tech/angular.svg';
 import css3Logo from '../../assets/tech/css3.svg';
@@ -713,6 +714,10 @@ export const ProjectsContent = ({ theme }) => {
   const [hoveredId, setHoveredId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
+  // Upright touch tablets keep a 2-column grid at every size
+  const [portraitTablet, setPortraitTablet] = useState(() =>
+    typeof window !== 'undefined' && isTouchUi() && window.innerHeight > window.innerWidth
+  );
   const [tab, setTab] = useState('work'); // 'work' = frontend case studies, 'side' = side projects
   const list = tab === 'work' ? workData : projectsData;
   const switchTab = (next) => { if (next !== tab) { setTab(next); setActiveMobileIndex(0); setDirection(1); } };
@@ -730,6 +735,7 @@ export const ProjectsContent = ({ theme }) => {
       const h = window.innerHeight;
       setViewportHeight(getPageFit().h);
       setIsMobile(w < 768 || h < 520);
+      setPortraitTablet(isTouchUi() && h > w);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -788,6 +794,28 @@ export const ProjectsContent = ({ theme }) => {
 
   const currentProject = list[activeMobileIndex] || list[0];
 
+  // Grid (tablets & laptops): shrink to fit the space between the header and the tech tray, whatever
+  // the screen, so cards never run under the tab bar or push the tray off screen (iPad mini upright).
+  const gridAreaRef = useRef(null);
+  const gridRef = useRef(null);
+  const [gridFit, setGridFit] = useState(1);
+  useLayoutEffect(() => {
+    if (isMobile) return undefined;
+    const area = gridAreaRef.current;
+    const grid = gridRef.current;
+    if (!area || !grid) return undefined;
+    const measure = () => {
+      const avail = area.clientHeight;
+      const need = grid.offsetHeight; // layout size, not affected by the scale itself
+      setGridFit(avail > 0 && need > avail ? Math.max(0.55, avail / need) : 1);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(area);
+    ro.observe(grid);
+    return () => ro.disconnect();
+  }, [isMobile, tab, portraitTablet]);
+
   return (
     <div className="w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto relative overflow-hidden py-2 sm:py-4 px-3 sm:px-6">
 
@@ -795,7 +823,7 @@ export const ProjectsContent = ({ theme }) => {
       <FloatingBubbles />
 
       {/* Title Header */}
-      <div className="text-center mb-1 sm:mb-2 max-w-2xl z-10 mt-16 xs:mt-18 sm:mt-20 md:mt-24 lg:mt-16 shrink-0">
+      <div className="text-center mb-1 sm:mb-2 max-w-2xl z-10 mt-16 xs:mt-18 sm:mt-20 md:mt-24 desk:mt-16 shrink-0">
         <span className={`text-[10px] sm:text-xs font-black tracking-widest uppercase transition-colors duration-500 ease-in-out ${isLight ? 'text-pink-600' : 'text-pink-400'
           }`}>
           Ideas In Motion
@@ -968,8 +996,13 @@ export const ProjectsContent = ({ theme }) => {
         </div>
       ) : (
         /* DESKTOP / TABLET VIEW: Responsive Grid */
-        <div className="relative w-full max-w-6xl flex-1 flex flex-col justify-center items-center my-auto z-20 py-2 sm:py-3" style={getScaleStyle()}>
-          <div key={tab} className={`w-full grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5 justify-center items-stretch ${list.length === 3 ? 'lg:grid-cols-3 max-w-5xl' : 'lg:grid-cols-4'}`}>
+        <div ref={gridAreaRef} className="relative w-full max-w-6xl flex-1 min-h-0 flex flex-col justify-center items-center my-auto z-20 py-2 sm:py-3">
+          <div
+            ref={gridRef}
+            key={tab}
+            style={gridFit < 1 ? { transform: `scale(${gridFit.toFixed(3)})`, transformOrigin: 'center center' } : undefined}
+            className={`w-full grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-5 justify-center items-stretch ${portraitTablet ? 'max-w-3xl' : list.length === 3 ? 'lg:grid-cols-3 max-w-5xl' : 'lg:grid-cols-4'}`}
+          >
             {list.map((project, index) => {
               return (
                 <motion.div
@@ -980,7 +1013,7 @@ export const ProjectsContent = ({ theme }) => {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.28, delay: index * 0.03, ease: [0.16, 1, 0.3, 1] }}
-                  className={`relative w-full rounded-xl sm:rounded-2xl p-[1px] overflow-hidden flex flex-col group cursor-pointer ${list.length % 2 === 1 && index === list.length - 1 ? 'sm:col-span-2 sm:justify-self-center sm:w-[calc(50%-0.5rem)] lg:col-span-1 lg:w-full' : ''} transition-transform duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] transform-gpu ${isLight
+                  className={`relative w-full rounded-xl sm:rounded-2xl p-[1px] overflow-hidden flex flex-col group cursor-pointer ${list.length % 2 === 1 && index === list.length - 1 ? (portraitTablet ? 'sm:col-span-2 sm:justify-self-center sm:w-[calc(50%-0.5rem)]' : 'sm:col-span-2 sm:justify-self-center sm:w-[calc(50%-0.5rem)] lg:col-span-1 lg:w-full') : ''} transition-transform duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] transform-gpu ${isLight
                     ? project.lightBg
                     : 'glass-surface glass-surface-hoverable border border-white/10 group-hover:border-pink-500/50 shadow-lg shadow-black/30'
                     }`}
@@ -1057,7 +1090,7 @@ export const ProjectsContent = ({ theme }) => {
       )}
 
       {/* ── Tech Stack Loop (ReactBits LogoLoop Component) at the bottom ── */}
-      <div className={`w-full mt-1 sm:mt-4 mb-16 lg:mb-0 max-w-5xl z-20 border-t pt-2 sm:pt-3 flex flex-col items-center shrink-0 pointer-events-none select-none transition-colors duration-500 ease-in-out ${isLight ? 'border-purple-200' : 'border-purple-500/10'
+      <div className={`w-full mt-1 sm:mt-4 mb-16 desk:mb-0 max-w-5xl z-20 border-t pt-2 sm:pt-3 flex flex-col items-center shrink-0 pointer-events-none select-none transition-colors duration-500 ease-in-out ${isLight ? 'border-purple-200' : 'border-purple-500/10'
         }`}>
         <span className={`text-[8px] sm:text-[9px] font-black tracking-widest uppercase mb-1.5 sm:mb-3 transition-colors duration-500 ease-in-out ${isLight ? 'text-pink-600' : 'text-cyan-400'
           }`}>
