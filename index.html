@@ -28,8 +28,10 @@
     <!-- Paint the site's background before any CSS or JS loads, so opening a page never flashes white -->
     <style>html, body { background: #07010e; } html.theme-light, html.theme-light body { background: #faf5f0; }</style>
     <script>try { if (localStorage.getItem('portfolio_theme') === 'light') document.documentElement.className += ' theme-light'; } catch (e) {}</script>
-    <script type="module" crossorigin src="/theinsanecat/assets/index-7TZMhxpv.js"></script>
-    <link rel="stylesheet" crossorigin href="/theinsanecat/assets/index-JvcwWUhV.css">
+    <!-- Touch-only devices (phones and every tablet, any size or orientation) get the tablet/phone layout -->
+    <script>try { if (matchMedia('(hover: none) and (pointer: coarse)').matches) document.documentElement.classList.add('touch-ui'); } catch (e) {}</script>
+    <script type="module" crossorigin src="/theinsanecat/assets/index-BQ-Un0NR.js"></script>
+    <link rel="stylesheet" crossorigin href="/theinsanecat/assets/index-DFUNZ6RZ.css">
     <link rel="preload" as="font" type="font/woff2" crossorigin="" href="/theinsanecat/assets/mileast-D6G_CG72.woff2">
     <link rel="preload" as="font" type="font/woff2" crossorigin="" href="/theinsanecat/assets/questrial-4cVkscdP.woff2">
   </head>
