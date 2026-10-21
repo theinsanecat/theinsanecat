@@ -585,8 +585,49 @@ const CardFront = ({ card, isSelected, theme, isMobile }) => {
 };
 
 // ─── Glow behind the front card ────────────────────────────────────────────────
-// One fixed layer at the front-card position (not inside each card), so the glow stays put while
-// the deck turns instead of leaving with the old card and fading back in on the new one.
+// Laptops/desktops: drawn inside each card, so it travels with the front card as the deck turns
+// (the approved look). Phones/tablets: one fixed layer at the front-card position (CenterGlow),
+// because there the per-card glow blinked out and back on every turn.
+const GlowLayers = ({ theme, active }) => (
+  <>
+    {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
+    <div
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
+    <div
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Radiant Glowing Aura Disk - Light Mode */}
+    <div
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-85' : 'opacity-0'
+        }`}
+    />
+
+    {/* Radiant Glowing Aura Disk - Dark Mode */}
+    <div
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-85' : 'opacity-0'
+        }`}
+    />
+
+    {/* Glowing Outer Card Frame Halo - Light Mode */}
+    <div
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Glowing Outer Card Frame Halo - Dark Mode */}
+    <div
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+  </>
+);
+
 const CenterGlow = ({ theme, scale, visible }) => (
   <div
     aria-hidden="true"
@@ -596,47 +637,14 @@ const CenterGlow = ({ theme, scale, visible }) => (
       transform: `scale(${scale})`, zIndex: 9, opacity: visible ? 1 : 0,
     }}
   >
-      {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
-      <div
-        className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
-
-      {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
-      <div
-        className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
-
-      {/* Radiant Glowing Aura Disk - Light Mode */}
-      <div
-        className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-85' : 'opacity-0'
-          }`}
-      />
-
-      {/* Radiant Glowing Aura Disk - Dark Mode */}
-      <div
-        className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-85' : 'opacity-0'
-          }`}
-      />
-
-      {/* Glowing Outer Card Frame Halo - Light Mode */}
-      <div
-        className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
-
-      {/* Glowing Outer Card Frame Halo - Dark Mode */}
-      <div
-        className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
+    <GlowLayers theme={theme} active />
   </div>
 );
 
 // ─── Full Card (flipper wrapper with standalone perspective camera) ─────────────
-const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile }) => (
+const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile, cardGlow }) => (
   <div className="w-full h-full relative perspective-[1500px] transform-gpu">
+    {cardGlow && <GlowLayers theme={theme} active={isCenterUnturned} />}
     {/* Smooth Floating Container: GPU CSS Accelerated */}
     <div
       className={`w-full h-full relative preserve-3d transform-gpu ${isCenterUnturned ? 'animate-card-float' : ''}`}
@@ -811,6 +819,7 @@ export const AboutContent = ({ theme }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isMathModalOpen, setIsMathModalOpen] = useState(false);
+  const { modeLocked: compactUi } = usePerformanceMode(); // phones & tablets
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -960,7 +969,7 @@ export const AboutContent = ({ theme }) => {
             style={{ width: '1100px', height: '1100px', bottom: '-830px', opacity: selectedCardId ? 0 : 1 }}
           />
 
-          <CenterGlow theme={theme} scale={deckScale} visible={!selectedCardId} />
+          {compactUi && <CenterGlow theme={theme} scale={deckScale} visible={!selectedCardId} />}
 
           {/* Cards mapping - stays entirely mounted to morph dynamically */}
           {cardsData.map((card, index) => {
@@ -1059,6 +1068,7 @@ export const AboutContent = ({ theme }) => {
                   isCenterUnturned={isCenterUnturned}
                   theme={cardTheme}
                   isMobile={isMobile}
+                  cardGlow={!compactUi}
                 />
               </motion.div>
             );

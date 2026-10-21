@@ -80,7 +80,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
   ];
 
   return (
-    <div className="relative w-full min-h-full flex flex-col items-center justify-center pt-28 pb-12 sm:pt-36 sm:pb-16 md:pt-40 z-30 select-none max-w-4xl px-4 pointer-events-auto">      
+    <div className="relative w-full min-h-full flex flex-col items-center justify-center pt-28 pb-12 sm:pt-36 sm:pb-16 md:pt-40 desk:pt-32 desk:pb-44 z-30 select-none max-w-4xl px-4 pointer-events-auto">      
       {/* Swaying Sakura Branch and Falling Petals overlaying the Contact page */}
       <SakuraBranch theme={theme} />
 
