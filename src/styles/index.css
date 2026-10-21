@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* "desk:" = laptop/desktop layout: 1024px and wider, and NOT a touch-only tablet.
+   Tablets of every size (html.touch-ui, set in index.html) keep the tablet layout. */
+@custom-variant desk {
+  @media (width >= 64rem) {
+    &:where(html:not(.touch-ui) *) {
+      @slot;
+    }
+  }
+}
+
 /* Fonts: subset (Latin + used symbols) WOFF2 builds of the originals kept in /design-source/fonts.
    Questrial + Mileast are preloaded from main.jsx. */
 @font-face {

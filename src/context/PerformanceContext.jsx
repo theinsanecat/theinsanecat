@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { COMPACT_MAX_WIDTH, isCompactScreen } from '../lib/compactScreen';
+import { COMPACT_MAX_WIDTH, TOUCH_UI_QUERY, isCompactScreen } from '../lib/compactScreen';
 
 const PerformanceContext = createContext({
   performanceMode: 'full', // 'full' (Cinematic) | 'balanced' | 'lite'
@@ -98,11 +98,14 @@ export const PerformanceProvider = ({ children }) => {
   );
   const [compact, setCompact] = useState(isCompactScreen);
   useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${COMPACT_MAX_WIDTH}px)`);
-    const onChange = () => setCompact(mq.matches);
+    const queries = [window.matchMedia(`(max-width: ${COMPACT_MAX_WIDTH}px)`), window.matchMedia(TOUCH_UI_QUERY)];
+    const onChange = () => {
+      setCompact(isCompactScreen());
+      document.documentElement.classList.toggle('touch-ui', queries[1].matches);
+    };
     onChange();
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
+    queries.forEach((q) => q.addEventListener('change', onChange));
+    return () => queries.forEach((q) => q.removeEventListener('change', onChange));
   }, []);
   const performanceMode = compact ? 'lite' : chosenMode;
   const [detectedGpu] = useState(() => (typeof window === 'undefined' ? '' : getDetection().renderer));

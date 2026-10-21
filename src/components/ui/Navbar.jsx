@@ -58,7 +58,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
       </button>
 
       {/* Nav Links: glass pill. Hidden below lg; sits in the row on 1024-1279px so it never meets the right controls, centred from xl */}
-      <div className="hidden lg:block xl:absolute xl:left-1/2 xl:top-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2 pointer-events-auto z-10">
+      <div className="hidden desk:block xl:absolute xl:left-1/2 xl:top-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2 pointer-events-auto z-10">
         {isLight ? (
           <div className="flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-md border border-white/80 bg-white/75 shadow-md shadow-pink-900/5 text-slate-800 transition-all duration-500">
             {navLinks.map((link) => {
@@ -157,7 +157,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
         </button>
 
         {/* Say Hello CTA Button - Hidden on mobile & tablet (< lg) */}
-        <div className="hidden lg:block">
+        <div className="hidden desk:block">
           {isLight ? (
             <div className="p-[1.5px] rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 shadow-md shadow-pink-500/10 active:scale-95 transition-all duration-700 ease-in-out cursor-pointer w-max">
               <button
@@ -195,7 +195,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
           Kept OUTSIDE the animated <nav>: while the nav slides in it has a transform, and a transformed
           parent makes position:fixed children stick to the parent, so the bar showed at the top first */}
       <div
-        className="lg:hidden fixed left-1/2 -translate-x-1/2 z-50 pointer-events-auto"
+        className="desk:hidden fixed left-1/2 -translate-x-1/2 z-50 pointer-events-auto"
         style={{ bottom: 'calc(10px + env(safe-area-inset-bottom, 0px))' }}
       >
         <div className={`flex items-center gap-0.5 p-1 rounded-full border shadow-lg transition-colors duration-700 ${

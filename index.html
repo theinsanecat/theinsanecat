@@ -28,6 +28,8 @@
     <!-- Paint the site's background before any CSS or JS loads, so opening a page never flashes white -->
     <style>html, body { background: #07010e; } html.theme-light, html.theme-light body { background: #faf5f0; }</style>
     <script>try { if (localStorage.getItem('portfolio_theme') === 'light') document.documentElement.className += ' theme-light'; } catch (e) {}</script>
+    <!-- Touch-only devices (phones and every tablet, any size or orientation) get the tablet/phone layout -->
+    <script>try { if (matchMedia('(hover: none) and (pointer: coarse)').matches) document.documentElement.classList.add('touch-ui'); } catch (e) {}</script>
   </head>
   <body>
     <div id="root"></div>

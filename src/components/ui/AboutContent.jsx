@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { ABOUT_IMAGES, ABOUT_CARD_IMAGES } from '../../lib/artAssets';
 import { usePerformanceMode } from '../../context/PerformanceContext';
-import { isCompactScreen } from '../../lib/compactScreen';
+import { isCompactScreen, isTouchUi } from '../../lib/compactScreen';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import BorderGlow from './BorderGlow';
@@ -814,16 +814,23 @@ export const AboutContent = ({ theme }) => {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
+  // Tablet layout: 768-1180px, and every touch tablet whatever its size (uniform tablet experience)
   const [isTablet, setIsTablet] = useState(() =>
-    typeof window !== 'undefined' ? (window.innerWidth >= 768 && window.innerWidth <= 1180) : false
+    typeof window !== 'undefined' ? (window.innerWidth >= 768 && (window.innerWidth <= 1180 || isTouchUi())) : false
+  );
+  const [vp, setVp] = useState(() =>
+    typeof window !== 'undefined' ? { w: window.innerWidth, h: window.innerHeight } : { w: 1024, h: 768 }
   );
   const [isSmallScreen, setIsSmallScreen] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 640 : false
   );
   const isLocked = useRef(false);
 
+  // Tablets: grow the deck, the opened card and the story with the screen (1 = the original tablet size).
+  // Tall portrait tablets used to show a small deck in a mostly empty screen.
+  const tabletK = isTablet ? Math.min(1.5, Math.max(1, Math.min(vp.w / 740, vp.h / 1050) / 0.85)) : 1;
   // Scale of the focused (centre) card at this screen size, mirrors baseScale below
-  const deckScale = isSmallScreen ? 0.72 : (isMobile ? 0.82 : (isTablet ? 0.85 : 1));
+  const deckScale = isSmallScreen ? 0.72 : (isMobile ? 0.82 : (isTablet ? 0.85 * tabletK : 1));
 
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
   const total = cardsData.length;
@@ -832,7 +839,8 @@ export const AboutContent = ({ theme }) => {
     const checkResponsive = () => {
       const w = window.innerWidth;
       setIsMobile(w < 768);
-      setIsTablet(w >= 768 && w <= 1180);
+      setIsTablet(w >= 768 && (w <= 1180 || isTouchUi()));
+      setVp({ w, h: window.innerHeight });
       setIsSmallScreen(w < 640);
     };
     checkResponsive();
@@ -905,7 +913,7 @@ export const AboutContent = ({ theme }) => {
 
   return (
     <ThemeLayersContext.Provider value={themeLayers}>
-    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 lg:pb-6">
+    <div className="relative w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto overflow-hidden pb-20 desk:pb-6">
 
       {/* Aurora Background */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -949,9 +957,10 @@ export const AboutContent = ({ theme }) => {
         <motion.div
           onPanEnd={handlePanEnd}
           className={`relative w-full flex flex-col items-center justify-center transition-all duration-700 ${selectedCardId
-            ? (isMobile ? 'h-[500px] xs:h-[540px] sm:h-[690px]' : (isTablet ? 'h-[440px]' : 'h-[480px]'))
-            : 'h-[360px] sm:h-[420px] md:h-[460px]'
+            ? (isMobile ? 'h-[500px] xs:h-[540px] sm:h-[690px]' : (isTablet ? '' : 'h-[480px]'))
+            : (isTablet ? '' : 'h-[360px] sm:h-[420px] md:h-[460px]')
             }`}
+          style={isTablet ? { height: `${Math.round((selectedCardId ? 440 : 460) * tabletK)}px` } : undefined}
         >
           {/* Circular Plate Disc */}
           <div
@@ -974,10 +983,10 @@ export const AboutContent = ({ theme }) => {
             const arc = getArc(index, activeIndex, total, isLight);
 
             // Proportional card scaling based on screen size
-            let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 : arc.scale));
+            let baseScale = isSmallScreen ? arc.scale * 0.72 : (isMobile ? arc.scale * 0.82 : (isTablet ? arc.scale * 0.85 * tabletK : arc.scale));
 
             // Position targets
-            let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 : 1)));
+            let targetX = arc.x * (isSmallScreen ? 0.65 : (isMobile ? 0.8 : (isTablet ? 0.72 * tabletK : 1)));
             let targetY = arc.y;
             let rotateZ = arc.rotateZ;
             let scale = baseScale;
@@ -991,10 +1000,10 @@ export const AboutContent = ({ theme }) => {
               if (isSelected) {
                 {
                   // Rest of devices (Tablets, Laptops, Desktops): card shifted LEFT, details text SIDE-BY-SIDE on right
-                  targetX = isTablet ? -135 : -200;
+                  targetX = isTablet ? -135 * tabletK : -200;
                   targetY = 0;
                   rotateZ = 0;
-                  scale = isTablet ? 0.80 : 0.92;
+                  scale = isTablet ? 0.80 * tabletK : 0.92;
                   opacity = 1;
                   zIndex = 50;
                 }
@@ -1081,8 +1090,9 @@ export const AboutContent = ({ theme }) => {
                   left: '50%',
                   top: '50%',
                   marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
-                  width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? '340px' : '440px'),
-                  height: isMobile ? 'auto' : (isTablet ? '360px' : '414px'),
+                  // tablets: grows with the screen but never past the right edge
+                  width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? `${Math.round(Math.min(340 * tabletK, vp.w / 2 - 36))}px` : '440px'),
+                  height: isMobile ? 'auto' : (isTablet ? `${Math.round(360 * tabletK)}px` : '414px'),
                   maxHeight: isMobile ? (isSmallScreen ? '420px' : '480px') : 'none',
                 }}
               >
@@ -1109,7 +1119,7 @@ export const AboutContent = ({ theme }) => {
 
 
                 {/* Long Description Body */}
-                <div className={`w-full my-1 font-medium transition-colors duration-700 ${isMobile ? 'min-h-0 shrink overflow-y-auto pr-1 custom-scrollbar text-[13px] leading-relaxed' : 'leading-snug text-[9px] xs:text-[10px] sm:text-xs flex-1 overflow-y-auto pr-2 custom-scrollbar'
+                <div className={`w-full my-1 font-medium transition-colors duration-700 ${isMobile ? 'min-h-0 shrink overflow-y-auto pr-1 custom-scrollbar text-[13px] leading-relaxed' : `${isTablet && tabletK > 1.08 ? 'leading-relaxed text-[13px]' : 'leading-snug text-[9px] xs:text-[10px] sm:text-xs'} flex-1 overflow-y-auto pr-2 custom-scrollbar`
                   } ${isLight ? 'text-slate-700' : 'text-purple-200/85'}`}>
                   <p>{isMobile ? selectedCard.mobileSummary : selectedCard.longDescription}</p>
                 </div>
