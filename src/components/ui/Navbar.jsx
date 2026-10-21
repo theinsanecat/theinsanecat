@@ -28,6 +28,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
   const isLight = theme === 'light';
 
   return (
+    <>
     <motion.nav 
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -42,12 +43,12 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
         aria-label="Soumya Dwivedi, home"
         className="group flex flex-col items-start leading-none cursor-pointer focus:outline-none shrink-0 z-10"
       >
-        <span className={`text-[7px] xs:text-[8px] sm:text-[9px] lg:text-[10px] font-black tracking-[0.25em] uppercase mb-0.5 sm:mb-1 transition-colors duration-700 ease-in-out whitespace-nowrap ${
+        <span className={`text-[9px] sm:text-[9px] lg:text-[10px] font-black tracking-[0.25em] uppercase mb-1 transition-colors duration-700 ease-in-out whitespace-nowrap ${
           isLight ? 'text-pink-600' : 'text-purple-300'
         }`}>
           Soumya Dwivedi
         </span>
-        <span className={`text-[9px] xs:text-[10px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-700 ease-in-out whitespace-nowrap ${
+        <span className={`text-[15px] sm:text-sm md:text-base lg:text-xl font-mileast tracking-tight transition-all duration-700 ease-in-out whitespace-nowrap ${
           isLight
             ? 'text-[#1e1832] group-hover:text-pink-600'
             : 'text-white group-hover:text-purple-400 group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
@@ -134,7 +135,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
         {/* Theme Toggle Button (Sun / Moon) */}
         <button
           onClick={() => setTheme(isLight ? 'dark' : 'light')}
-          className={`p-1 sm:p-2.5 rounded-full backdrop-blur-md border transition-all duration-700 ease-in-out cursor-pointer active:scale-95 flex items-center justify-center ${
+          className={`p-2 sm:p-2.5 rounded-full backdrop-blur-md border transition-all duration-700 ease-in-out cursor-pointer active:scale-95 flex items-center justify-center ${
             isLight
               ? 'bg-white/80 border-pink-200 text-amber-500 hover:bg-amber-50 shadow-sm'
               : 'bg-white/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20 shadow-md'
@@ -144,12 +145,12 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
         >
           {isLight ? (
             /* Golden Sun Icon */
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-amber-500">
               <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18.75a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM6.166 18.894a.75.75 0 0 0 1.06 1.06l1.59-1.591a.75.75 0 1 0-1.06-1.061l-1.59 1.591ZM4.5 12a.75.75 0 0 1-.75-.75H1.5a.75.75 0 0 1 0 1.5h2.25A.75.75 0 0 1 4.5 12ZM6.166 5.106a.75.75 0 0 0-1.06 1.06l1.591 1.59a.75.75 0 0 0 1.06-1.061L6.166 5.106Z" />
             </svg>
           ) : (
             /* Crescent Moon Icon */
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 sm:w-4 sm:h-4 text-purple-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-purple-300">
               <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clipRule="evenodd" />
             </svg>
           )}
@@ -188,7 +189,11 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
         </div>
       </div>
 
-      {/* Mobile & tablet navigation (< lg): bottom tab bar, thumb-reachable */}
+    </motion.nav>
+
+      {/* Mobile & tablet navigation (< lg): bottom tab bar, thumb-reachable.
+          Kept OUTSIDE the animated <nav>: while the nav slides in it has a transform, and a transformed
+          parent makes position:fixed children stick to the parent, so the bar showed at the top first */}
       <div
         className="lg:hidden fixed left-1/2 -translate-x-1/2 z-50 pointer-events-auto"
         style={{ bottom: 'calc(10px + env(safe-area-inset-bottom, 0px))' }}
@@ -216,6 +221,6 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
           })}
         </div>
       </div>
-    </motion.nav>
+    </>
   );
 };

@@ -13,7 +13,7 @@ import { HeroContent } from './components/ui/HeroContent';
 import { CyberDialogueBox } from './components/ui/CyberDialogueBox';
 import { UFOCatSpaceship, GlobalSVGDefs } from './components/ui/UFOCatSpaceship';
 import { InteractiveSpotlight } from './components/ui/InteractiveSpotlight';
-import { ResumeViewer } from './components/ui/ResumeViewer';
+import { ResumeViewer, RESUME_PREVIEW_URL } from './components/ui/ResumeViewer';
 import { RotateNotice } from './components/ui/RotateNotice';
 import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { usePageFit } from './lib/pageFit';
@@ -227,6 +227,7 @@ function App() {
             ...(isMobile ? [] : Object.values(ABOUT_IMAGES).map((src) => () => warmImage(src))),
             () => warmRender('about'),
             () => warmRender('projects'),
+            () => warmImage(RESUME_PREVIEW_URL), // résumé popup opens with the page already drawn
           ], 0);
         });
     }, 300);
