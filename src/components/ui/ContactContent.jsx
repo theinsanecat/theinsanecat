@@ -80,7 +80,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
   ];
 
   return (
-    <div className="relative w-full min-h-full flex flex-col items-center justify-center pt-28 pb-12 sm:pt-36 sm:pb-16 md:pt-40 desk:pt-32 desk:pb-44 z-30 select-none max-w-4xl px-4 pointer-events-auto">      
+    <div className="relative w-full min-h-full flex flex-col items-center justify-center pt-28 pb-12 sm:pt-36 sm:pb-16 md:pt-40 desk:pb-[88px] z-30 select-none max-w-4xl px-4 pointer-events-auto">      
       {/* Swaying Sakura Branch and Falling Petals overlaying the Contact page */}
       <SakuraBranch theme={theme} />
 
@@ -271,7 +271,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full px-2 mt-4 sm:mt-8 z-30 transform-gpu"
+        className="flex flex-wrap items-center justify-center gap-2 sm:gap-5 w-full px-2 mt-4 sm:mt-8 desk:mt-4 z-30 transform-gpu"
       >
         {socialLinks.map((link) => (
           <div key={link.name} className="relative transform-gpu">
@@ -282,7 +282,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick(); } : undefined}
-                className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-[#1e1832] bg-white/85 hover:bg-white border border-purple-200/90 shadow-sm rounded-full hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
+                className="px-3.5 sm:px-6 py-1.5 sm:py-3 desk:px-5 desk:py-2 text-[11px] sm:text-xs md:text-sm desk:text-xs font-semibold tracking-wide text-[#1e1832] bg-white/85 hover:bg-white border border-purple-200/90 shadow-sm rounded-full hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
               >
                 <span className="text-purple-600 group-hover:text-pink-600 transition-colors duration-300">
                   {link.icon}
@@ -310,7 +310,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick(); } : undefined}
-                  className="px-3.5 sm:px-6 py-1.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide text-white focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
+                  className="px-3.5 sm:px-6 py-1.5 sm:py-3 desk:px-5 desk:py-2 text-[11px] sm:text-xs md:text-sm desk:text-xs font-semibold tracking-wide text-white focus:outline-none flex items-center justify-center gap-1.5 sm:gap-2 group whitespace-nowrap"
                 >
                   <span className={`transition-colors duration-300 ${link.color}`}>
                     {link.icon}
