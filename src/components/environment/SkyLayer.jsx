@@ -4,6 +4,7 @@ import { motion, useTransform } from 'framer-motion';
 // Same falloff as the former SVG maskGlow gradient (1 -> 0.6 @ 50% -> 0), as an alpha mask
 const REVEAL_MASK = 'radial-gradient(circle closest-side, #000 0%, rgba(0,0,0,0.6) 50%, transparent 100%)';
 const REVEAL_RADIUS = 260; // in 1920x1080 sky units
+import { isCompactScreen } from '../../lib/compactScreen';
 
 // Screen geometry of a 1920x1080 viewBox drawn with preserveAspectRatio="xMidYMid slice"
 const skyGeometry = () => {
@@ -43,7 +44,8 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
   // The tall phone/tablet sky (600x1080, top-aligned) on a LANDSCAPE screen is scaled to the width,
   // which made the moon/sun big and put them over the page content (sideways tablets, smart displays).
   // There they shrink and move up into the top corners: offsets are in sky units.
-  const landscapeSky = isSmallScreen && geom.W > geom.H;
+  // Touch devices and sub-laptop windows only: a 1024-1180px laptop window keeps its approved sky
+  const landscapeSky = isSmallScreen && geom.W > geom.H && isCompactScreen();
   const cornerY = landscapeSky ? (0.15 * geom.H * 600) / geom.W : 150; // ~15% down the screen
   const moonShift = landscapeSky ? { x: 520 - 450, y: cornerY - 150, s: 0.6 } : { x: 0, y: 0, s: 1 };
   const sunShift = landscapeSky ? { x: 80 - 120, y: cornerY - 150, s: 0.6 } : { x: 0, y: 0, s: 1 };
@@ -141,7 +143,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
           <motion.g
             animate={{ opacity: isLight ? 1.0 : 0, scale: (isLight ? 1.0 : 0.4) * sunShift.s, x: sunShift.x, y: sunShift.y }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{ originX: '50%', originY: '50%' }}
+            style={landscapeSky ? { originX: '50%', originY: '50%' } : { originX: '120px', originY: '150px' }}
           >
             <circle cx="120" cy="150" r="115" fill="url(#sunCoronaMobile)" />
             <circle cx="120" cy="150" r="44" fill="url(#sunGradMobile)" filter="url(#glowFilterMobile)" opacity="0.95" />
@@ -151,7 +153,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
           <motion.g
             animate={{ opacity: isLight ? 0 : 1.0, scale: (isLight ? 0.4 : 1.0) * moonShift.s, x: moonShift.x, y: moonShift.y }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{ originX: '50%', originY: '50%' }}
+            style={landscapeSky ? { originX: '50%', originY: '50%' } : { originX: '450px', originY: '150px' }}
           >
             <circle cx="450" cy="150" r="110" fill="url(#lunarGlowMobile)" />
             <circle cx="450" cy="150" r="40" fill="url(#moonGradMobile)" filter="url(#glowFilterMobile)" opacity="0.95" />

@@ -62,7 +62,7 @@ export const HeroContent = ({ setActiveSection, onAvatarTrigger, theme }) => {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border backdrop-blur-md mb-8 text-xs md:text-sm font-semibold tracking-wide pointer-events-auto transition-colors duration-500 ${
+        className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border backdrop-blur-md mb-8 text-xs md:text-sm font-semibold tracking-wide pointer-events-auto transition-[color,background-color,border-color,box-shadow] duration-500 ${
           isLight
             ? 'bg-white/80 border-pink-300/70 text-pink-700 shadow-sm'
             : 'bg-purple-500/10 border-purple-500/30 text-purple-300'

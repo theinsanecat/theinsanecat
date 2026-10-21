@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { COMPACT_MAX_WIDTH, TOUCH_UI_QUERY, isCompactScreen } from '../lib/compactScreen';
+import { COMPACT_QUERY, TOUCH_UI_QUERY, isCompactScreen } from '../lib/compactScreen';
 
 const PerformanceContext = createContext({
   performanceMode: 'full', // 'full' (Cinematic) | 'balanced' | 'lite'
@@ -98,7 +98,7 @@ export const PerformanceProvider = ({ children }) => {
   );
   const [compact, setCompact] = useState(isCompactScreen);
   useEffect(() => {
-    const queries = [window.matchMedia(`(max-width: ${COMPACT_MAX_WIDTH}px)`), window.matchMedia(TOUCH_UI_QUERY)];
+    const queries = [window.matchMedia(COMPACT_QUERY), window.matchMedia(TOUCH_UI_QUERY)];
     const onChange = () => {
       setCompact(isCompactScreen());
       document.documentElement.classList.toggle('touch-ui', queries[1].matches);

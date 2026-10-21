@@ -322,31 +322,31 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
 
       {/* Middle Layer: Shield & Contours - Light Mode */}
       {themeLayers.light && (
-      <svg className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
+      <svg className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480">
         <g transform="translate(160,240)">
           <path d="M 0 -130 L 35 -80 L 100 -20 L 70 50 L 0 110 L -70 50 L -100 -20 L -35 -80 Z" fill="#c4b5fd" stroke="#7c3aed" strokeWidth="4" strokeLinejoin="round" />
           <path d="M 0 -100 L 25 -60 L 70 -15 L 50 35 L 0 80 L -50 35 L -70 -15 L -25 -60 Z" fill="#ddd6fe" stroke="#a855f7" strokeWidth="2" />
           <polygon points="0,-75 62,-36 62,36 0,75 -62,36 -62,-36" fill="#fbcfe8" stroke="#f472b6" strokeWidth="6" />
-          <motion.polygon points="0,-70 56,-32 56,32 0,70 -56,32 -56,-32" fill="#ec4899" animate={{ opacity: isLight ? 0.48 : (isHovered ? 0.48 : 0.25) }} transition={{ duration: 0.3 }} filter="url(#gem-glow)" />
+          <motion.polygon points="0,-70 56,-32 56,32 0,70 -56,32 -56,-32" fill="#ec4899" animate={{ opacity: isLight ? 0.48 : (isHovered ? 0.48 : 0.25) }} transition={{ duration: 0.3 }} />
         </g>
       </svg>
       )}
 
       {/* Middle Layer: Shield & Contours - Dark Mode */}
       {themeLayers.dark && (
-      <svg className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
+      <svg className={`absolute inset-0 w-full h-full z-10 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480">
         <g transform="translate(160,240)">
           <path d="M 0 -130 L 35 -80 L 100 -20 L 70 50 L 0 110 L -70 50 L -100 -20 L -35 -80 Z" fill="#18102e" stroke="#5b399c" strokeWidth="4" strokeLinejoin="round" />
           <path d="M 0 -100 L 25 -60 L 70 -15 L 50 35 L 0 80 L -50 35 L -70 -15 L -25 -60 Z" fill="#231545" stroke="#3b226e" strokeWidth="2" />
           <polygon points="0,-75 62,-36 62,36 0,75 -62,36 -62,-36" fill="#0b0616" stroke="#130b24" strokeWidth="6" />
-          <motion.polygon points="0,-70 56,-32 56,32 0,70 -56,32 -56,-32" fill="#ff1493" animate={{ opacity: isHovered ? 0.48 : 0.2 }} transition={{ duration: 0.3 }} filter="url(#gem-glow)" />
+          <motion.polygon points="0,-70 56,-32 56,32 0,70 -56,32 -56,-32" fill="#ff1493" animate={{ opacity: isHovered ? 0.48 : 0.2 }} transition={{ duration: 0.3 }} />
         </g>
       </svg>
       )}
 
       {/* Dual Blades Layer - Light Mode */}
       {themeLayers.light && (
-      <svg className={`absolute inset-0 w-full h-full z-20 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
+      <svg className={`absolute inset-0 w-full h-full z-20 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480">
         <defs>
           <linearGradient id={`blade-l-${card.id}`} x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#fbcfe8" /><stop offset="40%" stopColor="#c084fc" /><stop offset="100%" stopColor="#818cf8" />
@@ -374,7 +374,7 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
 
       {/* Dual Blades Layer - Dark Mode */}
       {themeLayers.dark && (
-      <svg className={`absolute inset-0 w-full h-full z-20 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
+      <svg className={`absolute inset-0 w-full h-full z-20 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480">
         <defs>
           <linearGradient id={`blade-d-${card.id}`} x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#d5ccf0" /><stop offset="40%" stopColor="#8771cc" /><stop offset="100%" stopColor="#372170" />
@@ -402,11 +402,11 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
 
       {/* Top Layer: Center 3D Isometric Hexagon Gem - Light Mode */}
       {themeLayers.light && (
-      <svg className={`absolute inset-0 w-full h-full z-30 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
+      <svg className={`absolute inset-0 w-full h-full z-30 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-100' : 'opacity-0'}`} viewBox="0 0 320 480">
         <g transform="translate(160,240)">
           <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="#c4b5fd" stroke="#7c3aed" strokeWidth="4" />
           <polygon points="0,-52 46,-27 46,27 0,52 -46,27 -46,-27" fill="#fbcfe8" stroke="#f472b6" strokeWidth="2" />
-          <g filter="url(#gem-glow)">
+          <g>
             <polygon points="0,-46 40,-23 40,23 0,46 -40,23 -40,-23" fill={card.gemBase} />
             <polygon points="0,-46 40,-23 0,0 -40,-23" fill={card.gemTop} />
             <polygon points="40,-23 40,23 0,15 0,0" fill={card.gemRight} />
@@ -462,11 +462,11 @@ const CardBack = ({ card, isHovered, isSelected, theme, isMobile }) => {
 
       {/* Top Layer: Center 3D Isometric Hexagon Gem - Dark Mode */}
       {themeLayers.dark && (
-      <svg className={`absolute inset-0 w-full h-full z-30 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480" filter="url(#heavy-shadow)">
+      <svg className={`absolute inset-0 w-full h-full z-30 transition-opacity duration-700 ease-in-out ${isLight ? 'opacity-0' : 'opacity-100'}`} viewBox="0 0 320 480">
         <g transform="translate(160,240)">
           <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="#251744" stroke="#4a2e85" strokeWidth="4" />
           <polygon points="0,-52 46,-27 46,27 0,52 -46,27 -46,-27" fill="#1b1235" stroke="#7952c2" strokeWidth="2" />
-          <g filter="url(#gem-glow)">
+          <g>
             <polygon points="0,-46 40,-23 40,23 0,46 -40,23 -40,-23" fill={card.gemBase} />
             <polygon points="0,-46 40,-23 0,0 -40,-23" fill={card.gemTop} />
             <polygon points="40,-23 40,23 0,15 0,0" fill={card.gemRight} />
@@ -585,58 +585,66 @@ const CardFront = ({ card, isSelected, theme, isMobile }) => {
 };
 
 // ─── Glow behind the front card ────────────────────────────────────────────────
-// One fixed layer at the front-card position (not inside each card), so the glow stays put while
-// the deck turns instead of leaving with the old card and fading back in on the new one.
+// Laptops/desktops: drawn inside each card, so it travels with the front card as the deck turns
+// (the approved look). Phones/tablets: one fixed layer at the front-card position (CenterGlow),
+// because there the per-card glow blinked out and back on every turn.
+const GlowLayers = ({ theme, active }) => (
+  <>
+    {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
+    <div
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
+    <div
+      className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Radiant Glowing Aura Disk - Light Mode */}
+    <div
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-85' : 'opacity-0'
+        }`}
+    />
+
+    {/* Radiant Glowing Aura Disk - Dark Mode */}
+    <div
+      className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-85' : 'opacity-0'
+        }`}
+    />
+
+    {/* Glowing Outer Card Frame Halo - Light Mode */}
+    <div
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${active && theme === 'light' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+
+    {/* Glowing Outer Card Frame Halo - Dark Mode */}
+    <div
+      className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${active && theme === 'dark' ? 'opacity-90' : 'opacity-0'
+        }`}
+    />
+  </>
+);
+
 const CenterGlow = ({ theme, scale, visible }) => (
   <div
     aria-hidden="true"
     className="absolute pointer-events-none transition-opacity duration-700 ease-in-out"
     style={{
       top: '50%', left: '50%', width: 300, height: 450, marginTop: -225, marginLeft: -150,
-      transform: `scale(${scale})`, zIndex: 1, opacity: visible ? 1 : 0,
+      transform: `scale(${scale})`, zIndex: 9, opacity: visible ? 1 : 0,
     }}
   >
-      {/* Deep Ambient Contrast Drop Shadow Disk - Light Mode */}
-      <div
-        className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-[#5b21b6]/25 shadow-2xl transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
-
-      {/* Deep Ambient Contrast Drop Shadow Disk - Dark Mode */}
-      <div
-        className={`absolute -inset-4 rounded-[2.5rem] blur-2xl pointer-events-none z-0 bg-black/60 transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
-
-      {/* Radiant Glowing Aura Disk - Light Mode */}
-      <div
-        className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#38bdf8]/85 via-[#c084fc]/85 to-[#f472b6]/85 transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-85' : 'opacity-0'
-          }`}
-      />
-
-      {/* Radiant Glowing Aura Disk - Dark Mode */}
-      <div
-        className={`absolute -inset-6 rounded-[2.5rem] blur-3xl pointer-events-none z-0 bg-gradient-to-tr from-[#ec4899] via-[#a855f7] to-[#f59e0b] transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-85' : 'opacity-0'
-          }`}
-      />
-
-      {/* Glowing Outer Card Frame Halo - Light Mode */}
-      <div
-        className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#c084fc]/45 transition-opacity duration-700 ease-in-out ${theme === 'light' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
-
-      {/* Glowing Outer Card Frame Halo - Dark Mode */}
-      <div
-        className={`absolute inset-0 rounded-[2rem] blur-xl pointer-events-none z-0 bg-[#ec4899]/35 transition-opacity duration-700 ease-in-out ${theme === 'dark' ? 'opacity-90' : 'opacity-0'
-          }`}
-      />
+    <GlowLayers theme={theme} active />
   </div>
 );
 
 // ─── Full Card (flipper wrapper with standalone perspective camera) ─────────────
-const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile }) => (
+const CardVisual = ({ card, isSelected, isHovered, isCenterUnturned, theme, isMobile, cardGlow }) => (
   <div className="w-full h-full relative perspective-[1500px] transform-gpu">
+    {cardGlow && <GlowLayers theme={theme} active={isCenterUnturned} />}
     {/* Smooth Floating Container: GPU CSS Accelerated */}
     <div
       className={`w-full h-full relative preserve-3d transform-gpu ${isCenterUnturned ? 'animate-card-float' : ''}`}
@@ -811,6 +819,7 @@ export const AboutContent = ({ theme }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isMathModalOpen, setIsMathModalOpen] = useState(false);
+  const { modeLocked: compactUi } = usePerformanceMode(); // phones & tablets
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -828,7 +837,7 @@ export const AboutContent = ({ theme }) => {
 
   // Tablets: grow the deck, the opened card and the story with the screen (1 = the original tablet size).
   // Tall portrait tablets used to show a small deck in a mostly empty screen.
-  const tabletK = isTablet ? Math.min(1.5, Math.max(1, Math.min(vp.w / 740, vp.h / 1050) / 0.85)) : 1;
+  const tabletK = isTablet && (isTouchUi() || vp.w < 1024) ? Math.min(1.5, Math.max(1, Math.min(vp.w / 740, vp.h / 1050) / 0.85)) : 1;
   // Scale of the focused (centre) card at this screen size, mirrors baseScale below
   const deckScale = isSmallScreen ? 0.72 : (isMobile ? 0.82 : (isTablet ? 0.85 * tabletK : 1));
 
@@ -921,19 +930,8 @@ export const AboutContent = ({ theme }) => {
       </div>
 
       {/* Global SVG Filters */}
-      {/* Shared SVG filters. Not display:none: Safari (every iPhone browser) refuses to draw anything
-          whose filter points into a display:none SVG, so the artwork using these vanished on iOS */}
-      <svg aria-hidden="true" width="0" height="0" className="absolute w-0 h-0 overflow-hidden pointer-events-none">
-        <defs>
-          <filter id="heavy-shadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="12" stdDeviation="8" floodColor="#000000" floodOpacity="0.7" />
-          </filter>
-          <filter id="gem-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
-      </svg>
+      {/* (The card artwork's shadow/glow SVG filters were removed: Chrome never drew them, because they lived
+          in a display:none SVG, and the approved look is without them. Safari didn't draw the artwork at all.) */}
 
       {/* Section Header */}
       <div
@@ -971,7 +969,7 @@ export const AboutContent = ({ theme }) => {
             style={{ width: '1100px', height: '1100px', bottom: '-830px', opacity: selectedCardId ? 0 : 1 }}
           />
 
-          <CenterGlow theme={theme} scale={deckScale} visible={!selectedCardId} />
+          {compactUi && <CenterGlow theme={theme} scale={deckScale} visible={!selectedCardId} />}
 
           {/* Cards mapping - stays entirely mounted to morph dynamically */}
           {cardsData.map((card, index) => {
@@ -1070,6 +1068,7 @@ export const AboutContent = ({ theme }) => {
                   isCenterUnturned={isCenterUnturned}
                   theme={cardTheme}
                   isMobile={isMobile}
+                  cardGlow={!compactUi}
                 />
               </motion.div>
             );

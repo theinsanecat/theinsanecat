@@ -19,6 +19,7 @@ import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { usePageFit } from './lib/pageFit';
 import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES, ABOUT_CARD_IMAGES } from './lib/artAssets';
 import { isCompactScreen } from './lib/compactScreen';
+import { usePerformanceMode } from './context/PerformanceContext';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
 // Each page ships in its own chunk. They are all fetched in parallel right after Home's first paint,
@@ -167,6 +168,7 @@ function App() {
   });
 
   const location = useLocation();
+  const { performanceMode, modeLocked } = usePerformanceMode();
   // Keep the pre-CSS background in index.html in step with the theme
   useEffect(() => { document.documentElement.classList.toggle('theme-light', theme === 'light'); }, [theme]);
   const pageFit = usePageFit();
@@ -193,6 +195,11 @@ function App() {
   // 1. ~300 ms after first paint: fetch every page chunk IN PARALLEL (tiny files, no idle waiting).
   // 2. Then, in idle slots: decode the heavy artwork and warm-render each page once, off-screen.
   const [warmPage, setWarmPage] = useState(null);
+  // Laptops with GPU drawing (not Lite): once warmed up, the lotus lake stays mounted and pre-drawn,
+  // parked out of sight, so Say Hello opens without drawing ~20 lotus/wave layers in one frame.
+  // Lite (software drawing) keeps the old mount-on-entry: compositing a parked lake every frame costs more there.
+  const [lakeParked, setLakeParked] = useState(false);
+  const parkLake = lakeParked && !modeLocked && !isMobileViewport && performanceMode !== 'lite';
   const warmDoneRef = useRef(null);
   const visitedRef = useRef(new Set());
   useEffect(() => { visitedRef.current.add(activeSection); }, [activeSection]);
@@ -228,6 +235,7 @@ function App() {
             () => warmRender('about'),
             () => warmRender('projects'),
             () => warmImage(RESUME_PREVIEW_URL), // résumé popup opens with the page already drawn
+            () => { if (!isCompactScreen()) setLakeParked(true); },
           ], 0);
         });
     }, 300);
@@ -406,13 +414,19 @@ function App() {
       <InteractiveSpotlight mouseXpx={mouseXpx} mouseYpx={mouseYpx} theme={theme} />
 
       {/* Serene Lotus Lake (Pops UP on Contact section, slides DOWN on return to Home) */}
-      <AnimatePresence>
-        {activeSection === 'contact' && (
-          <Suspense key={isMobileViewport ? 'lotus-lake-mob' : 'lotus-lake'} fallback={null}>
-            {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} fitScale={pageFit.s} />}
-          </Suspense>
-        )}
-      </AnimatePresence>
+      {parkLake ? (
+        <Suspense fallback={null}>
+          <LotusWaterBody theme={theme} fitScale={pageFit.s} shown={activeSection === 'contact'} />
+        </Suspense>
+      ) : (
+        <AnimatePresence>
+          {activeSection === 'contact' && (
+            <Suspense key={isMobileViewport ? 'lotus-lake-mob' : 'lotus-lake'} fallback={null}>
+              {isMobileViewport ? <MobileLotusWaterBody theme={theme} /> : <LotusWaterBody theme={theme} fitScale={pageFit.s} />}
+            </Suspense>
+          )}
+        </AnimatePresence>
+      )}
 
       {/* 6. UI Content Layer */}
       <div className="relative z-30 w-full h-full flex items-center justify-center pointer-events-none">
