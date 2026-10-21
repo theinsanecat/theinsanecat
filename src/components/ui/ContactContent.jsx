@@ -109,7 +109,7 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-10 xs:top-12 sm:top-18 left-2 sm:left-6 md:left-16 z-40 transform-gpu"
+        className="fixed top-[68px] sm:top-18 left-2 sm:left-6 md:left-16 z-40 transform-gpu"
       >
         <div className="relative">
           {/* Light Mode Back Button */}
