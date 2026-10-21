@@ -421,7 +421,7 @@ const LotusLayer = ({ lotus, geo, theme, front = false }) => {
   );
 };
 
-export const LotusWaterBody = ({ theme, fitScale = 1 }) => {
+export const LotusWaterBody = ({ theme, fitScale = 1, shown = true }) => {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
@@ -438,12 +438,15 @@ export const LotusWaterBody = ({ theme, fitScale = 1 }) => {
   return (
     <motion.div
       initial={{ y: 120, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      // shown=false: kept mounted (already drawn) but parked low and practically invisible, with its
+      // motion paused, so opening Say Hello doesn't have to draw the whole lake in one go
+      animate={shown ? { y: 0, opacity: 1 } : { y: 120, opacity: 0.001 }}
       exit={{ y: 120, opacity: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       // short laptop-width screens: lake keeps its share of the screen (see lib/pageFit)
       style={{ willChange: 'transform, opacity', ...(fitScale < 1 ? { height: `${Math.round(165 * fitScale)}px` } : null) }}
-      className="fixed bottom-0 left-0 right-0 w-full h-[65px] xs:h-[85px] sm:h-[130px] md:h-[165px] pointer-events-none z-40 overflow-hidden select-none transform-gpu"
+      aria-hidden={shown ? undefined : true}
+      className={`${shown ? '' : 'lake-parked '}fixed bottom-0 left-0 right-0 w-full h-[65px] xs:h-[85px] sm:h-[130px] md:h-[165px] pointer-events-none z-40 overflow-hidden select-none transform-gpu`}
     >
       {/* SVG Definitions (gradients + filters referenced by every wave/lotus SVG) */}
       <LotusDefinitions theme={theme} />

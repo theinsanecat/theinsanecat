@@ -613,3 +613,9 @@ html[data-theme-switch="instant"] *::before,
 html[data-theme-switch="instant"] *::after {
   transition: none !important;
 }
+
+/* Lotus lake parked (pre-drawn) while you're not on Say Hello: hold its motion still */
+.lake-parked,
+.lake-parked * {
+  animation-play-state: paused !important;
+}
