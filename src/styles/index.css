@@ -50,7 +50,7 @@
   body {
     height: 100%;
     overflow: hidden;
-    overscroll-behavior: none;
+    overscroll-behavior-y: none; /* vertical only: keeps two-finger swipe back/forward on trackpads */
   }
 
   body {
