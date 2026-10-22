@@ -180,4 +180,5 @@ export const PerformanceProvider = ({ children }) => {
   return <PerformanceContext.Provider value={value}>{children}</PerformanceContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components -- hook lives beside its provider
 export const usePerformanceMode = () => useContext(PerformanceContext);

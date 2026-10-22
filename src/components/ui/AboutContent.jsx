@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, createContext, useContext } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, createContext, useContext } from 'react';
 import { ABOUT_IMAGES, ABOUT_CARD_IMAGES } from '../../lib/artAssets';
 import { usePerformanceMode } from '../../context/PerformanceContext';
 import { isCompactScreen, isTouchUi } from '../../lib/compactScreen';
@@ -25,6 +25,7 @@ const useThemeLayers = (theme) => {
       return () => cancelAnimationFrame(r);
     }
     // 1) mount both sets while still showing the old theme, 2) two frames later flip -> CSS cross-fade
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-off state sync
     setCrossfading(true);
     let r2;
     const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setVisualTheme(theme)); });
@@ -843,6 +844,31 @@ export const AboutContent = ({ theme }) => {
   const deckScale = isSmallScreen ? 0.72 : (isMobile ? 0.82 : (isTablet ? 0.85 * tabletK : 1));
 
   const selectedCard = selectedCardId ? cardsData.find(c => c.id === selectedCardId) : null;
+
+  // Phones: keep the opened card's story between the name at the top and the tab bar at the bottom.
+  // On short screens (e.g. Chrome with its bottom address bar) the centred panel ran under the tab bar.
+  const deckRef = useRef(null);
+  const [panelBand, setPanelBand] = useState(null);
+  useLayoutEffect(() => {
+    if (!isMobile || !selectedCardId) return undefined;
+    const measure = () => {
+      const deck = deckRef.current?.getBoundingClientRect();
+      if (!deck) return;
+      const bar = document.querySelector('[data-tabbar]')?.getBoundingClientRect();
+      const top = 64; // below the name / "git commit" line
+      const bottom = (bar && bar.height ? bar.top : window.innerHeight - 64) - 10;
+      const room = bottom - top;
+      const max = isSmallScreen ? 420 : 480;
+      const next = { top: Math.round((top + bottom) / 2 - deck.top), maxH: Math.round(Math.min(max, room)) };
+      setPanelBand((prev) => (prev && prev.top === next.top && prev.maxH === next.maxH ? prev : next));
+    };
+    measure();
+    // the deck grows when a card opens, which can move it: follow it so the panel stays put
+    const ro = new ResizeObserver(measure);
+    if (deckRef.current) ro.observe(deckRef.current);
+    window.addEventListener('resize', measure);
+    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
+  }, [isMobile, isSmallScreen, selectedCardId, vp.h]);
   const total = cardsData.length;
 
   useEffect(() => {
@@ -872,6 +898,7 @@ export const AboutContent = ({ theme }) => {
     const handleKeyDown = (e) => {
       if (selectedCardId !== null) return;
       if (e.key === 'ArrowLeft') {
+        // eslint-disable-next-line react-hooks/immutability -- navigate is defined below; the effect runs after render
         navigate(-1);
       } else if (e.key === 'ArrowRight') {
         navigate(1);
@@ -879,6 +906,7 @@ export const AboutContent = ({ theme }) => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies chosen on purpose
   }, [selectedCardId, activeIndex]);
 
   const navigate = (dir) => {
@@ -907,15 +935,6 @@ export const AboutContent = ({ theme }) => {
     }
     isLocked.current = true;
     setSelectedCardId(card.id);
-    setTimeout(() => {
-      isLocked.current = false;
-    }, 700);
-  };
-
-  const collapse = () => {
-    if (isLocked.current) return;
-    isLocked.current = true;
-    setSelectedCardId(null);
     setTimeout(() => {
       isLocked.current = false;
     }, 700);
@@ -954,6 +973,7 @@ export const AboutContent = ({ theme }) => {
       {/* ── Main Interactive Section ── */}
       <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center flex-1 px-4 sm:px-8">
         <motion.div
+          ref={deckRef}
           onPanEnd={handlePanEnd}
           className={`relative w-full flex flex-col items-center justify-center transition-all duration-700 ${selectedCardId
             ? (isMobile ? 'h-[500px] xs:h-[540px] sm:h-[690px]' : (isTablet ? '' : 'h-[480px]'))
@@ -973,6 +993,7 @@ export const AboutContent = ({ theme }) => {
           {compactUi && <CenterGlow theme={theme} scale={deckScale} visible={!selectedCardId} />}
 
           {/* Cards mapping - stays entirely mounted to morph dynamically */}
+          {/* eslint-disable-next-line react-hooks/refs -- lock ref read is intentional */}
           {cardsData.map((card, index) => {
             const isSelected = selectedCardId === card.id;
             const isAnySelected = selectedCardId !== null;
@@ -1088,12 +1109,12 @@ export const AboutContent = ({ theme }) => {
                   }`}
                 style={{
                   left: '50%',
-                  top: '50%',
+                  top: isMobile && panelBand ? `${panelBand.top}px` : '50%',
                   marginLeft: isMobile ? '0px' : (isTablet ? '20px' : '40px'),
                   // tablets: grows with the screen but never past the right edge
                   width: isMobile ? (isSmallScreen ? '94%' : '88%') : (isTablet ? `${Math.round(Math.min(340 * tabletK, vp.w / 2 - 36))}px` : '440px'),
                   height: isMobile ? 'auto' : (isTablet ? `${Math.round(360 * tabletK)}px` : '414px'),
-                  maxHeight: isMobile ? (isSmallScreen ? '420px' : '480px') : 'none',
+                  maxHeight: isMobile ? (panelBand ? `${panelBand.maxH}px` : (isSmallScreen ? '420px' : '480px')) : 'none',
                 }}
               >
                 {/* Header Info */}

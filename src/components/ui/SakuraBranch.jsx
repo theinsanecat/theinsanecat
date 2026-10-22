@@ -4,7 +4,7 @@ import { SAKURA_BRANCH_SRC } from '../../lib/artAssets';
 import { useImageReady } from '../../hooks/useImageReady';
 
 // Falling Sakura Petal Component originating from Right branch
-const SakuraPetal = ({ id, delay, theme }) => {
+const SakuraPetal = ({ delay, theme }) => {
   const isLight = theme === 'light';
   const [randomConfig, setRandomConfig] = useState(null);
 
@@ -18,6 +18,7 @@ const SakuraPetal = ({ id, delay, theme }) => {
     const scale = 0.45 + Math.random() * 0.55;
     const swayRange = 25 + Math.random() * 40;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-off state sync
     setRandomConfig({
       xStart,
       xEnd,

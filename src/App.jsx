@@ -299,6 +299,7 @@ function App() {
   // Spaceship vanishes instantly behind the avatar whenever returning to the Home page
   useEffect(() => {
     if (activeSection === 'home') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-off state sync
       setIsSpaceshipSpawned(false);
       setIsDialogueVisible(false);
       setIsUFOHovered(false);

@@ -195,6 +195,7 @@ export const Navbar = ({ activeSection, setActiveSection, theme, setTheme, fitSc
           Kept OUTSIDE the animated <nav>: while the nav slides in it has a transform, and a transformed
           parent makes position:fixed children stick to the parent, so the bar showed at the top first */}
       <div
+        data-tabbar
         className="desk:hidden fixed left-1/2 -translate-x-1/2 z-50 pointer-events-auto"
         style={{ bottom: 'calc(10px + env(safe-area-inset-bottom, 0px))' }}
       >

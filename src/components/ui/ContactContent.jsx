@@ -11,10 +11,10 @@ import BorderGlow from './BorderGlow';
 
 export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpenResume }) => {
   const isLight = theme === 'light';
-  const [isHovered, setIsHovered] = useState(false);
+  const [, setIsHovered] = useState(false);
   // Emblem fades in once decoded (normally already warmed up from Home)
   const emblemReady = useImageReady(ROTATING_EMBLEM_SRC);
-  const [isMobile, setIsMobile] = useState(() =>
+  const [, setIsMobile] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
   );
 
@@ -24,12 +24,6 @@ export const ContactContent = ({ setActiveSection, theme, onAvatarTrigger, onOpe
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const contactData = {
-    category: "CONTACT",
-    backTitle: "01/01",
-    title: "SOUMYA DWIVEDI",
-    description: "Let's connect! I am always excited to discuss full-stack engineering, immersive UI/UX designs, and collaborative opportunities.",
-  };
 
   const socialLinks = [
     {

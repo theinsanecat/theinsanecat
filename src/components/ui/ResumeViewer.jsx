@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { countEvent } from '../../lib/analytics';
@@ -28,6 +28,24 @@ const ExternalIcon = () => (
 export const ResumeViewer = ({ isOpen, onClose, theme }) => {
   const isLight = theme === 'light';
   const closeRef = useRef(null);
+  // The page image is added only after the popup has finished opening, and fades in once decoded.
+  // Decoding this big image (first open, and again after a theme switch, when the browser has dropped
+  // its decoded copy) held up the opening animation, so the dark backdrop jumped in like a flash.
+  const [opened, setOpened] = useState(false);
+  const [pageReady, setPageReady] = useState(false);
+  // fresh state for each opening (kept while closing, so the page doesn't vanish mid-fade)
+  const [wasOpen, setWasOpen] = useState(isOpen);
+  if (isOpen !== wasOpen) {
+    setWasOpen(isOpen);
+    if (isOpen) { setOpened(false); setPageReady(false); }
+  }
+  const pageRef = (img) => {
+    if (!img || img.dataset.decoding) return;
+    img.dataset.decoding = '1';
+    // wait two frames after decoding so the (nearly invisible) page is already drawn before it fades in
+    const show = () => requestAnimationFrame(() => requestAnimationFrame(() => setPageReady(true)));
+    if (img.decode) img.decode().then(show, show); else if (img.complete) show(); else img.addEventListener('load', show, { once: true });
+  };
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -70,6 +88,7 @@ export const ResumeViewer = ({ isOpen, onClose, theme }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            onAnimationComplete={() => { if (isOpen) setOpened(true); }}
             className={`relative z-10 flex flex-col w-full max-w-2xl max-h-[92dvh] rounded-2xl sm:rounded-3xl overflow-hidden border-2 shadow-2xl ${
               isLight ? 'bg-[#fcf8ff] border-purple-200' : 'bg-[#140b28] border-purple-500/30'
             }`}
@@ -100,15 +119,21 @@ export const ResumeViewer = ({ isOpen, onClose, theme }) => {
             </div>
 
             {/* Body: the page preview, scrolling inside the popup */}
-            <div className="relative flex-1 min-h-0 overflow-y-auto overscroll-contain bg-white">
-              <img
-                src={RESUME_PREVIEW_URL}
-                alt="Soumya Dwivedi, résumé"
-                width="1530"
-                height="1980"
-                decoding="async"
-                className="block w-full h-auto select-none"
-              />
+            <div className={`relative flex-1 min-h-0 overflow-y-auto overscroll-contain ${isLight ? 'bg-white' : 'bg-[#140b28]'}`}>
+              <div className="relative w-full" style={{ aspectRatio: '1530 / 1980' }}>
+                {opened && (
+                  <img
+                    src={RESUME_PREVIEW_URL}
+                    alt="Soumya Dwivedi, résumé"
+                    width="1530"
+                    height="1980"
+                    decoding="async"
+                    ref={pageRef}
+                    className="absolute inset-0 block w-full h-full select-none transition-opacity duration-300 ease-out"
+                    style={{ opacity: pageReady ? 1 : 0.001, willChange: 'opacity' }}
+                  />
+                )}
+              </div>
             </div>
           </motion.div>
         </div>
