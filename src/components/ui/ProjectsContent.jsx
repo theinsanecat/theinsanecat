@@ -816,6 +816,37 @@ export const ProjectsContent = ({ theme }) => {
     return () => ro.disconnect();
   }, [isMobile, tab, portraitTablet]);
 
+  // Phones: if the card + dots are taller than the space above the tech tray (short screens such as
+  // a Galaxy S25 Ultra with Chrome's bottom bar), shrink them to fit instead of running into the tray.
+  const mobileAreaRef = useRef(null);
+  const mobileStackRef = useRef(null);
+  const [mobileFit, setMobileFit] = useState(1);
+  useLayoutEffect(() => {
+    if (!isMobile) return undefined;
+    const area = mobileAreaRef.current;
+    const stack = mobileStackRef.current;
+    if (!area || !stack) return undefined;
+    const measure = () => {
+      const cs = getComputedStyle(area);
+      const avail = area.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      const need = stack.offsetHeight; // layout size, not affected by the scale itself
+      setMobileFit(avail > 0 && need > avail ? Math.max(0.6, avail / need) : 1);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(area);
+    ro.observe(stack);
+    return () => ro.disconnect();
+  }, [isMobile, tab]);
+
+  const mobileScaleStyle = () => {
+    const base = getScaleStyle();
+    if (mobileFit >= 1) return base;
+    const m = /scale\(([\d.]+)\)/.exec(base.transform || '');
+    const s = Math.min(m ? parseFloat(m[1]) : 1, mobileFit);
+    return { ...base, transform: `scale(${s.toFixed(3)})`, transformOrigin: 'center center' };
+  };
+
   return (
     <div className="w-[var(--page-w,100vw)] h-[var(--page-h,100dvh)] max-h-[var(--page-h,100dvh)] flex flex-col justify-between items-center select-none pointer-events-auto relative overflow-hidden py-2 sm:py-4 px-3 sm:px-6">
 
@@ -866,7 +897,8 @@ export const ProjectsContent = ({ theme }) => {
 
       {/* MOBILE VIEW: Single Prominent Card Carousel with Left/Right Arrows & Dots */}
       {isMobile ? (
-        <div className="relative w-full flex-1 flex flex-col items-center justify-center z-20 min-h-0 my-auto py-2" style={getScaleStyle()}>
+        <div ref={mobileAreaRef} className="relative w-full flex-1 flex flex-col items-center justify-center z-20 min-h-0 my-auto py-2" style={mobileScaleStyle()}>
+          <div ref={mobileStackRef} className="w-full flex flex-col items-center">
           <div className="relative w-full max-w-[320px] sm:max-w-[360px] flex items-center justify-center">
             {/* Left Navigation Arrow */}
             <button
@@ -992,6 +1024,7 @@ export const ProjectsContent = ({ theme }) => {
                 aria-label={`Go to project ${idx + 1}`}
               />
             ))}
+          </div>
           </div>
         </div>
       ) : (

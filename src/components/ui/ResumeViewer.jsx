@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { countEvent } from '../../lib/analytics';
@@ -28,6 +28,9 @@ const ExternalIcon = () => (
 export const ResumeViewer = ({ isOpen, onClose, theme }) => {
   const isLight = theme === 'light';
   const closeRef = useRef(null);
+  // The page image fades in once decoded: in dark mode a white page popping in looked like a flash
+  const [pageReady, setPageReady] = useState(false);
+  const pageRef = (img) => { if (img?.complete && img.naturalWidth) setPageReady(true); };
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -100,14 +103,17 @@ export const ResumeViewer = ({ isOpen, onClose, theme }) => {
             </div>
 
             {/* Body: the page preview, scrolling inside the popup */}
-            <div className="relative flex-1 min-h-0 overflow-y-auto overscroll-contain bg-white">
+            <div className={`relative flex-1 min-h-0 overflow-y-auto overscroll-contain ${isLight ? 'bg-white' : 'bg-[#140b28]'}`}>
               <img
                 src={RESUME_PREVIEW_URL}
                 alt="Soumya Dwivedi, résumé"
                 width="1530"
                 height="1980"
                 decoding="async"
-                className="block w-full h-auto select-none"
+                ref={pageRef}
+                onLoad={() => setPageReady(true)}
+                className="block w-full h-auto select-none transition-opacity duration-300 ease-out"
+                style={{ opacity: pageReady ? 1 : 0 }}
               />
             </div>
           </motion.div>
