@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { countEvent } from '../../lib/analytics';
 
 // Single place to change the résumé file: drop the PDF at public/files/<RESUME_FILE>
 export const RESUME_FILE = 'Soumya-Dwivedi-Resume.pdf';
@@ -80,7 +81,7 @@ export const ResumeViewer = ({ isOpen, onClose, theme }) => {
                 <h2 className={`text-lg sm:text-xl font-black leading-tight ${isLight ? 'text-[#1e1832]' : 'text-white'}`}>Soumya Dwivedi</h2>
               </div>
               <div className="flex items-center gap-2">
-                <a href={RESUME_URL} download={RESUME_FILE} className={`${btn} ${primary}`}>
+                <a href={RESUME_URL} download={RESUME_FILE} onClick={() => countEvent('resume-download')} className={`${btn} ${primary}`}>
                   <DownloadIcon /> Download PDF
                 </a>
                 <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className={`${btn} ${secondary} hidden sm:inline-flex`}>
