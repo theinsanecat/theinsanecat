@@ -6,7 +6,7 @@
  *   npm run build && npm run preview          (in one terminal)
  *   node scripts/render-about-cards.mjs       (in another)
  *
- * Writes 600x900 PNGs to design-source/about-cards/. Then convert each to
+ * Writes 600x900 PNGs to design-source/about-cards/ (a local, untracked folder). Then convert each to
  * src/assets/art/about-cards/<theme>-<n>.webp at 540x810, quality 80
  * (e.g. cwebp -q 80 -resize 540 810 light-1.png -o light-1.webp).
  */

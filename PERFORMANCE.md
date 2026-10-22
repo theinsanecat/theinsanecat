@@ -29,7 +29,7 @@ Every replaced asset was checked with a pixel diff against the original render.
 
 ### 1. Assets and loading
 
-- **The sakura branch was a 2.2 MB Illustrator SVG:** 1,923 paths and 1,781 gradients. It's now a 51 KB WebP rendered at 2× its display size; one pixel differs at Retina resolution. The rotating emblem went from a 400 KB SVG with 1,036 paths to a 146 KB AVIF, with zero pixels different. The originals are kept in `design-source/`.
+- **The sakura branch was a 2.2 MB Illustrator SVG:** 1,923 paths and 1,781 gradients. It's now a 51 KB WebP rendered at 2× its display size; one pixel differs at Retina resolution. The rotating emblem went from a 400 KB SVG with 1,036 paths to a 146 KB AVIF, with zero pixels different. The original vector files are kept outside the repository.
 - **Pre-decoding the artwork.** `new Image().src = …` only downloads a file. `src/lib/assetWarmup.js` also calls `img.decode()` in idle time, so the artwork is decoded before you open Contact. The images then fade in fully drawn instead of popping in half-rendered.
 - **Route-level code splitting.** Every page's code is fetched in parallel right after Home's first paint. Each page is then rendered once, invisibly, while you're still on Home, so the first visit is as fast as a repeat visit. Nav clicks wait for the page's code before switching, so the content and the landscape transition start in the same frame.
 - **Fonts, photos and logos.** The fonts are subset WOFF2 files (146 KB down to 45 KB) and the two main ones are preloaded. The photos use the existing WebP versions. The tech logos are bundled with the site instead of loaded from `jsdelivr@latest`.
@@ -39,7 +39,7 @@ Every replaced asset was checked with a pixel diff against the original render.
 Chrome can move, fade or rotate a *layer* on the GPU for free. It can't do that for things *inside* an SVG, or for anything with a live filter. Those get repainted, and the cost grows with the area that changes.
 
 - **Mouse-driven sky mask.** The constellation reveal was an SVG `<mask>` that followed the mouse, which repainted the whole 1920×1080 sky, including its blur filters, on every mouse frame. It's now a small window with a static mask that moves with the mouse while its contents move the opposite way. That's pure GPU transforms, with zero repaints.
-- **Star glow.** A live `feGaussianBlur` covered the whole starfield. It's replaced by per-star radial gradients whose stops were computed to match the blur (`design-source/scripts/star-halo-stops.py`).
+- **Star glow.** A live `feGaussianBlur` covered the whole starfield. It's replaced by per-star radial gradients whose stops were computed to match the blur.
 - **Lotus lake.** 14 lotuses, each with about 3 filters, were swayed inside one SVG, so the whole strip was repainted every frame. Now each wave and each lotus is its own small SVG in its own GPU layer, with CSS sway.
 - **Butterflies and petals.** Their flight paths are now CSS keyframes instead of Framer Motion JavaScript loops. The butterflies' glow moved onto the wing SVGs, so it's drawn once instead of recalculated on every wing flap.
 - **Aurora blobs.** A `filter: blur(32px)` on an animated element was replaced by a softer gradient. The largest difference is 8/255 in one colour channel, which is invisible.

@@ -385,7 +385,7 @@ export const SkyLayer = ({ style, constellationOpacity, isAboutPage, svgMouseX, 
             fill="#ffffff"
           >
             {/* Glow baked into per-star radial gradients (was a live feGaussianBlur filter over the whole group,
-                re-evaluated on every sky repaint). Profile computed by design-source/scripts/star-halo-stops.py */}
+                re-evaluated on every sky repaint). Stops computed to match the original blur profile */}
             <circle cx="120" cy="100" r="17.2" opacity="0.9" fill="url(#starHalo0)" />
             <circle cx="200" cy="150" r="17.6" opacity="0.85" fill="url(#starHalo1)" />
             <circle cx="450" cy="80" r="16.8" opacity="0.75" fill="url(#starHalo2)" />
