@@ -25,6 +25,7 @@ const useThemeLayers = (theme) => {
       return () => cancelAnimationFrame(r);
     }
     // 1) mount both sets while still showing the old theme, 2) two frames later flip -> CSS cross-fade
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-off state sync
     setCrossfading(true);
     let r2;
     const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setVisualTheme(theme)); });
@@ -872,6 +873,7 @@ export const AboutContent = ({ theme }) => {
     const handleKeyDown = (e) => {
       if (selectedCardId !== null) return;
       if (e.key === 'ArrowLeft') {
+        // eslint-disable-next-line react-hooks/immutability -- navigate is defined below; the effect runs after render
         navigate(-1);
       } else if (e.key === 'ArrowRight') {
         navigate(1);
@@ -879,6 +881,7 @@ export const AboutContent = ({ theme }) => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies chosen on purpose
   }, [selectedCardId, activeIndex]);
 
   const navigate = (dir) => {
@@ -907,15 +910,6 @@ export const AboutContent = ({ theme }) => {
     }
     isLocked.current = true;
     setSelectedCardId(card.id);
-    setTimeout(() => {
-      isLocked.current = false;
-    }, 700);
-  };
-
-  const collapse = () => {
-    if (isLocked.current) return;
-    isLocked.current = true;
-    setSelectedCardId(null);
     setTimeout(() => {
       isLocked.current = false;
     }, 700);
@@ -973,6 +967,7 @@ export const AboutContent = ({ theme }) => {
           {compactUi && <CenterGlow theme={theme} scale={deckScale} visible={!selectedCardId} />}
 
           {/* Cards mapping - stays entirely mounted to morph dynamically */}
+          {/* eslint-disable-next-line react-hooks/refs -- lock ref read is intentional */}
           {cardsData.map((card, index) => {
             const isSelected = selectedCardId === card.id;
             const isAnySelected = selectedCardId !== null;

@@ -106,6 +106,7 @@ const GlassSurface = ({
     });
 
     gaussianBlurRef.current?.setAttribute('stdDeviation', displace.toString());
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies chosen on purpose
   }, [
     useSVG,
     width,
@@ -137,12 +138,14 @@ const GlassSurface = ({
     return () => {
       resizeObserver.disconnect();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies chosen on purpose
   }, [useSVG]);
 
   useEffect(() => {
     if (useSVG) {
       setTimeout(updateDisplacementMap, 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies chosen on purpose
   }, [useSVG, width, height]);
 
   const containerStyle = {

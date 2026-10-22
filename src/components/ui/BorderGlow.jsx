@@ -63,46 +63,9 @@ const BorderGlow = ({
   fillOpacity = 0.5,
 }) => {
   const cardRef = useRef(null);
-  const targetAngleRef = useRef(45);
-  const currentAngleRef = useRef(45);
   const rectRef = useRef(null);
   const isHoveredRef = useRef(false);
-  const rafIdRef = useRef(null);
 
-  // Smooth angle lerp loop running on RequestAnimationFrame
-  const startRafLoop = useCallback(() => {
-    if (rafIdRef.current) return;
-
-    const tick = () => {
-      const card = cardRef.current;
-      if (!card) {
-        rafIdRef.current = null;
-        return;
-      }
-
-      const target = targetAngleRef.current;
-      let current = currentAngleRef.current;
-
-      // Calculate shortest angular distance to prevent 360-degree wrap-around spins
-      let diff = (target - current) % 360;
-      if (diff < -180) diff += 360;
-      if (diff > 180) diff -= 360;
-
-      if (Math.abs(diff) > 0.05) {
-        current += diff * 0.28; // Fluid responsiveness factor
-        currentAngleRef.current = current;
-        card.style.setProperty('--cursor-angle', `${current.toFixed(2)}deg`);
-      }
-
-      if (isHoveredRef.current) {
-        rafIdRef.current = requestAnimationFrame(tick);
-      } else {
-        rafIdRef.current = null;
-      }
-    };
-
-    rafIdRef.current = requestAnimationFrame(tick);
-  }, []);
 
   const updateAngleAndEdge = useCallback((e) => {
     const card = cardRef.current;
@@ -185,13 +148,6 @@ const BorderGlow = ({
     });
   }, [animated]);
 
-  useEffect(() => {
-    return () => {
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
-      }
-    };
-  }, []);
 
   const glowVars = buildGlowVars(glowColor, glowIntensity);
 

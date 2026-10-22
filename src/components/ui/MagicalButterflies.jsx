@@ -7,7 +7,6 @@ const MonochromeButterfly = ({
   colorTheme = 'pink',
   size = 28,
   flapDuration = 0.24,
-  flapDelay = 0,
   theme = 'dark',
   isMobile = false,
 }) => {

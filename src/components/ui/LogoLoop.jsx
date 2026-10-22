@@ -29,6 +29,7 @@ const useResizeObserver = (callback, elements, dependencies) => {
     return () => {
       observers.forEach(observer => observer?.disconnect());
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies chosen on purpose
   }, dependencies);
 };
 
@@ -60,26 +61,14 @@ const useImageLoader = (seqRef, onLoad, dependencies) => {
         img.removeEventListener('error', handleImageLoad);
       });
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies chosen on purpose
   }, dependencies);
 };
 
-// Commented out heavy JS requestAnimationFrame loop - replaced with GPU-accelerated CSS marquee
-const useAnimationLoop = (
-  trackRef,
-  targetVelocity,
-  seqWidth,
-  seqHeight,
-  isHovered,
-  hoverSpeed,
-  isVertical
-) => {
-  // Pure CSS animation is applied directly on the element style via CSS keyframes
-};
 
 export const LogoLoop = memo(
   ({
     logos,
-    speed = 40,
     direction = 'left',
     width = '100%',
     logoHeight = 28,
@@ -98,10 +87,10 @@ export const LogoLoop = memo(
     const trackRef = useRef(null);
     const seqRef = useRef(null);
 
-    const [seqWidth, setSeqWidth] = useState(0);
-    const [seqHeight, setSeqHeight] = useState(0);
+    const [, setSeqWidth] = useState(0);
+    const [, setSeqHeight] = useState(0);
     const [copyCount, setCopyCount] = useState(ANIMATION_CONFIG.MIN_COPIES);
-    const [isHovered, setIsHovered] = useState(false);
+    const [, setIsHovered] = useState(false);
 
     const effectiveHoverSpeed = useMemo(() => {
       if (hoverSpeed !== undefined) return hoverSpeed;
@@ -111,18 +100,6 @@ export const LogoLoop = memo(
     }, [hoverSpeed, pauseOnHover]);
 
     const isVertical = direction === 'up' || direction === 'down';
-
-    const targetVelocity = useMemo(() => {
-      const magnitude = Math.abs(speed);
-      let directionMultiplier;
-      if (isVertical) {
-        directionMultiplier = direction === 'up' ? 1 : -1;
-      } else {
-        directionMultiplier = direction === 'left' ? 1 : -1;
-      }
-      const speedMultiplier = speed < 0 ? -1 : 1;
-      return magnitude * directionMultiplier * speedMultiplier;
-    }, [speed, direction, isVertical]);
 
     const updateDimensions = useCallback(() => {
       const containerWidth = containerRef.current?.clientWidth ?? 0;
@@ -153,7 +130,6 @@ export const LogoLoop = memo(
 
     useResizeObserver(updateDimensions, [containerRef, seqRef], [logos, gap, logoHeight, isVertical]);
     useImageLoader(seqRef, updateDimensions, [logos, gap, logoHeight, isVertical]);
-    useAnimationLoop(trackRef, targetVelocity, seqWidth, seqHeight, isHovered, effectiveHoverSpeed, isVertical);
 
     const cssVariables = useMemo(
       () =>

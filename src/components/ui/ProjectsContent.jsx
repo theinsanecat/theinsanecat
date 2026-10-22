@@ -711,7 +711,7 @@ const getTechLogos = (isLight) => [
 
 export const ProjectsContent = ({ theme }) => {
   const isLight = theme === 'light';
-  const [hoveredId, setHoveredId] = useState(null);
+  const [, setHoveredId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
   // Upright touch tablets keep a 2-column grid at every size
@@ -748,8 +748,8 @@ export const ProjectsContent = ({ theme }) => {
     const w = window.innerWidth;
     const h = viewportHeight;
 
-    let targetHeight = 780;
-    let staticHeight = 200;
+    let targetHeight;
+    let staticHeight;
 
     if (isMobile) {
       targetHeight = 540;
