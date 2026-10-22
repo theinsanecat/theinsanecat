@@ -20,6 +20,7 @@ import { warmImage, runWhenIdle } from './lib/assetWarmup';
 import { usePageFit } from './lib/pageFit';
 import { SAKURA_BRANCH_SRC, ROTATING_EMBLEM_SRC, ABOUT_IMAGES, ABOUT_CARD_IMAGES } from './lib/artAssets';
 import { isCompactScreen } from './lib/compactScreen';
+import { countPageView, countEvent } from './lib/analytics';
 import { usePerformanceMode } from './context/PerformanceContext';
 
 // ================= ROUTE-LEVEL CODE SPLITTING =================
@@ -181,6 +182,8 @@ function App() {
   });
 
   const location = useLocation();
+  // Visitor stats (GoatCounter): one page view per route shown
+  useEffect(() => { countPageView(location.pathname); }, [location.pathname]);
   const { performanceMode, modeLocked } = usePerformanceMode();
   // Keep the pre-CSS background in index.html in step with the theme
   useEffect(() => { document.documentElement.classList.toggle('theme-light', theme === 'light'); }, [theme]);
@@ -201,7 +204,7 @@ function App() {
 
   // Résumé viewer (Contact page button, and shareable deep link: …/resume)
   const [isResumeOpen, setIsResumeOpen] = useState(false);
-  const openResume = useCallback(() => setIsResumeOpen(true), []);
+  const openResume = useCallback(() => { setIsResumeOpen(true); countEvent('resume-open'); }, []);
   const closeResume = useCallback(() => setIsResumeOpen(false), []);
 
   // ---------- First-visit warm-up ----------
