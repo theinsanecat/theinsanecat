@@ -26,3 +26,6 @@ dist-ssr
 # Performance tooling output
 .lighthouseci
 dist-preview
+
+# Original artwork, fonts and archived files: kept locally, not published
+design-source/

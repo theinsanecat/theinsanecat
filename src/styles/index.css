@@ -10,7 +10,7 @@
   }
 }
 
-/* Fonts: subset (Latin + used symbols) WOFF2 builds of the originals kept in /design-source/fonts.
+/* Fonts: subset (Latin + used symbols) WOFF2 builds of the original font files (kept outside the repository).
    Questrial + Mileast are preloaded from main.jsx. */
 @font-face {
   font-family: 'Mileast';
